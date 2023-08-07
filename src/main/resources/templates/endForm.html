@@ -46,7 +46,7 @@
     </thead>
     <tbody>
     <tr th:each="employee : ${employees}">
-        <td th:text="${employee.EmployeeID}"></td>
+        <td th:text="${employee.userDto.EmployeeID}"></td>
         <td th:text="${employee.BasicSalary}"></td>
         <td th:text="${employee.HolidayAllowance}"></td>
         <td th:text="${employee.LunchExpenses}"></td>
