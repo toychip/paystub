@@ -14,9 +14,9 @@ public class EmployeeSalaryDto {
     private Integer EmployeeID; // 일용직 근무자 사번
     private BigDecimal BasicSalary; // 기본수당
     private BigDecimal HolidayAllowance; // 주휴수당
-    private BigDecimal LunchExpenses; // 중식비 - 지급
+    private BigDecimal LunchExpenses; // 지금 중식비
     private BigDecimal FirstWeekHolidayAllowance; // 주휴수당(첫째주)
-    private BigDecimal RetroactiveHolidayAllowance; // 주휴수당 (소급분)
+    private BigDecimal RetroactiveHolidayAllowance; // 주휴수당(소급분)
     private BigDecimal TotalPayment; // 지급합계
     private BigDecimal IncomeTax; // 소득세
     private BigDecimal ResidentTax; // 주민세
@@ -33,8 +33,8 @@ public class EmployeeSalaryDto {
     private Integer TotalWorkDays; // 총 근로일수
     private Integer TotalWorkingHours; // 총근무시간
     private Integer HolidayCalculationHours; // 주휴산정시간
-    private Integer OvertimeCalculationHours; // 주휴산정시간
+    private Integer OvertimeCalculationHours; // 주휴산정시간(소급분)
     private BigDecimal HourlyWage; // 시급
-    private BigDecimal LunchAllowance; // 중식비
+    private BigDecimal LunchAllowance; // 근태 중식비
 
 }
