@@ -1,195 +1,66 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>관리자 페이지</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
+<meta charset="UTF-8">
+<title>관리자 페이지</title>
+<style>
+    button {
+        background-color: aliceblue;
+        width: 200px;
+        height: 40px;
+        border-width: 1px;
+        padding-top: 1px;
+        margin-top: 40px;
+    }
 
-        .margin {
-            margin-left: 50px;
-            margin-right: 50px;
-            margin-bottom: 50px;
-        }
-
-        .center {
-            text-align: center;
-        }
-
-        .error {
-            color: red;
-        }
-
-        .sticky{
-            background-color: lightgray;
-            position:sticky;
-            top:0px;
-        }
-
-    </style>
+    .center {
+        text-align: center;
+    }
+</style>
 </head>
 <body>
-<div class="center">
-    <h1>관리자 페이지</h1>
-</div>
-<div style="float:left" class="margin">
-    <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
-    <div th:if="${errors}" class="error">
-        <ul>
-            <li th:each="error : ${errors}">
-                <p th:text="${error}"></p>
-            </li>
-        </ul>
+    <div id="title" class="center">
+        <h1>관리자 페이지</h1>
+        <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
+        <!-- 파일 업로드 -->
+        <input id="excelFile" name="excelFile" type="file" />
+
+        <!-- 제출 버튼 -->
+        <div>
+        <button type="button" id="submitButton">제출</button>
+        </div>
     </div>
-    <!-- 파일 업로드 -->
-    <form method="POST" action="/admin" enctype="multipart/form-data">
-        <input type="file" id="file" name="file">
-        <input type="submit" id="submitButton" value="Upload">
-    </form>
-</div>
-<div style="float: right;" class="margin">
-    <h3>조회할 년도와 월을 선택해주세요.</h3>
-    <select id="year" th:name="year" th:value="${year}">
-        <option value="9999">전체</option>
-        <option value="2010">2010</option>
-        <option value="2011">2011</option>
-        <option value="2012">2012</option>
-        <option value="2013">2013</option>
-        <option value="2014">2014</option>
-        <option value="2015">2015</option>
-        <option value="2016">2016</option>
-        <option value="2017">2017</option>
-        <option value="2018">2018</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        <option value="2022">2023</option>
-    </select> <span>년</span>
-    <select id="month" th:name="month" th:value="${month}">
-        <option value="0">전체</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-    </select> <span>월</span>
-    <button id="searchButton">조회</button>
-</div>
 
-<div style="overflow:scroll; width:1000px; height:100px;" class="center">
-    <table>
-        <thead>
-        <tr>
-            <th class="sticky">선택</th>
-            <th class="sticky">일용직 근무자 사번</th>
-            <th class="sticky">이름</th>
-            <th class="sticky">생일</th>
-            <th class="sticky">기본수당</th>
-            <th class="sticky">주휴수당</th>
-            <th class="sticky">중식비 - 지급</th>
-            <th class="sticky">주휴수당(첫째주)</th>
-            <th class="sticky">주휴수당 (소급분)</th>
-            <th class="sticky">지급합계</th>
-            <th class="sticky">소득세</th>
-            <th class="sticky">주민세</th>
-            <th class="sticky">고용보험</th>
-            <th class="sticky">국민연금</th>
-            <th class="sticky">건강보험</th>
-            <th class="sticky">노인요양</th>
-            <th class="sticky">고용보험(소급공제)</th>
-            <th class="sticky">국민연금(소급공제)</th>
-            <th class="sticky">건강보험(소급공제)</th>
-            <th class="sticky">노인요양(소급공제)</th>
-            <th class="sticky">공제합계</th>
-            <th class="sticky">실지급액</th>
-            <th class="sticky">총 근로일수</th>
-            <th class="sticky">총근무시간</th>
-            <th class="sticky">주휴산정시간</th>
-            <th class="sticky">주휴산정시간(소급분)</th>
-            <th class="sticky">시급</th>
-            <th class="sticky">중식비</th>
-            <th class="sticky">이메일주소</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="response : ${responseDtos}">
-            <td><input type="checkbox" id="checkbox"></td>
-            <td th:text="${response.EmployeeID}"></td>
-            <td th:text="${response.year}"></td>
-            <td th:text="${response.month}"></td>
-            <td th:text="${response.Name}"></td>
-            <td th:text="${response.birthday}"></td>
-            <td th:text="${response.BasicSalary}"></td>
-            <td th:text="${response.HolidayAllowance}"></td>
-            <td th:text="${response.LunchExpenses}"></td>
-            <td th:text="${response.FirstWeekHolidayAllowance}"></td>
-            <td th:text="${response.RetroactiveHolidayAllowance}"></td>
-            <td th:text="${response.TotalPayment}"></td>
-            <td th:text="${response.IncomeTax}"></td>
-            <td th:text="${response.ResidentTax}"></td>
-            <td th:text="${response.EmploymentInsurance}"></td>
-            <td th:text="${response.NationalPension}"></td>
-            <td th:text="${response.HealthInsurance}"></td>
-            <td th:text="${response.ElderlyCareInsurance}"></td>
-            <td th:text="${response.EmploymentInsuranceDeduction}"></td>
-            <td th:text="${response.NationalPensionDeduction}"></td>
-            <td th:text="${response.HealthInsuranceDeduction}"></td>
-            <td th:text="${response.ElderlyCareInsuranceDeduction}"></td>
-            <td th:text="${response.DeductionTotal}"></td>
-            <td th:text="${response.NetPayment}"></td>
-            <td th:text="${response.TotalWorkDays}"></td>
-            <td th:text="${response.TotalWorkingHours}"></td>
-            <td th:text="${response.HolidayCalculationHours}"></td>
-            <td th:text="${response.OvertimeCalculationHours}"></td>
-            <td th:text="${response.HourlyWage}"></td>
-            <td th:text="${response.LunchAllowance}"></td>
-            <td th:text="${response.EmailAddress}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<div>
-    <button>삭제</button>
-</div>
 <script>
-    document.getElementById("searchButton").addEventListener("click", clickButton);
 
-    function clickButton() {
-        const year = document.getElementById("year").value;
-        const month = document.getElementById("month").value;
+    // 제출 버튼 클릭 시 제출 함수 호출
+    document.getElementById("submitButton").addEventListener("click", submitForm);
 
-        console.log(year);
-        console.log(month);
+    // 제출 함수
+    function submitForm() {
 
-        $.ajax({
-            url: "/admin",
-            type: "GET",
-            data: { year: year, month: month },
-            success: function(result) {
-                if(result) {
-                    alert("불러오기 성공");
-                } else {
-                    alert("불러오기 실패");
-                }
+        // 업로드 된 파일을 가져옴
+        const fileInput = document.getElementById('excelFile');
+        const excelFile = fileInput.files[0];
+
+        // 엑셀 파일 유무 체크
+        if (!excelFile) {
+            alert("엑셀 파일을 업로드해주세요.");
+        } else{
+
+            // 업로드한 파일의 확장자가 .xlsm 인지 체크
+            fileName = excelFile.name;
+            if (!fileName.toLowerCase().endsWith(".xlsm")) {
+                alert("엑셀 파일만 업로드 가능합니다.");
+            } else{
+                // 데이터 저장 로직
+                location.href = "success.html";s
+                alert("파일이 성공적으로 제출되었습니다");
+
             }
-        });
+        }
     }
 </script>
+
 </body>
 </html>
