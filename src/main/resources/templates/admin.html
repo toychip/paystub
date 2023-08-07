@@ -57,41 +57,41 @@
 </div>
 <div style="float: right;" class="margin">
     <h3>조회할 년도와 월을 선택해주세요.</h3>
-        <select id="year" th:name="year" th:value="${year}">
-            <option value="9999">전체</option>
-            <option value="2010">2010</option>
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
-            <option value="2013">2013</option>
-            <option value="2014">2014</option>
-            <option value="2015">2015</option>
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2022">2023</option>
-        </select> <span>년</span>
-        <select id="month" th:name="month" th:value="${month}">
-            <option value="0">전체</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-        </select> <span>월</span>
-        <button id="searchButton">조회</button>
+    <select id="year" th:name="year" th:value="${year}">
+        <option value="9999">전체</option>
+        <option value="2010">2010</option>
+        <option value="2011">2011</option>
+        <option value="2012">2012</option>
+        <option value="2013">2013</option>
+        <option value="2014">2014</option>
+        <option value="2015">2015</option>
+        <option value="2016">2016</option>
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2022">2023</option>
+    </select> <span>년</span>
+    <select id="month" th:name="month" th:value="${month}">
+        <option value="0">전체</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+    </select> <span>월</span>
+    <button id="searchButton">조회</button>
 </div>
-  
+
 <div style="overflow:scroll; width:1000px; height:100px;" class="center">
     <table>
         <thead>
@@ -128,7 +128,7 @@
         </tr>
         </thead>
         <tbody>
-          <tr th:each="response : ${responseDtos}">
+        <tr th:each="response : ${responseDtos}">
             <td><input type="checkbox" id="checkbox"></td>
             <td th:text="${response.EmployeeID}"></td>
             <td th:text="${response.year}"></td>
