@@ -19,6 +19,11 @@
     </style>
 </head>
 <body>
+<h2>Upload Excel File</h2>
+<form method="POST" action="/admin" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Upload">
+</form>
 <div id="title" class="center">
     <h1>관리자 페이지</h1>
     <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
@@ -30,7 +35,6 @@
     </form>
 </div>
 <script>
-
     // 제출 버튼 클릭 시 제출 함수 호출
     document.getElementById("submitButton").addEventListener("click", submitForm);
 
@@ -56,6 +60,5 @@
         }
     }
 </script>
-
 </body>
 </html>
