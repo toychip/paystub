@@ -73,6 +73,28 @@
         <td th:text="${employee.employeeSalaryDto.LunchAllowance}"></td>
     </tr>
     </tbody>
+
+    <thead>
+    <tr>
+        <th>사번번호</th>
+        <th>이름</th>
+        <th>상태</th>
+        <th>근무자 역할</th>
+        <th>생일</th>
+        <th>주민번호</th>
+        <th>이메일주소</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.userDto.EmployeeID}"></td>
+        <td th:text="${employee.userDto.Name}"></td>
+        <td th:text="${employee.userDto.State}"></td>
+        <td th:text="${employee.userDto.Role}"></td>
+        <td th:text="${employee.userDto.birthday}"></td>
+        <td th:text="${employee.userDto.SocialNumber}"></td>
+        <td th:text="${employee.userDto.EmailAddress}"></td>
+    </tbody>
 </table>
 </body>
 </html>
