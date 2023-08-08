@@ -3,10 +3,12 @@ package com.paystub.service;
 import com.paystub.dto.EmployeeSalaryDto;
 import com.paystub.dto.ResponseDto;
 import com.paystub.dto.UserDto;
+import com.paystub.repository.UserMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -18,6 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 public class UploadService {
+
+    private final UserMapper userMapper;
 
     public List<ResponseDto> excelToDto(MultipartFile file) {
 
@@ -154,6 +158,13 @@ public class UploadService {
 
         return list;
 
+    }
+
+    @Transactional
+    public void saveData(List<UserDto> data) {
+        for (UserDto userDto : data) {
+            userMapper.insertUser(userDto); // EmployeeSalaryDto에 대해서도 동일하게 처리
+            }
     }
 
     private BigDecimal getNumericValueOrNull(Cell cell) {

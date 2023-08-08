@@ -2,6 +2,7 @@ package com.paystub.controller;
 
 import com.paystub.dto.EmployeeSalaryDto;
 import com.paystub.dto.ResponseDto;
+import com.paystub.dto.UserDto;
 import com.paystub.service.UploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,6 +32,14 @@ public class UploadController {
 
         // 엑셀 파일 처리 로직 작성
         List<ResponseDto> responseDtos = uploadService.excelToDto(file);
+        List<UserDto> userDtoList = new ArrayList<>();
+        for (ResponseDto responseDto : responseDtos) {
+            UserDto userDto = responseDto.getUserDto();
+            userDtoList.add(userDto);
+
+        }
+        uploadService.saveData(userDtoList);
+
         model.addAttribute("employees", responseDtos);
         // TODO 저장하는 로직 DB
         return "endForm";  // 업로드 상태를 표시하는 페이지로 리디렉션
