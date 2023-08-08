@@ -18,13 +18,17 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	//thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'
 	
-	//¿¢¼¿ °ü·Ã
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	implementation 'org.apache.poi:poi:5.2.0'
 	implementation 'org.apache.poi:poi-ooxml:5.2.0'
 }
