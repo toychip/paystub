@@ -30,7 +30,15 @@ public class UploadController {
 
         // 엑셀 파일 처리 로직 작성
         List<ResponseDto> responseDtos = uploadService.excelToDto(file);
+        for (ResponseDto responseDto : responseDtos) {
+            System.out.println("responseDto.getEmployeeSalaryDto().getEmployeeID() = " + responseDto.getEmployeeSalaryDto().getEmployeeID());
+            System.out.println("responseDto.getEmployeeSalaryDto().getBasicSalary() = " + responseDto.getEmployeeSalaryDto().getBasicSalary());
+            System.out.println("responseDto.getUserDto().getBirthday() = " + responseDto.getUserDto().getBirthday());
+
+        }
         model.addAttribute("employees", responseDtos);
+        
+        
         return "endForm";  // 업로드 상태를 표시하는 페이지로 리디렉션
     }
 

@@ -5,6 +5,12 @@ import lombok.*;
 import java.math.BigDecimal;
 
 
+
+
+
+
+
+
 @Builder
 @Getter
 @Setter
@@ -24,16 +30,16 @@ public class EmployeeSalaryDto {
     private BigDecimal NationalPension; // 국민연금
     private BigDecimal HealthInsurance; // 건강보험
     private BigDecimal ElderlyCareInsurance; // 노인요양
-    private BigDecimal EmploymentInsuranceDeduction; // 고용보험
-    private BigDecimal NationalPensionDeduction; // 국민연금
-    private BigDecimal HealthInsuranceDeduction; // 건강보험
-    private BigDecimal ElderlyCareInsuranceDeduction; // 노인요양
+    private BigDecimal EmploymentInsuranceDeduction; // 고용보험 (소급공제)
+    private BigDecimal NationalPensionDeduction; // 국민연금 (소급공제)
+    private BigDecimal HealthInsuranceDeduction; // 건강보험 (소급공제)
+    private BigDecimal ElderlyCareInsuranceDeduction; // 노인요양 (소급공제)
     private BigDecimal DeductionTotal; // 공제합계
     private BigDecimal NetPayment; // 실지급액
-    private Integer TotalWorkDays; // 총 근로일수
-    private Integer TotalWorkingHours; // 총근무시간
-    private Integer HolidayCalculationHours; // 주휴산정시간
-    private Integer OvertimeCalculationHours; // 주휴산정시간(소급분)
+    private BigDecimal TotalWorkDays; // 총 근로일수
+    private BigDecimal TotalWorkingHours; // 총근무시간
+    private BigDecimal HolidayCalculationHours; // 주휴산정시간
+    private BigDecimal OvertimeCalculationHours; // 주휴산정시간(소급분)
     private BigDecimal HourlyWage; // 시급
     private BigDecimal LunchAllowance; // 근태 중식비
 
