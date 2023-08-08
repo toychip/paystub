@@ -17,13 +17,13 @@ public class UploadController {
 
     private final UploadService uploadService;
 
-    @GetMapping("/upload")
+    @GetMapping("/admin")
     public String getUploadPage() {
 
         return "uploadForm";
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/admin")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
         // 엑셀 파일 처리 로직 작성
         // JDBC를 사용하여 처리된 데이터를 데이터베이스에 저장
@@ -31,8 +31,7 @@ public class UploadController {
         // 엑셀 파일 처리 로직 작성
         List<ResponseDto> responseDtos = uploadService.excelToDto(file);
         model.addAttribute("employees", responseDtos);
-        
-        
+        // TODO 저장하는 로직 DB
         return "endForm";  // 업로드 상태를 표시하는 페이지로 리디렉션
     }
 
