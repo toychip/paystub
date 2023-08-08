@@ -6,11 +6,9 @@ import com.paystub.dto.UserDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -88,11 +86,12 @@ public class UploadService {
                 // 주휴산정시간
                 BigDecimal HolidayCalculationHours = getNumericValueOrNull(row.getCell(23));
                 // 두번째 자리에서 반올림
-                HolidayCalculationHours = HolidayCalculationHours.setScale(2, BigDecimal.ROUND_HALF_UP);
+                HolidayCalculationHours = HolidayCalculationHours != null ? HolidayCalculationHours.setScale(1, BigDecimal.ROUND_HALF_UP) : null;
+
                 // 주휴산정시간(소급분)
                 BigDecimal OvertimeCalculationHours = getNumericValueOrNull(row.getCell(24));
                 // 두번째 자리에서 반올림
-                OvertimeCalculationHours = OvertimeCalculationHours.setScale(2, BigDecimal.ROUND_HALF_UP);
+                OvertimeCalculationHours = OvertimeCalculationHours != null ? OvertimeCalculationHours.setScale(1, BigDecimal.ROUND_HALF_UP) : null;
 
                 // 시급
                 BigDecimal HourlyWage = getNumericValueOrNull(row.getCell(25));
@@ -162,13 +161,6 @@ public class UploadService {
             return null;
         }
         return new BigDecimal(cell.getNumericCellValue());
-    }
-
-    private Integer getNumericValueOrZero(Cell cell) {
-        if (cell == null || cell.getCellType() != CellType.NUMERIC) {
-            return 0;
-        }
-        return (int) cell.getNumericCellValue();
     }
 
     private String getStringValueOrNull(Cell cell) {
