@@ -18,6 +18,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class EmployeeSalaryDto {
     private Integer EmployeeID; // 일용직 근무자 사번
+
+    private Integer year;
+    private Integer month;
     private BigDecimal BasicSalary; // 기본수당
     private BigDecimal HolidayAllowance; // 주휴수당
     private BigDecimal LunchExpenses; // 지금 중식비
