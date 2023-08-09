@@ -3,9 +3,15 @@
 
 <mapper namespace="com.paystub.repository.UserMapper">
     <insert id="insertUser">
-        INSERT INTO member (EmployeeID, Name, State, Role, birthday, SocialNumber, EmailAddress)
+        INSERT INTO User (EmployeeID, Name, State, Role, birthday, SocialNumber, EmailAddress)
         VALUES (#{EmployeeID}, #{Name}, #{State}, #{Role}, #{birthday}, #{SocialNumber}, #{EmailAddress})
 
     </insert>
 
+    <select id="getTotalData" resultType="Map">
+        SELECT *
+        FROM EmployeeSalary, User
+        WHERE EmployeeSalary.EmployeeID = User.EmployeeID
+
+    </select>
 </mapper>
