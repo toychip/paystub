@@ -13,7 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,8 +44,11 @@ public class UploadService {
 
                 // 사번
                 Integer EmployeeID = Integer.valueOf(getStringValueOrNull(row.getCell(0)));
+                System.out.println("EmployeeID = " + EmployeeID);
                 String name = getStringValueOrNull(row.getCell(1));
+                System.out.println("name = " + name);
                 String birthday = getStringValueOrNull(row.getCell(2));
+                System.out.println("birthday = " + birthday);
                 String emailAddress = getStringValueOrNull(row.getCell(27));
 
                 // 기본 수당
@@ -174,10 +179,28 @@ public class UploadService {
         return new BigDecimal(cell.getNumericCellValue());
     }
 
+
     private String getStringValueOrNull(Cell cell) {
-        if (cell == null || cell.getCellType() != CellType.STRING) {
+        if (cell == null) {
             return null;
         }
-        return cell.getStringCellValue();
+
+        CellType cellType = cell.getCellType();
+
+        if (cellType == CellType.STRING) {
+            return cell.getStringCellValue();
+        } else if (cellType == CellType.NUMERIC) {
+            if (DateUtil.isCellDateFormatted(cell)) {
+                // 날짜형식의 셀일 경우, 날짜를 읽어서 문자열로 변환
+                Date date = cell.getDateCellValue();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  // 날짜 포맷 지정
+                return sdf.format(date);
+            }
+            // 숫자형 셀일 경우, 그냥 null 반환 (필요하다면 이 부분을 수정할 수 있음)
+            return null;
+        } else {
+            // 그 외의 셀 타입일 경우, null 반환
+            return null;
+        }
     }
 }
