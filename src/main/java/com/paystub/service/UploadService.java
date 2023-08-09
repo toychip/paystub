@@ -1,5 +1,6 @@
 package com.paystub.service;
 
+import com.paystub.config.AESUtilConfig;
 import com.paystub.dto.EmployeeSalaryDto;
 import com.paystub.dto.ResponseDto;
 import com.paystub.dto.UserDto;
@@ -27,6 +28,7 @@ public class UploadService {
 
     private final UserMapper userMapper;
     private final EmployeeSalaryMapper employeeSalaryMapper;
+    private final AESUtilConfig aesUtilConfig;
 
     public List<ResponseDto> excelToDto(MultipartFile file) {
 
@@ -53,6 +55,8 @@ public class UploadService {
                 String birthday = getStringValueOrNull(row.getCell(2));
                 System.out.println("birthday = " + birthday);
                 String emailAddress = getStringValueOrNull(row.getCell(27));
+                String socialNumber = aesUtilConfig.encrypt(birthday);
+                System.out.println("socialNumber = " + socialNumber);
 
                 // 기본 수당
                 BigDecimal BasicSalary = getNumericValueOrNull(row.getCell(3));
@@ -117,9 +121,9 @@ public class UploadService {
                         .EmployeeID(EmployeeID)
                         .Name(name)
                         .State(2) // 활성화 상태
-                        .Role(2) // 근무자 역할
+                        .Role(1) // 근무자 역할
                         .birthday(birthday)
-                        .SocialNumber(null) // 주민번호는 Excel 데이터에 없습니다.
+                        .SocialNumber(socialNumber) // 주민번호는 Excel 데이터에 없습니다.
                         .EmailAddress(emailAddress)
                         .build();
 

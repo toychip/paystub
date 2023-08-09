@@ -28,7 +28,6 @@ public class SecurityConfig {
                 .and()
                 // 요청에 대한 권한 설정
                 .authorizeHttpRequests()
-
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()

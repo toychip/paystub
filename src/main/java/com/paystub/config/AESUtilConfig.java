@@ -1,5 +1,6 @@
 package com.paystub.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Component
+@Slf4j
 public class AESUtilConfig {
     @Value("${aes.secretKey}")
     private String secretKey;
@@ -28,7 +30,7 @@ public class AESUtilConfig {
             // URL 안전 Base64 인코딩을 사용하여 암호화된 바이트 배열을 문자열로 변환
             return Base64.getUrlEncoder().withoutPadding().encodeToString(encrypted);
         } catch (Exception e) {
-            System.out.println("Error while encrypting: " + e.toString());
+            log.error("Error while encrypting: {}", e.toString());
         }
         return null;
     }
@@ -45,7 +47,7 @@ public class AESUtilConfig {
             // 암호화된 문자열을 복호화하여 바이트 배열로 변환하고, 이를 다시 문자열로 변환
             return new String(cipher.doFinal(Base64.getUrlDecoder().decode(strToDecrypt)));
         } catch (Exception e) {
-            System.out.println("Error while decrypting: " + e.toString());
+            log.error("Error while decrypting: {}", e.toString());
         }
         return null;
     }
