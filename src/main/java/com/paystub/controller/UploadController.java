@@ -35,9 +35,16 @@ public class UploadController {
         for (ResponseDto responseDto : responseDtos) {
             UserDto userDto = responseDto.getUserDto();
             userDtoList.add(userDto);
-
         }
-        uploadService.saveData(userDtoList);
+
+        List<EmployeeSalaryDto> employeeSalaryDtoList = new ArrayList<>();
+        for (ResponseDto responseDto : responseDtos) {
+            EmployeeSalaryDto employeeSalaryDto = responseDto.getEmployeeSalaryDto();
+            employeeSalaryDtoList.add(employeeSalaryDto);
+        }
+
+        uploadService.saveUser(userDtoList);
+        uploadService.saveEmployeeSalary(employeeSalaryDtoList);
 
         model.addAttribute("employees", responseDtos);
         // TODO 저장하는 로직 DB
