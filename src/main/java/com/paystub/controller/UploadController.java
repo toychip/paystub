@@ -1,6 +1,5 @@
 package com.paystub.controller;
 
-import com.paystub.dto.EmployeeSalaryDto;
 import com.paystub.dto.ResponseDto;
 import com.paystub.service.UploadService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ public class UploadController {
     @GetMapping("/admin")
     public String getUploadPage() {
 
-        return "uploadForm";
+        return "admin";
     }
 
     @PostMapping("/admin")

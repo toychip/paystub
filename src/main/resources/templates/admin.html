@@ -19,22 +19,18 @@
     </style>
 </head>
 <body>
-<h2>Upload Excel File</h2>
-<form method="POST" action="/admin" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" value="Upload">
-</form>
-<div id="title" class="center">
+<div class="center">
     <h1>관리자 페이지</h1>
     <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
-
     <!-- 파일 업로드 -->
-    <form method="POST" action="/upload" enctype="multipart/form-data" class="center">
+    <form method="POST" action="/admin" enctype="multipart/form-data">
         <input type="file" id="file" name="file">
         <input type="submit" id="submitButton" value="Upload">
     </form>
 </div>
+
 <script>
+
     // 제출 버튼 클릭 시 제출 함수 호출
     document.getElementById("submitButton").addEventListener("click", submitForm);
 
@@ -55,10 +51,38 @@
             if (!fileName.toLowerCase().endsWith(".xlsm") && !fileName.toLowerCase().endsWith(".xlsx")) {
                 alert("엑셀 파일만 업로드 가능합니다.");
             } else{
+
+                // 엑셀 업로드한 날짜 저장
+                date = new Date();
+                year = date.getFullYear();
+                month = date.getMonth() + 1;
+                day = date.getDate();
+
+                const paymentDate = year + '-' + month + '-' + day;
+
+
+                // 데이터 저장 로직
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/admin", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if(xhr.status === 200) {
+                            resolve();
+                        } else {
+                            reject(new Error("제출에 실패하였습니다."));
+                        }
+                    }
+                };
+                xhr.send(excelFile);
+
+
+                // location.href = "user.html";
                 alert("성공적으로 제출되었습니다");
             };
         }
     }
 </script>
+
 </body>
 </html>
