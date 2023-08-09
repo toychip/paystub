@@ -8,4 +8,10 @@
 
     </insert>
 
+    <select id="getTotalData" resultType="Map">
+        SELECT *
+        FROM EmployeeSalary, User
+        WHERE EmployeeSalary.EmployeeID = User.EmployeeID
+
+    </select>
 </mapper>

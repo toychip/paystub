@@ -60,10 +60,10 @@
         }
     </style>
 </head>
-<body class="margin">
+<body class="margin" th:each="employee : ${employees}">
 <div style="width: 1048px;">
     <div class="center">
-        <h2>일용근로자 급여 지급명세서 (<text id="year"></text>년 <text id="month"></text>월 귀속)</h2>
+        <h2>일용근로자 급여 지급명세서 (<th:text="${employee.employeeSalaryDto.year}년 월 귀속)</h2>
         <h5>회사명: 나이스디앤알(주)</h5>
         <h5>사번: <span id="EmployeeID"></span>          성명: <span id="Name"></span></h5>
         <h5>생년월일: <span id="birthday"></span>        지급일: <span id="PaymentDate"></span></h5>
@@ -262,44 +262,7 @@
 </div>
 <script>
 
-    window.onload = function () {
-        paymentDate();
-    }
 
-    // 지급일에서 년, 월을 가져와 년 출력, 월에서 -1을 뺀 후 출력
-    function paymentDate() {
-        // const paymentDate = document.getElementById('PaymentDate');
-        const paymentDate = '2023-07-14';
-        var year = Number(paymentDate.slice(0, 4));
-        var firstMonth = Number(paymentDate.slice(5, 6));
-        var secondMonth = Number(paymentDate.slice(6, 7));
-
-        // 만약, firstMonth가 0이고, secondMonth가 1이면 year는 -1, month에 12를 넣어줌
-        if(firstMonth === 0 && secondMonth === 1) {
-            year = year - 1;
-            var month = 12;
-        }
-        else {
-            // 만약, firstMonth가 0이라면
-            if(firstMonth === 0) {
-                month = secondMonth - 1;
-            }
-            // 만약, firstMonth가 1이라면
-            else {
-                // firstMonth와 secondMonth를 문자열로 바꿔주고, month에 합쳐준다
-                firstMonth = String(firstMonth);
-                secondMonth = String(secondMonth);
-                month = firstMonth + secondMonth;
-            }
-        }
-
-        // h1에 있는 xxxx년 x월 귀속에 출력하기 위해
-        const divYear = document.getElementById('year');
-        const divMonth = document.getElementById('month');
-
-        divYear.append(year);
-        divMonth.append(month);
-    }
 </script>
 
 </body>

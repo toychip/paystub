@@ -52,15 +52,6 @@
                 alert("엑셀 파일만 업로드 가능합니다.");
             } else{
 
-                // 엑셀 업로드한 날짜 저장
-                date = new Date();
-                year = date.getFullYear();
-                month = date.getMonth() + 1;
-                day = date.getDate();
-
-                const paymentDate = year + '-' + month + '-' + day;
-
-
                 // 데이터 저장 로직
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", "/admin", true);
