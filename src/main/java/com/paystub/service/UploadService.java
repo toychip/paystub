@@ -3,6 +3,7 @@ package com.paystub.service;
 import com.paystub.dto.EmployeeSalaryDto;
 import com.paystub.dto.ResponseDto;
 import com.paystub.dto.UserDto;
+import com.paystub.repository.EmployeeSalaryMapper;
 import com.paystub.repository.UserMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.List;
 public class UploadService {
 
     private final UserMapper userMapper;
+    private final EmployeeSalaryMapper employeeSalaryMapper;
 
     public List<ResponseDto> excelToDto(MultipartFile file) {
 
@@ -53,6 +56,7 @@ public class UploadService {
 
                 // 기본 수당
                 BigDecimal BasicSalary = getNumericValueOrNull(row.getCell(3));
+                System.out.println("BasicSalary = " + BasicSalary);
                 // 주휴 수당
                 BigDecimal HolidayAllowance = getNumericValueOrNull(row.getCell(4));
                 // 중식비
@@ -121,7 +125,19 @@ public class UploadService {
 
                 // EmployeeSalaryDto 객체를 생성하고 값을 설정합니다.
 
+                // 현재 날짜를 가져옵니다.
+                LocalDate now = LocalDate.now();
+
+                // 현재 년도를 가져옵니다.
+                int year = now.getYear();
+
+                // 한 달 전의 월을 가져옵니다.
+                int month = now.minusMonths(1).getMonthValue();
+
+
                 EmployeeSalaryDto employeeSalaryDto = EmployeeSalaryDto.builder()
+                        .year(year)
+                        .month(month)
                         .EmployeeID(EmployeeID)
                         .BasicSalary(BasicSalary)
                         .HolidayAllowance(HolidayAllowance)
@@ -166,10 +182,17 @@ public class UploadService {
     }
 
     @Transactional
-    public void saveData(List<UserDto> data) {
+    public void saveUser(List<UserDto> data) {
         for (UserDto userDto : data) {
             userMapper.insertUser(userDto); // EmployeeSalaryDto에 대해서도 동일하게 처리
             }
+    }
+
+    @Transactional
+    public void saveEmployeeSalary(List<EmployeeSalaryDto> data) {
+        for (EmployeeSalaryDto employeeSalaryDto : data) {
+            employeeSalaryMapper.insertEmployeeSalaryDto(employeeSalaryDto); // EmployeeSalaryDto에 대해서도 동일하게 처리
+        }
     }
 
     private BigDecimal getNumericValueOrNull(Cell cell) {
@@ -193,7 +216,7 @@ public class UploadService {
             if (DateUtil.isCellDateFormatted(cell)) {
                 // 날짜형식의 셀일 경우, 날짜를 읽어서 문자열로 변환
                 Date date = cell.getDateCellValue();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  // 날짜 포맷 지정
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");  // 날짜 포맷 지정
                 return sdf.format(date);
             }
             // 숫자형 셀일 경우, 그냥 null 반환 (필요하다면 이 부분을 수정할 수 있음)
