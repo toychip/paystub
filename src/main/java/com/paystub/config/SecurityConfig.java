@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//    private final AuthenticationProvider provider;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,6 +30,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
+
+                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+
                 .antMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 //.antMatchers("/admin")//.hasAuthority() //.hasAuthority("ADMIN") // 관리자만 접근 가능
                 .anyRequest().authenticated()
@@ -42,7 +46,7 @@ public class SecurityConfig {
                 .and()
                     .sessionFixation().newSession()  // 로그인 할 때마다 새로운 세션을 생성
                 .and()
-//                .authenticationProvider(provider)
+                .authenticationProvider(customAuthenticationProvider)
                 .build();
     }
 

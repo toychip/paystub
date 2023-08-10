@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 public class LoginFormDto {
-    private String username;
-    private String password;
+    private String username;    // EmployeeID
+    private String password;    // birthday
+    private Integer role;       // Role (관리자: 2, 사용자: 1)
 }
