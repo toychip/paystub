@@ -63,7 +63,7 @@
 <body class="margin" th:each="employee : ${employees}">
 <div style="width: 1048px;">
     <div class="center">
-        <h2>일용근로자 급여 지급명세서 (<th:text="${employee.employeeSalaryDto.year}년 월 귀속)</h2>
+        <h2>일용근로자 급여 지급명세서 (<span th:text="${employee.employeeSalaryDto.year}"></span>년 월 귀속)</h2>
         <h5>회사명: 나이스디앤알(주)</h5>
         <h5>사번: <span id="EmployeeID"></span>          성명: <span id="Name"></span></h5>
         <h5>생년월일: <span id="birthday"></span>        지급일: <span id="PaymentDate"></span></h5>

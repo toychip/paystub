@@ -1,5 +1,6 @@
 package com.paystub.controller;
 
+import com.paystub.dto.EmployeeSalaryDto;
 import com.paystub.dto.ResponseDto;
 import com.paystub.dto.UserDto;
 import com.paystub.service.UploadService;
@@ -35,6 +36,7 @@ public class UploadController {
         for (ResponseDto responseDto : responseDtos) {
             UserDto userDto = responseDto.getUserDto();
             userDtoList.add(userDto);
+            System.out.println(userDto);
         }
 
         List<EmployeeSalaryDto> employeeSalaryDtoList = new ArrayList<>();
