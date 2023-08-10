@@ -13,6 +13,7 @@ public class UserFormDto {
 
     private Integer year;
     private Integer month;
+    private Integer EmployeeID; // 일용직 근무자 사번
     private BigDecimal BasicSalary; // 기본수당
     private BigDecimal HolidayAllowance; // 주휴수당
     private BigDecimal LunchExpenses; // 지금 중식비
