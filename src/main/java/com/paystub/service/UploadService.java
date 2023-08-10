@@ -30,6 +30,22 @@ public class UploadService {
     private final EmployeeSalaryMapper employeeSalaryMapper;
     private final AESUtilConfig aesUtilConfig;
 
+    public List<ResponseDto> findAllResponse() {
+
+        List<UserDto> users = userMapper.findAllUsers();
+        List<EmployeeSalaryDto> salaries = employeeSalaryMapper.findAllSalaries(); // findAllSalaries는 모든 급여 정보를 반환하는 메서드
+
+        List<ResponseDto> responseDtos = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            responseDtos.add(new ResponseDto(salaries.get(i), users.get(i)));
+        }
+
+        return responseDtos;
+    }
+
+
+
+
     public List<ResponseDto> processExcelFile(MultipartFile file) {
         List<ResponseDto> responseDtos = excelToDto(file);  // model에 담기 위해 return하는 메서드
         saveData(responseDtos); // 데이터를 저장하는 메서드

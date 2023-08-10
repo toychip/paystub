@@ -23,18 +23,28 @@ public class UploadController {
     private final UploadService uploadService;
 
     @GetMapping("/admin")
-    public String getUploadPage() {
+    public String getUploadPage(@RequestParam(required = false) Long year,
+                                @RequestParam(required = false) Long month,
+                                Model model) {
 
+        List<ResponseDto> responseDtos = uploadService.findAllResponse();
+        model.addAttribute("responseDtos", responseDtos);
+        for (ResponseDto responseDto : responseDtos) {
+            System.out.println("responseDto.getUserDto().getName() = " + responseDto.getUserDto().getName());
+            System.out.println("responseDto.getUserDto().getEmployeeID() = " + responseDto.getUserDto().getEmployeeID());
+            System.out.println("responseDto.getEmployeeSalaryDto().getEmployeeID() = " + responseDto.getEmployeeSalaryDto().getEmployeeID());
+        }
         return "admin";
     }
 
     @PostMapping("/admin")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
         // 엑셀 파일 처리 로직 작성
+        uploadService.processExcelFile(file);
 
-        List<ResponseDto> responseDtos = uploadService.processExcelFile(file);
-        model.addAttribute("responseDtos", responseDtos);
-        return "endForm";  // 업로드 상태를 표시하는 페이지로 리디렉션
+        return "redirect:/admin";  // 업로드 상태를 표시하는 페이지로 리디렉션
+
+
     }
 
 }

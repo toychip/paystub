@@ -23,4 +23,8 @@
         #{HolidayCalculationHours}, #{OvertimeCalculationHours}, #{HourlyWage}, #{LunchAllowance}
         )
     </insert>
+    <select id="findAllSalaries" resultType="com.paystub.dto.EmployeeSalaryDto">
+        SELECT * FROM EmployeeSalary
+    </select>
+
 </mapper>

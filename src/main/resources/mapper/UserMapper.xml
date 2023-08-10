@@ -8,4 +8,8 @@
 
     </insert>
 
+    <select id="findAllUsers" resultType="com.paystub.dto.UserDto">
+        SELECT * FROM User
+    </select>
+
 </mapper>
