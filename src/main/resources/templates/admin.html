@@ -28,52 +28,70 @@
         <input type="submit" id="submitButton" value="Upload">
     </form>
 </div>
-
-<script>
-
-    // 제출 버튼 클릭 시 제출 함수 호출
-    document.getElementById("submitButton").addEventListener("click", submitForm);
-
-    // 제출 함수
-    function submitForm() {
-
-        // 업로드 된 파일을 가져옴
-        const fileInput = document.getElementById('file');
-        const excelFile = fileInput.files[0];
-
-        // 엑셀 파일 유무 체크
-        if (!excelFile) {
-            alert("엑셀 파일을 업로드해주세요.");
-        } else{
-
-            // 업로드한 파일의 확장자가 .xlsm && .xlsx 인지 체크
-            fileName = excelFile.name;
-            if (!fileName.toLowerCase().endsWith(".xlsm") && !fileName.toLowerCase().endsWith(".xlsx")) {
-                alert("엑셀 파일만 업로드 가능합니다.");
-            } else{
-
-                // 데이터 저장 로직
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "/admin", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if(xhr.status === 200) {
-                            resolve();
-                        } else {
-                            reject(new Error("제출에 실패하였습니다."));
-                        }
-                    }
-                };
-                xhr.send(excelFile);
-
-
-                // location.href = "user.html";
-                alert("성공적으로 제출되었습니다");
-            };
-        }
-    }
-</script>
-
+<table>
+    <thead>
+    <tr>
+        <th>일용직 근무자 사번</th>
+        <th>이름</th>
+        <th>생일</th>
+        <th>기본수당</th>
+        <th>주휴수당</th>
+        <th>중식비 - 지급</th>
+        <th>주휴수당(첫째주)</th>
+        <th>주휴수당 (소급분)</th>
+        <th>지급합계</th>
+        <th>소득세</th>
+        <th>주민세</th>
+        <th>고용보험</th>
+        <th>국민연금</th>
+        <th>건강보험</th>
+        <th>노인요양</th>
+        <th>고용보험(소급공제)</th>
+        <th>국민연금(소급공제)</th>
+        <th>건강보험(소급공제)</th>
+        <th>노인요양(소급공제)</th>
+        <th>공제합계</th>
+        <th>실지급액</th>
+        <th>총 근로일수</th>
+        <th>총근무시간</th>
+        <th>주휴산정시간</th>
+        <th>주휴산정시간(소급분)</th>
+        <th>시급</th>
+        <th>중식비</th>
+        <th>이메일주소</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="employee : ${responseDtos}">
+        <td th:text="${employee.employeeSalaryDto.EmployeeID}"></td>
+        <td th:text="${employee.userDto.Name}"></td>
+        <td th:text="${employee.userDto.birthday}"></td>
+        <td th:text="${employee.employeeSalaryDto.BasicSalary}"></td>
+        <td th:text="${employee.employeeSalaryDto.HolidayAllowance}"></td>
+        <td th:text="${employee.employeeSalaryDto.LunchExpenses}"></td>
+        <td th:text="${employee.employeeSalaryDto.FirstWeekHolidayAllowance}"></td>
+        <td th:text="${employee.employeeSalaryDto.RetroactiveHolidayAllowance}"></td>
+        <td th:text="${employee.employeeSalaryDto.TotalPayment}"></td>
+        <td th:text="${employee.employeeSalaryDto.IncomeTax}"></td>
+        <td th:text="${employee.employeeSalaryDto.ResidentTax}"></td>
+        <td th:text="${employee.employeeSalaryDto.EmploymentInsurance}"></td>
+        <td th:text="${employee.employeeSalaryDto.NationalPension}"></td>
+        <td th:text="${employee.employeeSalaryDto.HealthInsurance}"></td>
+        <td th:text="${employee.employeeSalaryDto.ElderlyCareInsurance}"></td>
+        <td th:text="${employee.employeeSalaryDto.EmploymentInsuranceDeduction}"></td>
+        <td th:text="${employee.employeeSalaryDto.NationalPensionDeduction}"></td>
+        <td th:text="${employee.employeeSalaryDto.HealthInsuranceDeduction}"></td>
+        <td th:text="${employee.employeeSalaryDto.ElderlyCareInsuranceDeduction}"></td>
+        <td th:text="${employee.employeeSalaryDto.DeductionTotal}"></td>
+        <td th:text="${employee.employeeSalaryDto.NetPayment}"></td>
+        <td th:text="${employee.employeeSalaryDto.TotalWorkDays}"></td>
+        <td th:text="${employee.employeeSalaryDto.TotalWorkingHours}"></td>
+        <td th:text="${employee.employeeSalaryDto.HolidayCalculationHours}"></td>
+        <td th:text="${employee.employeeSalaryDto.OvertimeCalculationHours}"></td>
+        <td th:text="${employee.employeeSalaryDto.HourlyWage}"></td>
+        <td th:text="${employee.employeeSalaryDto.LunchAllowance}"></td>
+        <td th:text="${employee.userDto.EmailAddress}"></td>
+    </tr>
+    </tbody>
 </body>
 </html>

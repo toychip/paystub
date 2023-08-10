@@ -5,8 +5,17 @@
     <insert id="insertUser">
         INSERT INTO User (EmployeeID, Name, State, Role, birthday, SocialNumber, EmailAddress)
         VALUES (#{EmployeeID}, #{Name}, #{State}, #{Role}, #{birthday}, #{SocialNumber}, #{EmailAddress})
-
     </insert>
+
+    <select id="findAllUsers" resultType="com.paystub.dto.UserDto">
+        SELECT * FROM User WHERE Role = 1
+    </select>
+
+    <select id="findByUsername" resultType="com.paystub.dto.LoginFormDto">
+        SELECT EmployeeID AS username, SocialNumber AS password, Role AS role
+        FROM User
+        WHERE EmployeeID = #{username}
+    </select>
 
     <select id="getTotalData" resultType="com.paystub.dto.UserFormDto">
         SELECT year, month, User.EmployeeID, BasicSalary, HolidayAllowance, LunchExpenses, FirstWeekHolidayAllowance, RetroactiveHolidayAllowance, TotalPayment, IncomeTax,
@@ -18,3 +27,4 @@
 
     </select>
 </mapper>
+
