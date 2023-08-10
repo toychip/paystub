@@ -29,11 +29,6 @@ public class UploadController {
 
         List<ResponseDto> responseDtos = uploadService.findAllResponse();
         model.addAttribute("responseDtos", responseDtos);
-        for (ResponseDto responseDto : responseDtos) {
-            System.out.println("responseDto.getUserDto().getName() = " + responseDto.getUserDto().getName());
-            System.out.println("responseDto.getUserDto().getEmployeeID() = " + responseDto.getUserDto().getEmployeeID());
-            System.out.println("responseDto.getEmployeeSalaryDto().getEmployeeID() = " + responseDto.getEmployeeSalaryDto().getEmployeeID());
-        }
         return "admin";
     }
 

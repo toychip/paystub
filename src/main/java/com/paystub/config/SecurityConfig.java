@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 public class SecurityConfig {
 
     private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -24,16 +25,14 @@ public class SecurityConfig {
                     .formLogin()
                     .loginPage("/login")
                     .loginProcessingUrl("/login")
-                    .defaultSuccessUrl("/admin")
+                .successHandler(successHandler)
                 .and()
                 // 요청에 대한 권한 설정
                 .authorizeHttpRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
-
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("ADMIN", "USER")
-
                 .antMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 //.antMatchers("/admin")//.hasAuthority() //.hasAuthority("ADMIN") // 관리자만 접근 가능
                 .anyRequest().authenticated()
