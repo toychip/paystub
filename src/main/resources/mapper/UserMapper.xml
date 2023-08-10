@@ -5,7 +5,6 @@
     <insert id="insertUser">
         INSERT INTO User (EmployeeID, Name, State, Role, birthday, SocialNumber, EmailAddress)
         VALUES (#{EmployeeID}, #{Name}, #{State}, #{Role}, #{birthday}, #{SocialNumber}, #{EmailAddress})
-
     </insert>
 
     <select id="findAllUsers" resultType="com.paystub.dto.UserDto">
@@ -18,6 +17,14 @@
         WHERE EmployeeID = #{username}
     </select>
 
+    <select id="getTotalData" resultType="com.paystub.dto.UserFormDto">
+        SELECT year, month, User.EmployeeID, BasicSalary, HolidayAllowance, LunchExpenses, FirstWeekHolidayAllowance, RetroactiveHolidayAllowance, TotalPayment, IncomeTax,
+                ResidentTax, EmploymentInsurance, NationalPension, HealthInsurance, ElderlyCareInsurance, EmploymentInsuranceDeduction, NationalPensionDeduction,
+                HealthInsuranceDeduction, ElderlyCareInsuranceDeduction, DeductionTotal, NetPayment, TotalWorkDays, TotalWorkingHours, HolidayCalculationHours,
+                OvertimeCalculationHours, HourlyWage, Name, birthday
+        FROM EmployeeSalary, User
+        WHERE (Name = "이혜란" and EmployeeSalary.EmployeeID = User.EmployeeID)
 
-
+    </select>
 </mapper>
+

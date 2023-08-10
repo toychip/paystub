@@ -39,7 +39,6 @@ public class UploadController {
 
         return "redirect:/admin";  // 업로드 상태를 표시하는 페이지로 리디렉션
 
-
     }
 
 }
