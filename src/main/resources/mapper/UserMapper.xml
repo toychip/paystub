@@ -8,10 +8,13 @@
 
     </insert>
 
-    <select id="getTotalData" resultType="Map">
-        SELECT *
+    <select id="getTotalData" resultType="com.paystub.dto.UserFormDto">
+        SELECT year, month, User.EmployeeID, BasicSalary, HolidayAllowance, LunchExpenses, FirstWeekHolidayAllowance, RetroactiveHolidayAllowance, TotalPayment, IncomeTax,
+                ResidentTax, EmploymentInsurance, NationalPension, HealthInsurance, ElderlyCareInsurance, EmploymentInsuranceDeduction, NationalPensionDeduction,
+                HealthInsuranceDeduction, ElderlyCareInsuranceDeduction, DeductionTotal, NetPayment, TotalWorkDays, TotalWorkingHours, HolidayCalculationHours,
+                OvertimeCalculationHours, HourlyWage, Name, birthday
         FROM EmployeeSalary, User
-        WHERE EmployeeSalary.EmployeeID = User.EmployeeID
+        WHERE (Name = "이혜란" and EmployeeSalary.EmployeeID = User.EmployeeID)
 
     </select>
 </mapper>

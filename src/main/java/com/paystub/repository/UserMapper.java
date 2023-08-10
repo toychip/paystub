@@ -3,6 +3,7 @@ package com.paystub.repository;
 
 import com.paystub.dto.ResponseDto;
 import com.paystub.dto.UserDto;
+import com.paystub.dto.UserFormDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,5 +12,5 @@ import java.util.List;
 public interface UserMapper {
     void insertUser(UserDto userDto);
 
-    List<ResponseDto> getTotalData();
+   List<UserFormDto> getTotalData();
 }
