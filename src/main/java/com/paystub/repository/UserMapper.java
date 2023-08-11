@@ -3,6 +3,7 @@ package com.paystub.repository;
 
 import com.paystub.dto.LoginFormDto;
 import com.paystub.dto.UserDto;
+import com.paystub.dto.UserFormDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
