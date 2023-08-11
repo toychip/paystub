@@ -28,6 +28,12 @@
         WHERE EmployeeID = #{EmployeeID} AND Name = #{Name}
     </select>
 
+    <select id="findByEmployeeID" resultType="com.paystub.dto.UserDto">
+        SELECT * FROM User
+        WHERE EmployeeID = #{EmployeeID}
+    </select>
+
+
     <select id="findAllJoinedData" resultType="com.paystub.dto.ResponseDto">
         SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
                e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
