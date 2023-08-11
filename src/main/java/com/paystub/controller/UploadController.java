@@ -33,7 +33,7 @@ public class UploadController {
     }
 
     @PostMapping("/admin")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         // 엑셀 파일 처리 로직 작성
         uploadService.processExcelFile(file);
 

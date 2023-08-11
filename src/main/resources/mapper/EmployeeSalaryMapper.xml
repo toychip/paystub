@@ -23,8 +23,10 @@
         #{HolidayCalculationHours}, #{OvertimeCalculationHours}, #{HourlyWage}, #{LunchAllowance}
         )
     </insert>
-    <select id="findAllSalaries" resultType="com.paystub.dto.EmployeeSalaryDto">
+
+    <select id="findSalaryByYearMonthAndEmployeeID" resultType="com.paystub.dto.EmployeeSalaryDto">
         SELECT * FROM EmployeeSalary
+        WHERE year = #{year} AND month = #{month} AND EmployeeID = #{EmployeeID}
     </select>
 
 </mapper>
