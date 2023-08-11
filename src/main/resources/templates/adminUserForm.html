@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee Salary</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>선택</th>
+        <th>일용직 근무자 사번</th>
+        <th>이름</th>
+        <th>생일</th>
+        <th>비밀번호</th>
+        <th>이메일주소</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${userDto}">
+        <td><input type="checkbox" id="checkbox"></td>
+        <td th:text="${user.EmployeeID}"></td>
+        <td th:text="${user.Name}"></td>
+        <td th:text="${user.birthday}"></td>
+        <td th:text="${user.socialnumber}"></td>
+        <td th:text="${employee.employeeSalaryDto.HolidayAllowance}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

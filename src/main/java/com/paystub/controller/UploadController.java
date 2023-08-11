@@ -3,7 +3,6 @@ package com.paystub.controller;
 import com.paystub.dto.EmployeeSalaryDto;
 import com.paystub.dto.FileUploadForm;
 import com.paystub.dto.ResponseDto;
-import com.paystub.dto.UserDto;
 import com.paystub.service.UploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -27,11 +25,15 @@ public class UploadController {
 
     private final UploadService uploadService;
 
+    @GetMapping("/adminSelect")
+    public String getAdminSelect() {
+        return "adminSelect";
+    }
+
     @GetMapping("/admin")
     public String getUploadPage(@RequestParam(required = false) Long year,
                                 @RequestParam(required = false) Long month,
                                 Model model) {
-// --
         LocalDate now = LocalDate.now();
         LocalDate oneMonthAgo = now.minusMonths(1);
 
@@ -42,7 +44,6 @@ public class UploadController {
         if (month == null) {
             month = (long) oneMonthAgo.getMonthValue();
         }
-// --
 
         List<ResponseDto> responseDtos = uploadService.findResponseByYearAndMonth(year, month);
         model.addAttribute("responseDtos", responseDtos);
@@ -67,6 +68,7 @@ public class UploadController {
             // 파일이 비어 있을 경우 오류 메시지 설정
             bindingResult.rejectValue("file", "error.file", "파일을 선택해주세요.");
         }
+
 
         List<ResponseDto> responseDtos = null;
         if (!bindingResult.hasErrors()) {
@@ -93,6 +95,5 @@ public class UploadController {
 
         return "redirect:/admin"; // 성공적인 업로드 후 리다이렉션
     }
-
 
 }

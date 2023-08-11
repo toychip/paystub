@@ -19,7 +19,7 @@
                 HealthInsuranceDeduction, ElderlyCareInsuranceDeduction, DeductionTotal, NetPayment, TotalWorkDays, TotalWorkingHours, HolidayCalculationHours,
                 OvertimeCalculationHours, HourlyWage, Name, birthday
         FROM EmployeeSalary, User
-        WHERE (Name = "이혜란" and EmployeeSalary.EmployeeID = User.EmployeeID)
+        WHERE (User.EmployeeID = #{employeeID} and EmployeeSalary.EmployeeID = User.EmployeeID)
 
     </select>
 
