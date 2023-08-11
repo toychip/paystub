@@ -22,6 +22,10 @@
         .center {
             text-align: center;
         }
+
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -30,6 +34,13 @@
 </div>
 <div style="float:left" class="margin">
     <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
+    <div th:if="${errors}" class="error">
+        <ul>
+            <li th:each="error : ${errors}">
+                <p th:text="${error}"></p>
+            </li>
+        </ul>
+    </div>
     <!-- 파일 업로드 -->
     <form method="GET" action="/admin" enctype="multipart/form-data">
         <input type="file" id="file" name="file">
@@ -70,8 +81,8 @@
         </select> <span>월</span>
         <button>조회</button>
     </form>
-
 </div>
+  
 <div style="width: 100%; height: 500px; overflow: auto" class="center">
     <table>
         <thead>
@@ -108,36 +119,38 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="employee : ${responseDtos}">
+          <tr th:each="response : ${responseDtos}">
             <td><input type="checkbox" id="checkbox"></td>
-            <td th:text="${employee.employeeSalaryDto.EmployeeID}"></td>
-            <td th:text="${employee.userDto.Name}"></td>
-            <td th:text="${employee.userDto.birthday}"></td>
-            <td th:text="${employee.employeeSalaryDto.BasicSalary}"></td>
-            <td th:text="${employee.employeeSalaryDto.HolidayAllowance}"></td>
-            <td th:text="${employee.employeeSalaryDto.LunchExpenses}"></td>
-            <td th:text="${employee.employeeSalaryDto.FirstWeekHolidayAllowance}"></td>
-            <td th:text="${employee.employeeSalaryDto.RetroactiveHolidayAllowance}"></td>
-            <td th:text="${employee.employeeSalaryDto.TotalPayment}"></td>
-            <td th:text="${employee.employeeSalaryDto.IncomeTax}"></td>
-            <td th:text="${employee.employeeSalaryDto.ResidentTax}"></td>
-            <td th:text="${employee.employeeSalaryDto.EmploymentInsurance}"></td>
-            <td th:text="${employee.employeeSalaryDto.NationalPension}"></td>
-            <td th:text="${employee.employeeSalaryDto.HealthInsurance}"></td>
-            <td th:text="${employee.employeeSalaryDto.ElderlyCareInsurance}"></td>
-            <td th:text="${employee.employeeSalaryDto.EmploymentInsuranceDeduction}"></td>
-            <td th:text="${employee.employeeSalaryDto.NationalPensionDeduction}"></td>
-            <td th:text="${employee.employeeSalaryDto.HealthInsuranceDeduction}"></td>
-            <td th:text="${employee.employeeSalaryDto.ElderlyCareInsuranceDeduction}"></td>
-            <td th:text="${employee.employeeSalaryDto.DeductionTotal}"></td>
-            <td th:text="${employee.employeeSalaryDto.NetPayment}"></td>
-            <td th:text="${employee.employeeSalaryDto.TotalWorkDays}"></td>
-            <td th:text="${employee.employeeSalaryDto.TotalWorkingHours}"></td>
-            <td th:text="${employee.employeeSalaryDto.HolidayCalculationHours}"></td>
-            <td th:text="${employee.employeeSalaryDto.OvertimeCalculationHours}"></td>
-            <td th:text="${employee.employeeSalaryDto.HourlyWage}"></td>
-            <td th:text="${employee.employeeSalaryDto.LunchAllowance}"></td>
-            <td th:text="${employee.userDto.EmailAddress}"></td>
+            <td th:text="${response.EmployeeID}"></td>
+            <td th:text="${response.year}"></td>
+            <td th:text="${response.month}"></td>
+            <td th:text="${response.Name}"></td>
+            <td th:text="${response.birthday}"></td>
+            <td th:text="${response.BasicSalary}"></td>
+            <td th:text="${response.HolidayAllowance}"></td>
+            <td th:text="${response.LunchExpenses}"></td>
+            <td th:text="${response.FirstWeekHolidayAllowance}"></td>
+            <td th:text="${response.RetroactiveHolidayAllowance}"></td>
+            <td th:text="${response.TotalPayment}"></td>
+            <td th:text="${response.IncomeTax}"></td>
+            <td th:text="${response.ResidentTax}"></td>
+            <td th:text="${response.EmploymentInsurance}"></td>
+            <td th:text="${response.NationalPension}"></td>
+            <td th:text="${response.HealthInsurance}"></td>
+            <td th:text="${response.ElderlyCareInsurance}"></td>
+            <td th:text="${response.EmploymentInsuranceDeduction}"></td>
+            <td th:text="${response.NationalPensionDeduction}"></td>
+            <td th:text="${response.HealthInsuranceDeduction}"></td>
+            <td th:text="${response.ElderlyCareInsuranceDeduction}"></td>
+            <td th:text="${response.DeductionTotal}"></td>
+            <td th:text="${response.NetPayment}"></td>
+            <td th:text="${response.TotalWorkDays}"></td>
+            <td th:text="${response.TotalWorkingHours}"></td>
+            <td th:text="${response.HolidayCalculationHours}"></td>
+            <td th:text="${response.OvertimeCalculationHours}"></td>
+            <td th:text="${response.HourlyWage}"></td>
+            <td th:text="${response.LunchAllowance}"></td>
+            <td th:text="${response.EmailAddress}"></td>
         </tr>
         </tbody>
     </table>

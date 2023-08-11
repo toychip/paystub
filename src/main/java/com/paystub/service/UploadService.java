@@ -8,11 +8,15 @@ import com.paystub.repository.EmployeeSalaryMapper;
 import com.paystub.repository.UserMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -20,51 +24,105 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Getter
+@Slf4j
 public class UploadService {
 
     private final UserMapper userMapper;
     private final EmployeeSalaryMapper employeeSalaryMapper;
     private final AESUtilConfig aesUtilConfig;
 
-    public List<ResponseDto> findAllResponse() {
+    public List<ResponseDto> findResponseByYearAndMonth(Long year, Long month) {
+        return userMapper.findJoinedDataByYearAndMonth(year, month);
+    }
 
-        List<UserDto> users = userMapper.findAllUsers();
-        List<EmployeeSalaryDto> salaries = employeeSalaryMapper.findAllSalaries(); // findAllSalaries는 모든 급여 정보를 반환하는 메서드
 
-        List<ResponseDto> responseDtos = new ArrayList<>();
-        for (int i = 0; i < users.size(); i++) {
-            responseDtos.add(new ResponseDto(salaries.get(i), users.get(i)));
+    public List<ResponseDto> processExcelFile(MultipartFile file, BindingResult bindingResult,
+                                              Long year, Long month) {
+        List<UserDto> userDtos = new ArrayList<>();
+        List<EmployeeSalaryDto> employeeSalaryDtos = new ArrayList<>();
+
+        InputStream inputStream = null; // 여기서 변수 선언
+
+        try {
+            inputStream = file.getInputStream();
+            Workbook workbook = WorkbookFactory.create(inputStream);
+            Sheet sheet = workbook.getSheetAt(2); // 세 번째 시트
+            // 첫 번째 행은 헤더이므로 두 번째 행부터 시작합니다.
+            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) {
+                    continue;
+                }
+
+                UserDto userDto = createUserDto(row);
+                EmployeeSalaryDto employeeSalaryDto = createEmployeeSalaryDto(row, userDto.getEmployeeID());
+
+                userDtos.add(userDto);
+                employeeSalaryDtos.add(employeeSalaryDto);
+            }
+            workbook.close();
+        } catch (Exception e) {
+            // 오류 발생 시 BindingResult에 오류 추가
+            FieldError error = new FieldError("file", "file", "파일 처리 중 오류가 발생했습니다: " + e.getMessage());
+            bindingResult.addError(error);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    FieldError error = new FieldError("file", "file", "파일 스트림 닫기 중 오류가 발생했습니다: " + e.getMessage());
+                    bindingResult.addError(error);
+                }
+            }
         }
 
-        return responseDtos;
+        saveUsers(userDtos, bindingResult);
+        saveEmployeeSalaries(employeeSalaryDtos, bindingResult);
+
+        // 저장된 데이터를 바로 반환하거나 필요한 경우 데이터베이스에서 다시 조회할 수 있습니다.
+        return findResponseByYearAndMonth(year, month);
     }
 
 
-
-
-    public List<ResponseDto> processExcelFile(MultipartFile file) {
-        List<ResponseDto> responseDtos = excelToDto(file);  // model에 담기 위해 return하는 메서드
-        saveData(responseDtos); // 데이터를 저장하는 메서드
-        return responseDtos;
-    }
-
-    // Mybatis를 사용하여 처리된 데이터를 데이터베이스에 저장
     @Transactional
-    public void saveData(List<ResponseDto> responseDtos) {
-        List<UserDto> userDtoList = new ArrayList<>();
-        List<EmployeeSalaryDto> employeeSalaryDtoList = new ArrayList<>();
+    public void saveUsers(List<UserDto> userDtos, BindingResult bindingResult) {
+        for (UserDto userDto : userDtos) {
+            Optional<UserDto> existingUserWithSameIDAndName = userMapper.findByEmployeeIDAndName(userDto.getEmployeeID(), userDto.getName());
+            Optional<UserDto> existingUserWithSameID = userMapper.findByEmployeeID(userDto.getEmployeeID());
 
-        for (ResponseDto responseDto : responseDtos) {
-            userDtoList.add(responseDto.getUserDto());
-            employeeSalaryDtoList.add(responseDto.getEmployeeSalaryDto());
+            if (existingUserWithSameIDAndName.isPresent()) {
+                FieldError error = new FieldError("userDto", "Name", "[" + userDto.getName() + "]님이 이미 존재합니다.");
+                bindingResult.addError(error);
+            } else if (existingUserWithSameID.isPresent()) {
+                FieldError error = new FieldError("userDto", "EmployeeID", "[" + userDto.getName() + "]님이 이미 [" + userDto.getEmployeeID() + "]를 사용중입니다.");
+                bindingResult.addError(error);
+            } else {
+                userMapper.insertUser(userDto);
+            }
         }
+    }
 
-        saveUser(userDtoList);
-        saveEmployeeSalary(employeeSalaryDtoList);
+
+    @Transactional
+    public void saveEmployeeSalaries(List<EmployeeSalaryDto> employeeSalaryDtos, BindingResult bindingResult) {
+        for (EmployeeSalaryDto employeeSalaryDto : employeeSalaryDtos) {
+            EmployeeSalaryDto existingData = employeeSalaryMapper.findSalaryByYearMonthAndEmployeeID(
+                    employeeSalaryDto.getYear(),
+                    employeeSalaryDto.getMonth(),
+                    employeeSalaryDto.getEmployeeID()
+            );
+            if (existingData != null) {
+                FieldError error = new FieldError("employeeSalaryDto", "EmployeeID", "동일한 EmployeeID, year, month가 이미 존재합니다.");
+                bindingResult.addError(error);
+            } else {
+                employeeSalaryMapper.insertEmployeeSalaryDto(employeeSalaryDto);
+            }
+        }
     }
 
     private UserDto createUserDto(Row row) {
@@ -93,7 +151,7 @@ public class UploadService {
         int year = now.getYear();
 
         // 한 달 전의 월을 가져옵니다.
-        int month = now.minusMonths(1).getMonthValue();
+        int month = now.minusMonths(2).getMonthValue();
 
         BigDecimal BasicSalary = getNumericValueOrNull(row.getCell(3)); // 기본 수당
         BigDecimal HolidayAllowance = getNumericValueOrNull(row.getCell(4)); // 주휴 수당
@@ -154,48 +212,6 @@ public class UploadService {
                 .HourlyWage(HourlyWage)
                 .LunchAllowance(LunchAllowance)
                 .build();
-    }
-
-    public List<ResponseDto> excelToDto(MultipartFile file) {
-
-        List<ResponseDto> list = new ArrayList<>();
-
-        try {
-            InputStream inputStream = file.getInputStream();
-            Workbook workbook = WorkbookFactory.create(inputStream);
-            Sheet sheet = workbook.getSheetAt(2); // 세 번째 시트
-            // 첫 번째 행은 헤더이므로 두 번째 행부터 시작합니다.
-            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
-                Row row = sheet.getRow(i);
-                if (row == null) {
-                    continue;
-                }
-
-                UserDto userDto = createUserDto(row);
-                EmployeeSalaryDto employeeSalaryDto = createEmployeeSalaryDto(row, userDto.getEmployeeID());
-
-                // ResponseDto 객체를 생성하고 값을 설정합니다.
-                ResponseDto responseDto = new ResponseDto(employeeSalaryDto, userDto);
-                // 리스트에 ResponseDto 객체를 추가합니다.
-                list.add(responseDto);
-            }
-            workbook.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public void saveUser(List<UserDto> data) {
-        for (UserDto userDto : data) {
-            userMapper.insertUser(userDto); // EmployeeSalaryDto에 대해서도 동일하게 처리
-            }
-    }
-
-    public void saveEmployeeSalary(List<EmployeeSalaryDto> data) {
-        for (EmployeeSalaryDto employeeSalaryDto : data) {
-            employeeSalaryMapper.insertEmployeeSalaryDto(employeeSalaryDto); // EmployeeSalaryDto에 대해서도 동일하게 처리
-        }
     }
 
     private BigDecimal getNumericValueOrNull(Cell cell) {
