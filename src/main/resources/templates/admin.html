@@ -32,6 +32,8 @@
     <thead>
     <tr>
         <th>일용직 근무자 사번</th>
+        <th>년도</th>
+        <th>월</th>
         <th>이름</th>
         <th>생일</th>
         <th>기본수당</th>
@@ -62,35 +64,37 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="employee : ${responseDtos}">
-        <td th:text="${employee.employeeSalaryDto.EmployeeID}"></td>
-        <td th:text="${employee.userDto.Name}"></td>
-        <td th:text="${employee.userDto.birthday}"></td>
-        <td th:text="${employee.employeeSalaryDto.BasicSalary}"></td>
-        <td th:text="${employee.employeeSalaryDto.HolidayAllowance}"></td>
-        <td th:text="${employee.employeeSalaryDto.LunchExpenses}"></td>
-        <td th:text="${employee.employeeSalaryDto.FirstWeekHolidayAllowance}"></td>
-        <td th:text="${employee.employeeSalaryDto.RetroactiveHolidayAllowance}"></td>
-        <td th:text="${employee.employeeSalaryDto.TotalPayment}"></td>
-        <td th:text="${employee.employeeSalaryDto.IncomeTax}"></td>
-        <td th:text="${employee.employeeSalaryDto.ResidentTax}"></td>
-        <td th:text="${employee.employeeSalaryDto.EmploymentInsurance}"></td>
-        <td th:text="${employee.employeeSalaryDto.NationalPension}"></td>
-        <td th:text="${employee.employeeSalaryDto.HealthInsurance}"></td>
-        <td th:text="${employee.employeeSalaryDto.ElderlyCareInsurance}"></td>
-        <td th:text="${employee.employeeSalaryDto.EmploymentInsuranceDeduction}"></td>
-        <td th:text="${employee.employeeSalaryDto.NationalPensionDeduction}"></td>
-        <td th:text="${employee.employeeSalaryDto.HealthInsuranceDeduction}"></td>
-        <td th:text="${employee.employeeSalaryDto.ElderlyCareInsuranceDeduction}"></td>
-        <td th:text="${employee.employeeSalaryDto.DeductionTotal}"></td>
-        <td th:text="${employee.employeeSalaryDto.NetPayment}"></td>
-        <td th:text="${employee.employeeSalaryDto.TotalWorkDays}"></td>
-        <td th:text="${employee.employeeSalaryDto.TotalWorkingHours}"></td>
-        <td th:text="${employee.employeeSalaryDto.HolidayCalculationHours}"></td>
-        <td th:text="${employee.employeeSalaryDto.OvertimeCalculationHours}"></td>
-        <td th:text="${employee.employeeSalaryDto.HourlyWage}"></td>
-        <td th:text="${employee.employeeSalaryDto.LunchAllowance}"></td>
-        <td th:text="${employee.userDto.EmailAddress}"></td>
+    <tr th:each="response : ${responseDtos}">
+        <td th:text="${response.EmployeeID}"></td>
+        <td th:text="${response.year}"></td>
+        <td th:text="${response.month}"></td>
+        <td th:text="${response.Name}"></td>
+        <td th:text="${response.birthday}"></td>
+        <td th:text="${response.BasicSalary}"></td>
+        <td th:text="${response.HolidayAllowance}"></td>
+        <td th:text="${response.LunchExpenses}"></td>
+        <td th:text="${response.FirstWeekHolidayAllowance}"></td>
+        <td th:text="${response.RetroactiveHolidayAllowance}"></td>
+        <td th:text="${response.TotalPayment}"></td>
+        <td th:text="${response.IncomeTax}"></td>
+        <td th:text="${response.ResidentTax}"></td>
+        <td th:text="${response.EmploymentInsurance}"></td>
+        <td th:text="${response.NationalPension}"></td>
+        <td th:text="${response.HealthInsurance}"></td>
+        <td th:text="${response.ElderlyCareInsurance}"></td>
+        <td th:text="${response.EmploymentInsuranceDeduction}"></td>
+        <td th:text="${response.NationalPensionDeduction}"></td>
+        <td th:text="${response.HealthInsuranceDeduction}"></td>
+        <td th:text="${response.ElderlyCareInsuranceDeduction}"></td>
+        <td th:text="${response.DeductionTotal}"></td>
+        <td th:text="${response.NetPayment}"></td>
+        <td th:text="${response.TotalWorkDays}"></td>
+        <td th:text="${response.TotalWorkingHours}"></td>
+        <td th:text="${response.HolidayCalculationHours}"></td>
+        <td th:text="${response.OvertimeCalculationHours}"></td>
+        <td th:text="${response.HourlyWage}"></td>
+        <td th:text="${response.LunchAllowance}"></td>
+        <td th:text="${response.EmailAddress}"></td>
     </tr>
     </tbody>
 </body>

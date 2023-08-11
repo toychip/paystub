@@ -7,10 +7,6 @@
         VALUES (#{EmployeeID}, #{Name}, #{State}, #{Role}, #{birthday}, #{SocialNumber}, #{EmailAddress})
     </insert>
 
-    <select id="findAllUsers" resultType="com.paystub.dto.UserDto">
-        SELECT * FROM User WHERE Role = 1
-    </select>
-
     <select id="findByUsername" resultType="com.paystub.dto.LoginFormDto">
         SELECT EmployeeID AS username, SocialNumber AS password, Role AS role
         FROM User
@@ -26,5 +22,21 @@
         WHERE (Name = "이혜란" and EmployeeSalary.EmployeeID = User.EmployeeID)
 
     </select>
+
+    <select id="findByEmployeeIDAndName" resultType="com.paystub.dto.UserDto">
+        SELECT * FROM User
+        WHERE EmployeeID = #{EmployeeID} AND Name = #{Name}
+    </select>
+
+    <select id="findAllJoinedData" resultType="com.paystub.dto.ResponseDto">
+        SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
+               e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
+               e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
+               e.NationalPensionDeduction, e.HealthInsuranceDeduction, e.ElderlyCareInsuranceDeduction, e.DeductionTotal, e.NetPayment, e.TotalWorkDays,
+               e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
+        FROM User u
+                 JOIN EmployeeSalary e ON u.EmployeeID = e.EmployeeID
+    </select>
+
 </mapper>
 
