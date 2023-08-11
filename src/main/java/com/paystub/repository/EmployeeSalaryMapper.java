@@ -17,5 +17,4 @@ public interface EmployeeSalaryMapper {
             @Param("EmployeeID") Integer EmployeeID
     );
 
-    List<EmployeeSalaryDto> findAllSalaries(); // 모든 급여 정보 반환
 }

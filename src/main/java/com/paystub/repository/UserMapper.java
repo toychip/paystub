@@ -25,5 +25,7 @@ public interface UserMapper {
 
    Optional<UserDto> findByEmployeeIDAndName(@Param("EmployeeID") Integer EmployeeID, @Param("Name") String Name);
 
+   Optional<UserDto> findByEmployeeID(@Param("EmployeeID") Integer EmployeeID);
+
 
 }

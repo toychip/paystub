@@ -16,12 +16,23 @@
         .center {
             text-align: center;
         }
+
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>
 <div class="center">
     <h1>관리자 페이지</h1>
     <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
+    <div th:if="${errors}" class="error">
+        <ul>
+            <li th:each="error : ${errors}">
+                <p th:text="${error}"></p>
+            </li>
+        </ul>
+    </div>
     <!-- 파일 업로드 -->
     <form method="POST" action="/admin" enctype="multipart/form-data">
         <input type="file" id="file" name="file">

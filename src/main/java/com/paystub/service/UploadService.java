@@ -8,11 +8,15 @@ import com.paystub.repository.EmployeeSalaryMapper;
 import com.paystub.repository.UserMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -25,6 +29,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Getter
+@Slf4j
 public class UploadService {
 
     private final UserMapper userMapper;
@@ -35,12 +40,14 @@ public class UploadService {
         return userMapper.findAllJoinedData();
     }
 
-    public List<ResponseDto> processExcelFile(MultipartFile file) {
+    public List<ResponseDto> processExcelFile(MultipartFile file, BindingResult bindingResult) {
         List<UserDto> userDtos = new ArrayList<>();
         List<EmployeeSalaryDto> employeeSalaryDtos = new ArrayList<>();
 
+        InputStream inputStream = null; // 여기서 변수 선언
+
         try {
-            InputStream inputStream = file.getInputStream();
+            inputStream = file.getInputStream();
             Workbook workbook = WorkbookFactory.create(inputStream);
             Sheet sheet = workbook.getSheetAt(2); // 세 번째 시트
             // 첫 번째 행은 헤더이므로 두 번째 행부터 시작합니다.
@@ -58,35 +65,59 @@ public class UploadService {
             }
             workbook.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            // 오류 발생 시 BindingResult에 오류 추가
+            FieldError error = new FieldError("file", "file", "파일 처리 중 오류가 발생했습니다: " + e.getMessage());
+            bindingResult.addError(error);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    FieldError error = new FieldError("file", "file", "파일 스트림 닫기 중 오류가 발생했습니다: " + e.getMessage());
+                    bindingResult.addError(error);
+                }
+            }
         }
 
-        saveUsers(userDtos);
-        saveEmployeeSalaries(employeeSalaryDtos);
+        saveUsers(userDtos, bindingResult);
+        saveEmployeeSalaries(employeeSalaryDtos, bindingResult);
 
         // 저장된 데이터를 바로 반환하거나 필요한 경우 데이터베이스에서 다시 조회할 수 있습니다.
         return findAllResponse();
     }
 
+
     @Transactional
-    public void saveUsers(List<UserDto> userDtos) {
+    public void saveUsers(List<UserDto> userDtos, BindingResult bindingResult) {
         for (UserDto userDto : userDtos) {
-            Optional<UserDto> existingUser = userMapper.findByEmployeeIDAndName(userDto.getEmployeeID(), userDto.getName());
-            if (!existingUser.isPresent()) {
+            Optional<UserDto> existingUserWithSameIDAndName = userMapper.findByEmployeeIDAndName(userDto.getEmployeeID(), userDto.getName());
+            Optional<UserDto> existingUserWithSameID = userMapper.findByEmployeeID(userDto.getEmployeeID());
+
+            if (existingUserWithSameIDAndName.isPresent()) {
+                FieldError error = new FieldError("userDto", "Name", "[" + userDto.getName() + "]님이 이미 존재합니다.");
+                bindingResult.addError(error);
+            } else if (existingUserWithSameID.isPresent()) {
+                FieldError error = new FieldError("userDto", "EmployeeID", "[" + userDto.getName() + "]님이 이미 [" + userDto.getEmployeeID() + "]를 사용중입니다.");
+                bindingResult.addError(error);
+            } else {
                 userMapper.insertUser(userDto);
             }
         }
     }
 
+
     @Transactional
-    public void saveEmployeeSalaries(List<EmployeeSalaryDto> employeeSalaryDtos) {
+    public void saveEmployeeSalaries(List<EmployeeSalaryDto> employeeSalaryDtos, BindingResult bindingResult) {
         for (EmployeeSalaryDto employeeSalaryDto : employeeSalaryDtos) {
             EmployeeSalaryDto existingData = employeeSalaryMapper.findSalaryByYearMonthAndEmployeeID(
                     employeeSalaryDto.getYear(),
                     employeeSalaryDto.getMonth(),
                     employeeSalaryDto.getEmployeeID()
             );
-            if (existingData == null) {
+            if (existingData != null) {
+                FieldError error = new FieldError("employeeSalaryDto", "EmployeeID", "동일한 EmployeeID, year, month가 이미 존재합니다.");
+                bindingResult.addError(error);
+            } else {
                 employeeSalaryMapper.insertEmployeeSalaryDto(employeeSalaryDto);
             }
         }
@@ -180,70 +211,6 @@ public class UploadService {
                 .LunchAllowance(LunchAllowance)
                 .build();
     }
-
-//    public List<ResponseDto> excelToDto(MultipartFile file) {
-//
-//        List<ResponseDto> list = new ArrayList<>();
-//
-//        try {
-//            InputStream inputStream = file.getInputStream();
-//            Workbook workbook = WorkbookFactory.create(inputStream);
-//            Sheet sheet = workbook.getSheetAt(2); // 세 번째 시트
-//            // 첫 번째 행은 헤더이므로 두 번째 행부터 시작합니다.
-//            for (int i = 2; i <= sheet.getLastRowNum(); i++) {
-//                Row row = sheet.getRow(i);
-//                if (row == null) {
-//                    continue;
-//                }
-//
-//                UserDto userDto = createUserDto(row);
-//                EmployeeSalaryDto employeeSalaryDto = createEmployeeSalaryDto(row, userDto.getEmployeeID());
-//
-//                ResponseDto responseDto = ResponseDto.builder()
-//                        .EmployeeID(userDto.getEmployeeID())
-//                        .year(employeeSalaryDto.getYear())
-//                        .month(employeeSalaryDto.getMonth())
-//                        .Name(userDto.getName())
-//                        .State(userDto.getState())
-//                        .Role(userDto.getRole())
-//                        .birthday(userDto.getBirthday())
-//                        .SocialNumber(userDto.getSocialNumber())
-//                        .EmailAddress(userDto.getEmailAddress())
-//                        .BasicSalary(employeeSalaryDto.getBasicSalary())
-//                        .HolidayAllowance(employeeSalaryDto.getHolidayAllowance())
-//                        .LunchExpenses(employeeSalaryDto.getLunchExpenses())
-//                        .FirstWeekHolidayAllowance(employeeSalaryDto.getFirstWeekHolidayAllowance())
-//                        .RetroactiveHolidayAllowance(employeeSalaryDto.getRetroactiveHolidayAllowance())
-//                        .TotalPayment(employeeSalaryDto.getTotalPayment())
-//                        .IncomeTax(employeeSalaryDto.getIncomeTax())
-//                        .ResidentTax(employeeSalaryDto.getResidentTax())
-//                        .EmploymentInsurance(employeeSalaryDto.getEmploymentInsurance())
-//                        .NationalPension(employeeSalaryDto.getNationalPension())
-//                        .HealthInsurance(employeeSalaryDto.getHealthInsurance())
-//                        .ElderlyCareInsurance(employeeSalaryDto.getElderlyCareInsurance())
-//                        .EmploymentInsuranceDeduction(employeeSalaryDto.getEmploymentInsuranceDeduction())
-//                        .NationalPensionDeduction(employeeSalaryDto.getNationalPensionDeduction())
-//                        .HealthInsuranceDeduction(employeeSalaryDto.getHealthInsuranceDeduction())
-//                        .ElderlyCareInsuranceDeduction(employeeSalaryDto.getElderlyCareInsuranceDeduction())
-//                        .DeductionTotal(employeeSalaryDto.getDeductionTotal())
-//                        .NetPayment(employeeSalaryDto.getNetPayment())
-//                        .TotalWorkDays(employeeSalaryDto.getTotalWorkDays())
-//                        .TotalWorkingHours(employeeSalaryDto.getTotalWorkingHours())
-//                        .HolidayCalculationHours(employeeSalaryDto.getHolidayCalculationHours())
-//                        .OvertimeCalculationHours(employeeSalaryDto.getOvertimeCalculationHours())
-//                        .HourlyWage(employeeSalaryDto.getHourlyWage())
-//                        .LunchAllowance(employeeSalaryDto.getLunchAllowance())
-//                        .build();
-//
-//                // 리스트에 ResponseDto 객체를 추가합니다.
-//                list.add(responseDto);
-//            }
-//            workbook.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return list;
-//    }
 
     private BigDecimal getNumericValueOrNull(Cell cell) {
         if (cell == null || cell.getCellType() != CellType.NUMERIC) {
