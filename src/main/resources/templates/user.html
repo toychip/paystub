@@ -103,41 +103,41 @@
         </tr>
         <tr>
             <td>기본수당</td>
-            <td th:text="${totalData.basicSalary}" class="right">
+            <td th:text="${#numbers.formatInteger(totalData.basicSalary, 3, 'COMMA')}" class="right"></td>
             <td>소득세</td>
-            <td th:text="${totalData.incomeTax}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.incomeTax, 3, 'COMMA')}" class="right"></td>
             <td>총근로일수</td>
             <td th:text="${totalData.totalWorkDays}" class="right"></td>
         </tr>
         <tr>
             <td>주휴수당</td>
-            <td th:text="${totalData.holidayAllowance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.holidayAllowance, 3, 'COMMA')}" class="right"></td>
             <td>주민세</td>
-            <td th:text="${totalData.residentTax}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.residentTax, 3, 'COMMA')}" class="right"></td>
             <td>총근무시간</td>
             <td th:text="${totalData.totalWorkingHours}" class="right"></td>
         </tr>
         <tr>
             <td>중식비</td>
-            <td th:text="${totalData.lunchExpenses}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.lunchExpenses, 3, 'COMMA')}" class="right"></td>
             <td>고용보험</td>
-            <td th:text="${totalData.employmentInsurance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.employmentInsurance, 3, 'COMMA')}" class="right"></td>
             <td>주휴산정시간</td>
             <td th:text="${totalData.holidayCalculationHours}" class="right"></td>
         </tr>
         <tr>
             <td>주휴수당(첫째주)</td>
-            <td th:text="${totalData.firstWeekHolidayAllowance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.firstWeekHolidayAllowance, 3, 'COMMA')}" class="right"></td>
             <td>국민연금</td>
-            <td th:text="${totalData.nationalPension}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.nationalPension, 3, 'COMMA')}" class="right"></td>
             <td>주휴산정시간(소급)</td>
             <td th:text="${totalData.overtimeCalculationHours}" class="right"></td>
         </tr>
         <tr>
             <td>주휴수당(소급분)</td>
-            <td th:text="${totalData.retroactiveHolidayAllowance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.retroactiveHolidayAllowance, 3, 'COMMA')}" class="right"></td>
             <td>건강보험</td>
-            <td th:text="${totalData.healthInsurance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.healthInsurance, 3, 'COMMA')}" class="right"></td>
             <td></td>
             <td></td>
         </tr>
@@ -145,7 +145,7 @@
             <td></td>
             <td></td>
             <td>노인요양</td>
-            <td th:text="${totalData.elderlyCareInsurance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.elderlyCareInsurance, 3, 'COMMA')}" class="right"></td>
             <td></td>
             <td></td>
         </tr>
@@ -153,7 +153,7 @@
             <td></td>
             <td></td>
             <td>고용보험(소급공제)</td>
-            <td th:text="${totalData.employmentInsuranceDeduction}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.employmentInsuranceDeduction, 3, 'COMMA')}" class="right"></td>
             <td></td>
             <td></td>
         </tr>
@@ -161,7 +161,7 @@
             <td></td>
             <td></td>
             <td>국민연금(소급공제)</td>
-            <td th:text="${totalData.nationalPensionDeduction}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.nationalPensionDeduction, 3, 'COMMA')}" class="right"></td>
             <td></td>
             <td></td>
         </tr>
@@ -169,7 +169,7 @@
             <td></td>
             <td></td>
             <td>건강보험(소급공제)</td>
-            <td th:text="${totalData.healthInsuranceDeduction}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.healthInsuranceDeduction, 3, 'COMMA')}" class="right"></td>
             <td></td>
             <td></td>
         </tr>
@@ -177,15 +177,15 @@
             <td></td>
             <td></td>
             <td>노인요양(소급공제)</td>
-            <td th:text="${totalData.elderlyCareInsuranceDeduction}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.elderlyCareInsuranceDeduction, 3, 'COMMA')}" class="right"></td>
             <td></td>
             <td></td>
         </tr>
         <tr>
             <td>지급합계</td>
-            <td th:text="${totalData.totalPayment}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.totalPayment, 3, 'COMMA')}" class="right"></td>
             <td>공제합계</td>
-            <td th:text="${totalData.deductionTotal}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.deductionTotal, 3, 'COMMA')}" class="right"></td>
             <td></td>
             <td></td>
         </tr>
@@ -194,7 +194,7 @@
             <td class="hide"></td>
             <td class="hide" ></td>
             <td>실 지급액</td>
-            <td th:text="${totalData.netPayment}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.netPayment, 3, 'COMMA')}" class="right"></td>
             <td class="hide"></td>
             <td class="hide"></td>
         </tr>
@@ -211,27 +211,27 @@
         <tr>
             <td>기본수당</td>
             <td colspan="6"><span th:text="${totalData.hourlyWage}"></span> 원 * 근로시간</td>
-            <td th:text="${totalData.basicSalary}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.basicSalary, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>주휴수당</td>
             <td colspan="6"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
-            <td th:text="${totalData.holidayAllowance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.holidayAllowance, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>중식비</td>
             <td colspan="6">       원 * 근무일수</td>
-            <td th:text="${totalData.lunchExpenses}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.lunchExpenses, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>주휴수당(첫째주)</td>
             <td colspan="6"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
-            <td th:text="${totalData.firstWeekHolidayAllowance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.firstWeekHolidayAllowance, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>주휴수당(소급분)</td>
             <td colspan="6"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
-            <td th:text="${totalData.retroactiveHolidayAllowance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.retroactiveHolidayAllowance, 3, 'COMMA')}" class="right"></td>
         </tr>
     </table>
     <!-- 공제금액 산출내역 -->
@@ -245,32 +245,32 @@
         <tr>
             <td>소득세</td>
             <td colspan="2">간이세액표 참조</td>
-            <td th:text="${totalData.incomeTax}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.incomeTax, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>주민세</td>
             <td colspan="2">소득세 * 0.1000</td>
-            <td th:text="${totalData.residentTax}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.residentTax, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>고용보험</td>
             <td colspan="2">과세총액 * 0.0090</td>
-            <td th:text="${totalData.employmentInsurance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.employmentInsurance, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>국민연금</td>
             <td colspan="2">과세총액 * 0.0450</td>
-            <td th:text="${totalData.nationalPension}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.nationalPension, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>건강보험</td>
             <td colspan="2">과세총액 * 0.03545</td>
-            <td th:text="${totalData.healthInsurance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.healthInsurance, 3, 'COMMA')}" class="right"></td>
         </tr>
         <tr>
             <td>노인요양보험</td>
             <td colspan="2">건강보험 * 0.1281</td>
-            <td th:text="${totalData.elderlyCareInsurance}" class="right"></td>
+            <td th:text="${#numbers.formatInteger(totalData.elderlyCareInsurance, 3, 'COMMA')}" class="right"></td>
         </tr>
     </table>
     <div id="end" class="report"></div>
