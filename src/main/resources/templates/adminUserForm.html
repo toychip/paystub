@@ -17,6 +17,7 @@
 <table>
     <thead>
     <tr>
+        <th>선택</th>
         <th>일용직 근무자 사번</th>
         <th>이름</th>
         <th>생일</th>
@@ -26,6 +27,7 @@
     </thead>
     <tbody>
     <tr th:each="user : ${userDto}">
+        <td><input type="checkbox" id="checkbox"></td>
         <td th:text="${user.EmployeeID}"></td>
         <td th:text="${user.Name}"></td>
         <td th:text="${user.birthday}"></td>
