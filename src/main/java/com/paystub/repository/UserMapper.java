@@ -19,6 +19,6 @@ public interface UserMapper {
 
     Optional<LoginFormDto> findByUsername(String username);
 
-   List<UserFormDto> getTotalData();
+   List<UserFormDto> getTotalData(String employeeID);
 
 }
