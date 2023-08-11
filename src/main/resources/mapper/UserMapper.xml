@@ -34,7 +34,7 @@
     </select>
 
 
-    <select id="findAllJoinedData" resultType="com.paystub.dto.ResponseDto">
+    <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.dto.ResponseDto">
         SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
                e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
                e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
@@ -42,7 +42,9 @@
                e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
         FROM User u
                  JOIN EmployeeSalary e ON u.EmployeeID = e.EmployeeID
+        WHERE e.year = #{year} AND e.month = #{month}
     </select>
+
 
 </mapper>
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,15 +31,38 @@ public class UploadController {
     public String getUploadPage(@RequestParam(required = false) Long year,
                                 @RequestParam(required = false) Long month,
                                 Model model) {
+// --
+        LocalDate now = LocalDate.now();
+        LocalDate oneMonthAgo = now.minusMonths(1);
 
-        List<ResponseDto> responseDtos = uploadService.findAllResponse();
+        // 매개변수가 제공되지 않은 경우 기본 값을 사용
+        if (year == null) {
+            year = (long) oneMonthAgo.getYear();
+        }
+        if (month == null) {
+            month = (long) oneMonthAgo.getMonthValue();
+        }
+// --
+
+        List<ResponseDto> responseDtos = uploadService.findResponseByYearAndMonth(year, month);
         model.addAttribute("responseDtos", responseDtos);
         return "admin";
     }
 
     @PostMapping("/admin")
-    public String handleFileUpload(@ModelAttribute @Valid FileUploadForm form, BindingResult bindingResult, Model model) {
+    public String handleFileUpload(@ModelAttribute @Valid FileUploadForm form, BindingResult bindingResult,
+                                   @RequestParam(required = false) Long year,
+                                   @RequestParam(required = false) Long month, Model model) {
+
         MultipartFile file = form.getFile();
+
+        if (year == null) {
+            year = (long) LocalDate.now().minusMonths(1).getYear();
+        }
+        if (month == null) {
+            month = (long) LocalDate.now().minusMonths(1).getMonthValue();
+        }
+
         if (file.isEmpty()) {
             // 파일이 비어 있을 경우 오류 메시지 설정
             bindingResult.rejectValue("file", "error.file", "파일을 선택해주세요.");
@@ -47,7 +71,7 @@ public class UploadController {
         List<ResponseDto> responseDtos = null;
         if (!bindingResult.hasErrors()) {
             // 엑셀 파일 처리 로직 작성
-            responseDtos = uploadService.processExcelFile(file, bindingResult); // 결과를 받아옴
+            responseDtos = uploadService.processExcelFile(file, bindingResult, year, month); // 결과를 받아옴
         }
 
         if (bindingResult.hasErrors()) {
@@ -59,7 +83,7 @@ public class UploadController {
 
             // 현재 페이지 데이터를 다시 로드할 필요가 없음
             if (responseDtos == null) {
-                responseDtos = uploadService.findAllResponse();
+                responseDtos = uploadService.processExcelFile(file, bindingResult, year, month);
             }
             model.addAttribute("responseDtos", responseDtos);
 

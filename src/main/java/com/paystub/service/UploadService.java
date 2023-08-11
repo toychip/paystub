@@ -36,11 +36,13 @@ public class UploadService {
     private final EmployeeSalaryMapper employeeSalaryMapper;
     private final AESUtilConfig aesUtilConfig;
 
-    public List<ResponseDto> findAllResponse() {
-        return userMapper.findAllJoinedData();
+    public List<ResponseDto> findResponseByYearAndMonth(Long year, Long month) {
+        return userMapper.findJoinedDataByYearAndMonth(year, month);
     }
 
-    public List<ResponseDto> processExcelFile(MultipartFile file, BindingResult bindingResult) {
+
+    public List<ResponseDto> processExcelFile(MultipartFile file, BindingResult bindingResult,
+                                              Long year, Long month) {
         List<UserDto> userDtos = new ArrayList<>();
         List<EmployeeSalaryDto> employeeSalaryDtos = new ArrayList<>();
 
@@ -83,7 +85,7 @@ public class UploadService {
         saveEmployeeSalaries(employeeSalaryDtos, bindingResult);
 
         // 저장된 데이터를 바로 반환하거나 필요한 경우 데이터베이스에서 다시 조회할 수 있습니다.
-        return findAllResponse();
+        return findResponseByYearAndMonth(year, month);
     }
 
 
@@ -149,7 +151,7 @@ public class UploadService {
         int year = now.getYear();
 
         // 한 달 전의 월을 가져옵니다.
-        int month = now.minusMonths(1).getMonthValue();
+        int month = now.minusMonths(2).getMonthValue();
 
         BigDecimal BasicSalary = getNumericValueOrNull(row.getCell(3)); // 기본 수당
         BigDecimal HolidayAllowance = getNumericValueOrNull(row.getCell(4)); // 주휴 수당

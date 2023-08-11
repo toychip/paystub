@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class SuperAdminInit {
     private final UserMapper userMapper;
     private final AESUtilConfig aesUtilConfig;
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
 
         String birthday = "11111111";
