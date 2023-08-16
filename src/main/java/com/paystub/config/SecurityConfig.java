@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/adminSelect").hasRole("ADMIN")
-                .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/userSelect").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 //.antMatchers("/admin")//.hasAuthority() //.hasAuthority("ADMIN") // 관리자만 접근 가능
                 .anyRequest().authenticated()

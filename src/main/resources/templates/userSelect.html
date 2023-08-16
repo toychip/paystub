@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>관리자 페이지</title>
+    <style>
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .margin {
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-bottom: 50px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="center">
+    <h1>사용자 페이지</h1>
+</div>
+<div class="center">
+    <h3>조회할 년도와 월을 선택해주세요.</h3>
+        <select id="year" th:name="year" th:value="${year}">
+            <option value="9999">전체</option>
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+        </select> <span>년</span>
+        <select id="month" th:name="month" th:value="${month}">
+            <option value="0">전체</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+        </select> <span>월</span>
+        <button id="searchButton">조회</button>
+</div>
+
+
+<div id="dataList" class="center">
+
+</div>
+<div id="pagination" class="center">
+    <button id="prevPage">이전</button>
+    <span id="currentPage">1</span>/<span id="totalPages"></span>
+    <button id="nextPage">다음</button>
+</div>
+
+
+
+
+</body>
+<script th:inline="javascript">
+
+    document.getElementById("searchButton").addEventListener("click", clickButton);
+
+    function clickButton() {
+        const year = document.getElementById("year").value;
+        const month = document.getElementById("month").value;
+
+        var offset = 0;
+
+        if(month == 0) {
+            getTotalPage(year, month);
+        }
+
+        else {
+            getYearAndMonth(year, month);
+        }
+    }
+    // 한 건 조회시 로드되는 함수
+    function getYearAndMonth(year, month) {
+
+        console.log(year);
+        console.log(month);
+        $.ajax({
+            url: "/user",
+            type: "GET",
+            data: { year: year, month: month },
+            success: function(result) {
+                if(result) {
+                    alert("불러오기 성공");
+                    location.href = "/user?year=" + year + "&month=" + month; // 파라미터 추가
+                } else {
+                    alert("불러오기 실패");
+                }
+            }
+        });
+    }
+
+
+    var currentPage = 0; // 현재 페이지
+    var totalPages = 0; // 전체 페이지 수
+
+    // 전체 조회시 로드되는 함수
+    function getTotalPage(year, offset) {
+        $.ajax({
+            url: "/afterSelect",
+            type: "GET",
+            data: { year: year, offset: offset },
+            dataType: "json",
+            success: function(response) {
+                if(response) {
+                    var dataListHtml = "";
+                    response.yearAndMonth.forEach(function(item) {
+                        // user.html 페이지로 이동하고, 년도와 월을 파라미터로 전달하는 링크 생성
+                        dataListHtml += '<h4><a href="/user?year=' + item.year + '&month=' + item.month + '"><span>' + item.year + '</span>년 <span>' + item.month + '</span>월</a></h4>';
+                    });
+                    $('#dataList').html(dataListHtml);
+                    totalPages = response.totalPages; // 전체 페이지 수 설정
+                    $('#totalPages').text(totalPages);
+                    $('#currentPage').text(currentPage + 1); // 현재 페이지 표시
+                } else {
+                    alert("불러오기 실패");
+                }
+            }
+        });
+    }
+
+
+    // 이전 페이지 버튼 클릭 이벤트
+    $("#prevPage").click(function() {
+        if(currentPage > 0) {
+            currentPage--;
+            console.log(currentPage);
+            getTotalPage($('#year').val(), currentPage);
+        }
+    });
+
+    // 다음 페이지 버튼 클릭 이벤트
+    $("#nextPage").click(function() {
+        if(currentPage < totalPages - 1) {
+            currentPage++;
+            console.log(currentPage);
+            getTotalPage($('#year').val(), currentPage);
+        }
+    });
+
+
+
+
+
+
+</script>
+</html>
