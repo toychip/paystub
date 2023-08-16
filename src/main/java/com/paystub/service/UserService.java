@@ -20,6 +20,7 @@ public class UserService {
 
     private final UserMapper userMapper;
 
+    // 로그인한 사용자의 객체를 받아오는 메서드
     public String getCurrentMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
@@ -35,30 +36,25 @@ public class UserService {
     }
 
     public List<PageDto> getPage(Integer year, Integer limit,  Integer offset) {
-
-        System.out.println("year = " + year);
-
         List<PageDto> getPageData = new ArrayList<>();
 
+        // 만약 사용자가 year "전체" 옵션을 선택했을 시
         if(year == 9999) {
             getPageData = userMapper.findByTotal(getCurrentMember(), limit, offset);
         }
+
+        // 만약 사용자가 특정 년 옵션을 선택했을 시
         else {
             getPageData = userMapper.findByYear(getCurrentMember(), year, limit, offset);
-        }
-        System.out.println("offset = " + offset);
-
-        for (PageDto getPageDatum : getPageData) {
-            System.out.println("getPageDatum.getYear() = " + getPageDatum.getYear());
-            System.out.println("getPageDatum.getMonth() = " + getPageDatum.getMonth());
-            
         }
 
         return getPageData;
     }
 
     public int getTotalRecords(Integer year) {
+        // count 초기화
         int count = 0;
+
         if(year == 9999) {
             count = userMapper.countTotal(getCurrentMember());
         }
