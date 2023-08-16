@@ -66,12 +66,12 @@
     </style>
 </head>
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <body th:each="totalData : ${totalData}">
-
 
 
 <div id = "start" class="report" >
@@ -284,6 +284,10 @@
 
 
 <script type="text/javascript">
+
+    window.load = function() {
+        console.log("gg");
+    }
     let all_area_array = ['#start','#end']; //전체영역 area
     let area_array = ['#start']; //pdf 다운 영역
 

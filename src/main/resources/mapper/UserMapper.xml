@@ -19,7 +19,8 @@
                 HealthInsuranceDeduction, ElderlyCareInsuranceDeduction, DeductionTotal, NetPayment, TotalWorkDays, TotalWorkingHours, HolidayCalculationHours,
                 OvertimeCalculationHours, HourlyWage, Name, birthday
         FROM EmployeeSalary, User
-        WHERE (User.EmployeeID = #{employeeID} and EmployeeSalary.EmployeeID = User.EmployeeID)
+        WHERE (User.EmployeeID = #{employeeID} AND EmployeeSalary.EmployeeID = User.EmployeeID) AND
+                                 year = #{year} AND month = #{month}
 
     </select>
 
@@ -45,6 +46,44 @@
         WHERE e.year = #{year} AND e.month = #{month}
     </select>
 
+    <select id="findByYearAndMonth" resultType="com.paystub.dto.PageDto">
+        SELECT year, month
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year} AND month = #{month}
+    </select>
+
+
+
+<!--    LIMIT = 가져올 게시물의 수, OFFSET = 어디서부터 가져올지 (+1 행부터 가져와짐)-->
+<!--    전체 조회 쿼리-->
+    <select id="findByYear" resultType="com.paystub.dto.PageDto">
+        SELECT year, month
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
+        ORDER BY year DESC, month DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+
+    <select id="countYear" resultType="int">
+        SELECT COUNT(*)
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
+    </select>
+
+    <select id="findByTotal" resultType="com.paystub.dto.PageDto">
+        SELECT year, month
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID}
+        ORDER BY year DESC, month DESC
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countTotal" resultType="int">
+        SELECT COUNT(*)
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID}
+    </select>
 
 </mapper>
 
