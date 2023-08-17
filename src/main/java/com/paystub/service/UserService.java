@@ -71,4 +71,8 @@ public class UserService {
         userDtoList = userMapper.findByAdminUser();
         return userDtoList;
     }
+
+    public void deleteUsersByIds(List<Long> employeeIds) {
+
+    }
 }

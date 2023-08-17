@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -67,11 +68,17 @@ public class UserController {
     // 관리자 페이지에서 UserForm을 선택했을 시 페이지 로드하는 메서드
     @GetMapping("/adminUserForm")
     public String getAdminUserForm(Model model) {
-        List<UserDto> userDtoList = new ArrayList<>();
-        userDtoList = userService.getAdminUserForm();
+
+        List<UserDto> userDtoList = userService.getAdminUserForm();
 
         model.addAttribute("adminUserForm", userDtoList);
         return "adminUserForm";
+    }
+
+    @PostMapping("/adminUserForm")
+    public String deleteUsers(@RequestParam List<Long> employeeIds) {
+        userService.deleteUsersByIds(employeeIds);
+        return "redirect:/adminUserForm"; // 삭제 후 관리자 페이지로 리다이렉트
     }
 
 

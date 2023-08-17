@@ -15,27 +15,28 @@
 </head>
 <body>
 <h3>관리자 페이지</h3>
-<table>
-    <thead>
-    <tr>
-        <th>선택</th>
-        <th>일용직 근무자 사번</th>
-        <th>이름</th>
-        <th>생일</th>
-        <th>비밀번호</th>
-        <th>이메일주소</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="user : ${adminUserForm}">
-        <td><input type="checkbox" id="checkbox"></td>
-        <td th:text="${user.employeeID}"></td>
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.birthday}"></td>
-        <td th:text="${user.socialNumber}"></td>
-        <td th:text="${user.emailAddress}"></td>
-    </tr>
-    </tbody>
-</table>
+<form action="/adminUserForm" method="post">
+    <table>
+        <thead>
+        <tr>
+            <th>선택</th>
+            <th>일용직 근무자 사번</th>
+            <th>이름</th>
+            <th>생일</th>
+            <th>이메일주소</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${adminUserForm}">
+            <td><input type="checkbox" name="employeeIds" value="${user.employeeID}"></td>
+            <td th:text="${user.employeeID}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.birthday}"></td>
+            <td th:text="${user.emailAddress}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="submit">삭제</button>
+</form>
 </body>
 </html>
