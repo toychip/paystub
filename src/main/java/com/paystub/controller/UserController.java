@@ -65,21 +65,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // 관리자 페이지에서 UserForm을 선택했을 시 페이지 로드하는 메서드
-    @GetMapping("/adminUserForm")
-    public String getAdminUserForm(Model model) {
 
-        List<UserDto> userDtoList = userService.getAdminUserForm();
-
-        model.addAttribute("adminUserForm", userDtoList);
-        return "adminUserForm";
-    }
-
-    @PostMapping("/adminUserForm")
-    public String deleteUsers(@RequestParam List<Long> employeeIds) {
-        userService.deleteUsersByIds(employeeIds);
-        return "redirect:/adminUserForm"; // 삭제 후 관리자 페이지로 리다이렉트
-    }
 
 
 

@@ -66,13 +66,4 @@ public class UserService {
         return count;
     }
 
-    public List<UserDto> getAdminUserForm() {
-        List<UserDto> userDtoList = new ArrayList<>();
-        userDtoList = userMapper.findByAdminUser();
-        return userDtoList;
-    }
-
-    public void deleteUsersByIds(List<Long> employeeIds) {
-
-    }
 }

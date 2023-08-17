@@ -30,7 +30,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Getter
 @Slf4j
-public class UploadService {
+public class AdminService {
 
     private final UserMapper userMapper;
     private final EmployeeSalaryMapper employeeSalaryMapper;
@@ -244,5 +244,13 @@ public class UploadService {
             // 그 외의 셀 타입일 경우, null 반환
             return null;
         }
+    }
+
+    public List<UserDto> getAdminUserForm() {
+        return userMapper.findByAdminUser();
+    }
+
+    public void deleteUsersByIds(List<Long> employeeIds) {
+
     }
 }
