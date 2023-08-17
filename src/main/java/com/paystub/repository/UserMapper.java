@@ -39,4 +39,5 @@ public interface UserMapper {
 
    List<UserDto> findByAdminUser();
 
+    void deleteUsersByIds(List<Long> employeeIds);
 }

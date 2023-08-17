@@ -251,6 +251,6 @@ public class AdminService {
     }
 
     public void deleteUsersByIds(List<Long> employeeIds) {
-
+        userMapper.deleteUsersByIds(employeeIds);
     }
 }

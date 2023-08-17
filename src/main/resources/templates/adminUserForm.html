@@ -28,7 +28,7 @@
         </thead>
         <tbody>
         <tr th:each="user : ${adminUserForm}">
-            <td><input type="checkbox" name="employeeIds" value="${user.employeeID}"></td>
+            <td><input type="checkbox" name="employeeIds" th:value="${user.employeeID}"></td>
             <td th:text="${user.employeeID}"></td>
             <td th:text="${user.name}"></td>
             <td th:text="${user.birthday}"></td>
