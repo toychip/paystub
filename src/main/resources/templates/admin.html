@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>관리자 페이지</title>
     <style>
         table {
@@ -42,14 +43,13 @@
         </ul>
     </div>
     <!-- 파일 업로드 -->
-    <form method="POST" action="/admin" enctype="multipart/form-data">
+    <form method="GET" action="/admin" enctype="multipart/form-data">
         <input type="file" id="file" name="file">
         <input type="submit" id="submitButton" value="Upload">
     </form>
 </div>
 <div style="float: right;" class="margin">
     <h3>조회할 년도와 월을 선택해주세요.</h3>
-    <form method="GET" action="/admin">
         <select id="year" th:name="year" th:value="${year}">
             <option value="9999">전체</option>
             <option value="2010">2010</option>
@@ -65,7 +65,7 @@
             <option value="2020">2020</option>
             <option value="2021">2021</option>
             <option value="2022">2022</option>
-            <option value="2023">2023</option>
+            <option value="2022">2023</option>
         </select> <span>년</span>
         <select id="month" th:name="month" th:value="${month}">
             <option value="0">전체</option>
@@ -82,8 +82,7 @@
             <option value="11">11</option>
             <option value="12">12</option>
         </select> <span>월</span>
-        <button>조회</button>
-    </form>
+        <button id="searchButton">조회</button>
 </div>
   
 <div style="width: 100%; height: 500px; overflow: auto" class="center">
@@ -93,8 +92,6 @@
             <th>선택</th>
             <th>일용직 근무자 사번</th>
             <th>이름</th>
-            <th>근무년도</th>
-            <th>근무 월</th>
             <th>생일</th>
             <th>기본수당</th>
             <th>주휴수당</th>
@@ -127,9 +124,9 @@
           <tr th:each="response : ${responseDtos}">
             <td><input type="checkbox" id="checkbox"></td>
             <td th:text="${response.EmployeeID}"></td>
-            <td th:text="${response.Name}"></td>
             <td th:text="${response.year}"></td>
             <td th:text="${response.month}"></td>
+            <td th:text="${response.Name}"></td>
             <td th:text="${response.birthday}"></td>
             <td th:text="${response.BasicSalary}"></td>
             <td th:text="${response.HolidayAllowance}"></td>
@@ -163,5 +160,29 @@
 <div>
     <button>삭제</button>
 </div>
+<script>
+    document.getElementById("searchButton").addEventListener("click", clickButton);
+
+    function clickButton() {
+        const year = document.getElementById("year").value;
+        const month = document.getElementById("month").value;
+
+        console.log(year);
+        console.log(month);
+
+        $.ajax({
+            url: "/admin",
+            type: "GET",
+            data: { year: year, month: month },
+            success: function(result) {
+                if(result) {
+                    alert("불러오기 성공");
+                } else {
+                    alert("불러오기 실패");
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>
