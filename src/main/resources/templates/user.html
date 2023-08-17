@@ -63,6 +63,13 @@
         .padding {
             padding: 40px 40px 40px 40px;
         }
+
+        .img {
+            text-align: right;
+            margin-top: 90px;
+        }
+
+
     </style>
 </head>
 
@@ -273,6 +280,10 @@
             <td th:text="${#numbers.formatInteger(totalData.elderlyCareInsurance, 3, 'COMMA')}" class="right"></td>
         </tr>
     </table>
+
+        <div class="img" >
+            <img th:src="@{/img/nice.PNG}"/>
+        </div>
     <div id="end" class="report"></div>
 
 </div>

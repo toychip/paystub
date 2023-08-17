@@ -36,28 +36,37 @@ public class UserService {
         return totalData;
     }
 
-    public List<PageDto> getPage(Integer year, Integer limit,  Integer offset) {
+    public List<PageDto> getPage(Integer year, Integer month, Integer limit,  Integer offset) {
         List<PageDto> getPageData = new ArrayList<>();
 
-        // 만약 사용자가 year "전체" 옵션을 선택했을 시
-        if(year == 9999) {
+        // 만약 사용자가 year "전체", month "전체" 옵션을 선택했을 시
+        if(year == 9999 && month == 0) {
             getPageData = userMapper.findByTotal(getCurrentMember(), limit, offset);
         }
 
-        // 만약 사용자가 특정 년 옵션을 선택했을 시
-        else {
+        // 만약 사용자가 year "전체", 특정 월 옵션을 선택했을 시
+        else if(year == 9999 && month != 0) {
+            getPageData = userMapper.findByMonth(getCurrentMember(), month, limit, offset);
+        }
+
+        // 만약 사용자가 특정 년, month "전체" 옵션을 선택했을 시
+        else if (year != 9999 && month == 0) {
             getPageData = userMapper.findByYear(getCurrentMember(), year, limit, offset);
         }
 
         return getPageData;
     }
 
-    public int getTotalRecords(Integer year) {
+    public int getTotalRecords(Integer year, Integer month) {
         // count 초기화
         int count = 0;
 
-        if(year == 9999) {
+        if(year == 9999 && month == 0) {
             count = userMapper.countTotal(getCurrentMember());
+        }
+
+        else if(year == 9999 && month != 0) {
+            count = userMapper.countMonth(getCurrentMember(), month);
         }
         else {
             count = userMapper.countYear(getCurrentMember(), year);

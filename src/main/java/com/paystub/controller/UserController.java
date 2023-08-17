@@ -24,6 +24,9 @@ public class UserController {
 
     private final UserService userService;
 
+    // 쿼리에 사용할 limit를 하드코딩이 아닌 변수로 지정
+    private final int limit = 6;
+
     // 사용자 년,월 조회 페이지 로드하는 메서드
     @GetMapping("/userSelect")
     public String getUserSelect() {
@@ -35,6 +38,8 @@ public class UserController {
     @GetMapping("/user")
     public String getTotalData(@RequestParam Integer year, @RequestParam Integer month, Model model) {
 
+        System.out.println("year = " + year);
+        System.out.println("month = " + month);
         // EmployeeSalary 와 User 테이블을 조인하여 필요한 데이터만 담아온다.
         List<UserFormDto> userDtoList = userService.totalDataService(year, month);
         model.addAttribute("totalData", userDtoList);
@@ -44,16 +49,16 @@ public class UserController {
 
     // 사용자가 년, 월 중 하나라도 "전체" 옵션을 선택했을 시 로드하는 메서드
     @GetMapping("/afterSelect")
-    public ResponseEntity<Map<String, Object>> getPage(@RequestParam Integer year, @RequestParam Integer offset) {
+    public ResponseEntity<Map<String, Object>> getPage(@RequestParam Integer year,
+                                                       @RequestParam Integer month,
+                                                       @RequestParam Integer offset) {
 
-        // 쿼리에 사용할 limit를 하드코딩이 아닌 변수로 지정
-        final int limit = 4;
 
         // 조건에 맞는 데이터만 담아온다.
-        List<PageDto> pageDtoList = userService.getPage(year, limit, offset * limit);
+        List<PageDto> pageDtoList = userService.getPage(year, month, limit, offset * limit);
 
         // 조건에 맞는 데이터들의 갯수를 센다.
-        int totalRecords = userService.getTotalRecords(year);
+        int totalRecords = userService.getTotalRecords(year, month);
 
         // 데이터들의 갯수를 limit로 나누어 한 페이지에 보일 리스트 갯수를 지정
         int totalPages = (int) Math.ceil((double) totalRecords / limit);
