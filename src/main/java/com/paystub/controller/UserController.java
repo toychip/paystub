@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,6 +39,17 @@ public class UserController {
         System.out.println("month = " + month);
         // EmployeeSalary 와 User 테이블을 조인하여 필요한 데이터만 담아온다.
         List<UserFormDto> userDtoList = userService.totalDataService(year, month);
+
+        if( month == 12) {
+            year++;
+            month = 1;
+        }
+        else {
+            month++;
+        }
+        String payDay = year + "." + month + ".14";
+
+        model.addAttribute("payDay", payDay);
         model.addAttribute("totalData", userDtoList);
 
         return "user";

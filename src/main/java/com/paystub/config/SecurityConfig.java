@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .and()
                 // 요청에 대한 권한 설정
                 .authorizeHttpRequests()
-                .antMatchers("/").permitAll()
+//                .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/adminSelect").hasRole("ADMIN")
                 .antMatchers("/userSelect").hasAnyRole("ADMIN", "USER")

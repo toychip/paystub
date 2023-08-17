@@ -31,9 +31,8 @@ public class UserService {
     // 메서드 레벨의 트랜잭션 선언이 우선 적용되기 때문
     @Transactional(readOnly = true)
     public List<UserFormDto> totalDataService(Integer year, Integer month) {
-        List<UserFormDto> totalData = new ArrayList<>();
-        totalData = userMapper.getTotalData(getCurrentMember(), year, month);
-        return totalData;
+        return userMapper.getTotalData(getCurrentMember(), year, month);
+
     }
 
     public List<PageDto> getPage(Integer year, Integer month, Integer limit,  Integer offset) {
