@@ -60,9 +60,11 @@ public class AdminController {
 
         if (year == null) {
             year = (long) LocalDate.now().minusMonths(1).getYear();
+            System.out.println("AdminController.handleFileUpload.year=null");
         }
         if (month == null) {
             month = (long) LocalDate.now().minusMonths(1).getMonthValue();
+            System.out.println("AdminController.handleFileUpload.month=null");
         }
 
         if (file.isEmpty()) {
@@ -70,11 +72,11 @@ public class AdminController {
             bindingResult.rejectValue("file", "error.file", "파일을 선택해주세요.");
         }
 
-
         List<ResponseDto> responseDtos = null;
         if (!bindingResult.hasErrors()) {
             // 엑셀 파일 처리 로직 작성
             responseDtos = adminService.processExcelFile(file, bindingResult, year, month); // 결과를 받아옴
+            System.out.println("결과를 받아옴");
         }
 
         if (bindingResult.hasErrors()) {

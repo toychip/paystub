@@ -91,6 +91,14 @@
         FROM User
     </select>
 
+    <delete id="deleteEmployeeSalaryByIds">
+        DELETE FROM EmployeeSalary
+        WHERE EmployeeID IN
+        <foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
     <delete id="deleteUsersByIds">
         DELETE FROM User
         WHERE EmployeeID IN

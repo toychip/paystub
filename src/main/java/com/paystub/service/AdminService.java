@@ -250,7 +250,9 @@ public class AdminService {
         return userMapper.findByAdminUser();
     }
 
+    @Transactional
     public void deleteUsersByIds(List<Long> employeeIds) {
+        userMapper.deleteEmployeeSalaryByIds(employeeIds);
         userMapper.deleteUsersByIds(employeeIds);
     }
 }
