@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class UserFormDto {
 
-    private Integer year;
-    private Integer month;
+    private Integer year; // 년
+    private Integer month; // 월
     private Integer EmployeeID; // 일용직 근무자 사번
     private BigDecimal BasicSalary; // 기본수당
     private BigDecimal HolidayAllowance; // 주휴수당

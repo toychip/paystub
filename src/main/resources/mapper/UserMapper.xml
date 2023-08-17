@@ -13,6 +13,7 @@
         WHERE EmployeeID = #{username}
     </select>
 
+<!--    EmployeeSalary와 User 테이블을 조인하여 사용자의 해당 년, 월 데이터를 가져온다.-->
     <select id="getTotalData" resultType="com.paystub.dto.UserFormDto">
         SELECT year, month, User.EmployeeID, BasicSalary, HolidayAllowance, LunchExpenses, FirstWeekHolidayAllowance, RetroactiveHolidayAllowance, TotalPayment, IncomeTax,
                 ResidentTax, EmploymentInsurance, NationalPension, HealthInsurance, ElderlyCareInsurance, EmploymentInsuranceDeduction, NationalPensionDeduction,
@@ -52,25 +53,7 @@
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year} AND month = #{month}
     </select>
 
-
-
-<!--    LIMIT = 가져올 게시물의 수, OFFSET = 어디서부터 가져올지 (+1 행부터 가져와짐)-->
-<!--    전체 조회 쿼리-->
-    <select id="findByYear" resultType="com.paystub.dto.PageDto">
-        SELECT year, month
-        FROM EmployeeSalary
-        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
-        ORDER BY year DESC, month DESC
-        LIMIT #{limit} OFFSET #{offset}
-    </select>
-
-
-    <select id="countYear" resultType="int">
-        SELECT COUNT(*)
-        FROM EmployeeSalary
-        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
-    </select>
-
+<!--    조건 없이 사용자의 전체 년, 월 데이터를 가져온다.-->
     <select id="findByTotal" resultType="com.paystub.dto.PageDto">
         SELECT year, month
         FROM EmployeeSalary
@@ -79,11 +62,33 @@
             LIMIT #{limit} OFFSET #{offset}
     </select>
 
+
+<!--    해당 년에 맞는 사용자의 년, 월 데이터를 가져온다.-->
+    <select id="findByYear" resultType="com.paystub.dto.PageDto">
+        SELECT year, month
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
+        ORDER BY year DESC, month DESC
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+<!--    조건 없이 사용자의 전체 데이터 갯수를 가져오는 쿼리-->
     <select id="countTotal" resultType="int">
         SELECT COUNT(*)
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID}
     </select>
 
+<!--    해당 년에 맞는 사용자의 데이터 갯수를 가져오는 쿼리-->
+    <select id="countYear" resultType="int">
+        SELECT COUNT(*)
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
+    </select>
+
+    <select id="findByAdminUser" resultType="com.paystub.dto.UserDto">
+        SELECT *
+        FROM User
+    </select>
 </mapper>
 
