@@ -49,5 +49,6 @@ public interface UserMapper {
 
     void deleteUsersByIds(List<Long> employeeIds);
 
-
+    void deleteEmployeeSalaryById(@Param("employeeId") Long employeeId,
+                                  @Param("year") Long year, @Param("month") Long month);
 }

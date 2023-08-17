@@ -2,6 +2,7 @@ package com.paystub.controller;
 
 import com.paystub.dto.FileUploadForm;
 import com.paystub.dto.ResponseDto;
+import com.paystub.dto.SalaryKey;
 import com.paystub.dto.UserDto;
 import com.paystub.service.AdminService;
 import com.paystub.service.UserService;
@@ -96,4 +97,18 @@ public class AdminController {
         adminService.deleteUsersByIds(employeeIds);
         return "redirect:/adminUserForm"; // 삭제 후 관리자 페이지로 리다이렉트
     }
+
+    @PostMapping("/adminDeleteSalary")
+    public String deleteSalaries(@RequestParam List<String> salaryKeys) {
+        List<SalaryKey> salaryIds = salaryKeys.stream()
+                .map(key -> {
+                    String[] parts = key.split("_");
+                    return new SalaryKey(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]));
+                })
+                .collect(Collectors.toList());
+        adminService.deleteSalariesByIds(salaryIds);
+        return "redirect:/admin";
+    }
+
+
 }

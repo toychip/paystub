@@ -132,5 +132,11 @@
             #{id}
         </foreach>
     </delete>
+
+    <delete id="deleteEmployeeSalaryById">
+        DELETE FROM EmployeeSalary
+        WHERE EmployeeID = #{employeeId} AND year = #{year} AND month = #{month}
+    </delete>
+
 </mapper>
 

@@ -92,82 +92,83 @@
     </form>
 </div>
 
-<div style="width: 100%; height: 500px; overflow: auto" class="center">
-    <table>
-        <thead>
-        <tr>
-            <th class="sticky">선택</th>
-            <th class="sticky">일용직 근무자 사번</th>
-            <th class="sticky">이름</th>
-            <th class="sticky">근무년도</th>
-            <th class="sticky">근무 월</th>
-            <th class="sticky">생일</th>
-            <th class="sticky">기본수당</th>
-            <th class="sticky">주휴수당</th>
-            <th class="sticky">중식비 - 지급</th>
-            <th class="sticky">주휴수당(첫째주)</th>
-            <th class="sticky">주휴수당 (소급분)</th>
-            <th class="sticky">지급합계</th>
-            <th class="sticky">소득세</th>
-            <th class="sticky">주민세</th>
-            <th class="sticky">고용보험</th>
-            <th class="sticky">국민연금</th>
-            <th class="sticky">건강보험</th>
-            <th class="sticky">노인요양</th>
-            <th class="sticky">고용보험(소급공제)</th>
-            <th class="sticky">국민연금(소급공제)</th>
-            <th class="sticky">건강보험(소급공제)</th>
-            <th class="sticky">노인요양(소급공제)</th>
-            <th class="sticky">공제합계</th>
-            <th class="sticky">실지급액</th>
-            <th class="sticky">총 근로일수</th>
-            <th class="sticky">총근무시간</th>
-            <th class="sticky">주휴산정시간</th>
-            <th class="sticky">주휴산정시간(소급분)</th>
-            <th class="sticky">시급</th>
-            <th class="sticky">중식비</th>
-            <th class="sticky">이메일주소</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="response : ${responseDtos}">
-            <td><input type="checkbox" id="checkbox"></td>
-            <td th:text="${response.EmployeeID}"></td>
-            <td th:text="${response.Name}"></td>
-            <td th:text="${response.year}"></td>
-            <td th:text="${response.month}"></td>
-            <td th:text="${response.birthday}"></td>
-            <td th:text="${response.BasicSalary}"></td>
-            <td th:text="${response.HolidayAllowance}"></td>
-            <td th:text="${response.LunchExpenses}"></td>
-            <td th:text="${response.FirstWeekHolidayAllowance}"></td>
-            <td th:text="${response.RetroactiveHolidayAllowance}"></td>
-            <td th:text="${response.TotalPayment}"></td>
-            <td th:text="${response.IncomeTax}"></td>
-            <td th:text="${response.ResidentTax}"></td>
-            <td th:text="${response.EmploymentInsurance}"></td>
-            <td th:text="${response.NationalPension}"></td>
-            <td th:text="${response.HealthInsurance}"></td>
-            <td th:text="${response.ElderlyCareInsurance}"></td>
-            <td th:text="${response.EmploymentInsuranceDeduction}"></td>
-            <td th:text="${response.NationalPensionDeduction}"></td>
-            <td th:text="${response.HealthInsuranceDeduction}"></td>
-            <td th:text="${response.ElderlyCareInsuranceDeduction}"></td>
-            <td th:text="${response.DeductionTotal}"></td>
-            <td th:text="${response.NetPayment}"></td>
-            <td th:text="${response.TotalWorkDays}"></td>
-            <td th:text="${response.TotalWorkingHours}"></td>
-            <td th:text="${response.HolidayCalculationHours}"></td>
-            <td th:text="${response.OvertimeCalculationHours}"></td>
-            <td th:text="${response.HourlyWage}"></td>
-            <td th:text="${response.LunchAllowance}"></td>
-            <td th:text="${response.EmailAddress}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<form method="POST" action="/adminDeleteSalary">
+    <div style="width: 100%; height: 500px; overflow: auto" class="center">
+        <table>
+            <thead>
+            <tr>
+                <th class="sticky">선택</th>
+                <th class="sticky">일용직 근무자 사번</th>
+                <th class="sticky">이름</th>
+                <th class="sticky">근무년도</th>
+                <th class="sticky">근무 월</th>
+                <th class="sticky">생일</th>
+                <th class="sticky">기본수당</th>
+                <th class="sticky">주휴수당</th>
+                <th class="sticky">중식비 - 지급</th>
+                <th class="sticky">주휴수당(첫째주)</th>
+                <th class="sticky">주휴수당 (소급분)</th>
+                <th class="sticky">지급합계</th>
+                <th class="sticky">소득세</th>
+                <th class="sticky">주민세</th>
+                <th class="sticky">고용보험</th>
+                <th class="sticky">국민연금</th>
+                <th class="sticky">건강보험</th>
+                <th class="sticky">노인요양</th>
+                <th class="sticky">고용보험(소급공제)</th>
+                <th class="sticky">국민연금(소급공제)</th>
+                <th class="sticky">건강보험(소급공제)</th>
+                <th class="sticky">노인요양(소급공제)</th>
+                <th class="sticky">공제합계</th>
+                <th class="sticky">실지급액</th>
+                <th class="sticky">총 근로일수</th>
+                <th class="sticky">총근무시간</th>
+                <th class="sticky">주휴산정시간</th>
+                <th class="sticky">주휴산정시간(소급분)</th>
+                <th class="sticky">시급</th>
+                <th class="sticky">중식비</th>
+                <th class="sticky">이메일주소</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="response : ${responseDtos}">
+                <td><input type="checkbox" name="salaryKeys" th:value="${response.EmployeeID + '_' + response.year + '_' + response.month}"></td>
+                <td th:text="${response.EmployeeID}"></td>
+                <td th:text="${response.Name}"></td>
+                <td th:text="${response.year}"></td>
+                <td th:text="${response.month}"></td>
+                <td th:text="${response.birthday}"></td>
+                <td th:text="${response.BasicSalary}"></td>
+                <td th:text="${response.HolidayAllowance}"></td>
+                <td th:text="${response.LunchExpenses}"></td>
+                <td th:text="${response.FirstWeekHolidayAllowance}"></td>
+                <td th:text="${response.RetroactiveHolidayAllowance}"></td>
+                <td th:text="${response.TotalPayment}"></td>
+                <td th:text="${response.IncomeTax}"></td>
+                <td th:text="${response.ResidentTax}"></td>
+                <td th:text="${response.EmploymentInsurance}"></td>
+                <td th:text="${response.NationalPension}"></td>
+                <td th:text="${response.HealthInsurance}"></td>
+                <td th:text="${response.ElderlyCareInsurance}"></td>
+                <td th:text="${response.EmploymentInsuranceDeduction}"></td>
+                <td th:text="${response.NationalPensionDeduction}"></td>
+                <td th:text="${response.HealthInsuranceDeduction}"></td>
+                <td th:text="${response.ElderlyCareInsuranceDeduction}"></td>
+                <td th:text="${response.DeductionTotal}"></td>
+                <td th:text="${response.NetPayment}"></td>
+                <td th:text="${response.TotalWorkDays}"></td>
+                <td th:text="${response.TotalWorkingHours}"></td>
+                <td th:text="${response.HolidayCalculationHours}"></td>
+                <td th:text="${response.OvertimeCalculationHours}"></td>
+                <td th:text="${response.HourlyWage}"></td>
+                <td th:text="${response.LunchAllowance}"></td>
+                <td th:text="${response.EmailAddress}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 <div>
-    <button>삭제</button>
+    <button type="submit">삭제</button>
 </div>
 </body>
 </html>

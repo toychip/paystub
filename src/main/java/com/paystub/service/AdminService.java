@@ -3,6 +3,7 @@ package com.paystub.service;
 import com.paystub.config.AESUtilConfig;
 import com.paystub.dto.EmployeeSalaryDto;
 import com.paystub.dto.ResponseDto;
+import com.paystub.dto.SalaryKey;
 import com.paystub.dto.UserDto;
 import com.paystub.repository.EmployeeSalaryMapper;
 import com.paystub.repository.UserMapper;
@@ -151,7 +152,7 @@ public class AdminService {
         int year = now.getYear();
 
         // 한 달 전의 월을 가져옵니다.
-        int month = now.minusMonths(3).getMonthValue();
+        int month = now.minusMonths(1).getMonthValue();
 
         BigDecimal BasicSalary = getNumericValueOrNull(row.getCell(3)); // 기본 수당
         BigDecimal HolidayAllowance = getNumericValueOrNull(row.getCell(4)); // 주휴 수당
@@ -255,4 +256,13 @@ public class AdminService {
         userMapper.deleteEmployeeSalaryByIds(employeeIds);
         userMapper.deleteUsersByIds(employeeIds);
     }
+
+    // 급여명세서 삭제
+    @Transactional
+    public void deleteSalariesByIds(List<SalaryKey> salaryIds) {
+        for (SalaryKey key : salaryIds) {
+            userMapper.deleteEmployeeSalaryById(key.getEmployeeId(), key.getYear(), key.getMonth());
+        }
+    }
+
 }
