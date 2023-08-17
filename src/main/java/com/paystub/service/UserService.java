@@ -1,6 +1,7 @@
 package com.paystub.service;
 
 import com.paystub.dto.PageDto;
+import com.paystub.dto.UserDto;
 import com.paystub.dto.UserFormDto;
 import com.paystub.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -65,4 +66,9 @@ public class UserService {
         return count;
     }
 
+    public List<UserDto> getAdminUserForm() {
+        List<UserDto> userDtoList = new ArrayList<>();
+        userDtoList = userMapper.findByAdminUser();
+        return userDtoList;
+    }
 }

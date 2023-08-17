@@ -37,5 +37,6 @@ public interface UserMapper {
    // 해당 년에 맞는 사용자의 데이터 갯수를 가져온다.
    int countYear(String employeeID, Integer year);
 
+   List<UserDto> findByAdminUser();
 
 }

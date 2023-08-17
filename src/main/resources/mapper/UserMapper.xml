@@ -85,5 +85,10 @@
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
     </select>
+
+    <select id="findByAdminUser" resultType="com.paystub.dto.UserDto">
+        SELECT *
+        FROM User
+    </select>
 </mapper>
 

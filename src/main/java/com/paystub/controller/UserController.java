@@ -4,12 +4,14 @@ import com.paystub.dto.*;
 import com.paystub.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ public class UserController {
     public String getUserSelect() {
         return "userSelect";
     }
+
 
     // 사용자가 년, 월을 모두 선택 후 조회했을 시 로드하는 메서드
     @GetMapping("/user")
@@ -61,7 +64,15 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    // 관리자 페이지에서 UserForm을 선택했을 시 페이지 로드하는 메서드
+    @GetMapping("/adminUserForm")
+    public String getAdminUserForm(Model model) {
+        List<UserDto> userDtoList = new ArrayList<>();
+        userDtoList = userService.getAdminUserForm();
 
+        model.addAttribute("adminUserForm", userDtoList);
+        return "adminUserForm";
+    }
 
 
 

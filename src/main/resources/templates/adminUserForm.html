@@ -14,6 +14,7 @@
     </style>
 </head>
 <body>
+<h3>관리자 페이지</h3>
 <table>
     <thead>
     <tr>
@@ -26,13 +27,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${userDto}">
+    <tr th:each="user : ${adminUserForm}">
         <td><input type="checkbox" id="checkbox"></td>
-        <td th:text="${user.EmployeeID}"></td>
-        <td th:text="${user.Name}"></td>
+        <td th:text="${user.employeeID}"></td>
+        <td th:text="${user.name}"></td>
         <td th:text="${user.birthday}"></td>
-        <td th:text="${user.socialnumber}"></td>
-        <td th:text="${employee.employeeSalaryDto.HolidayAllowance}"></td>
+        <td th:text="${user.socialNumber}"></td>
+        <td th:text="${user.emailAddress}"></td>
     </tr>
     </tbody>
 </table>
