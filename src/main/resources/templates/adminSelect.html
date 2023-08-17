@@ -4,17 +4,31 @@
     <meta charset="UTF-8">
     <title>관리자 페이지</title>
     <style>
-
-        .center {
+        body {
             text-align: center;
         }
-
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content {
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-top: 60px;
+        }
         button {
             margin-top: 10px;
             width: 200px;
             height: 50px;
-            margin-left: 20px;
-            margin-right: 20px;
+        }
+        #content-container {
+            display: flex;
+            justify-content: center;
         }
     </style>
 </head>
@@ -22,21 +36,22 @@
 <div class="center">
     <h1>관리자 페이지</h1>
 </div>
-
-<div class="center" style="float: left; width: 40%;">
-    <img th:src="@{/img/admin.PNG}"/>
-    <div>
-        <a href="/admin">
-            <button>급여명세서 삭제</button>
-        </a>
+<div id="content-container">
+    <div id="admin" class="content">
+        <img th:src="@{/img/admin.PNG}"/>
+        <div>
+            <a href="/admin">
+                <button>급여명세서 관리</button>
+            </a>
+        </div>
     </div>
-</div>
-<div class="center" style="float:left; width: 40%">
-    <img th:src="@{/img/adminUserForm.png}"/>
-    <div>
-        <a href="/adminUserForm">
-            <button>일용직 삭제</button>
-        </a>
+    <div id="adminUserForm" class="content">
+        <img th:src="@{/img/adminUserForm.png}"/>
+        <div>
+            <a href="/adminUserForm">
+                <button>회원 관리</button>
+            </a>
+        </div>
     </div>
 </div>
 </body>

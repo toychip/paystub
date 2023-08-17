@@ -22,17 +22,13 @@
             border: 1px white;
         }
 
-        /* 테이블 안 th, td 스타일 */
-        th,
-        td {
-            border: 1px solid black;
+        th, td {
+            border: 0.5px solid black; /* 이 부분의 1px 값을 원하는 굵기로 변경 */
             padding: 5px 5px;
             text-align: center;
-            border-width: 2px;
             width: 200px;
             height: 1px;
         }
-
         /* 중앙 정렬 */
         .center {
             text-align: center;
@@ -85,9 +81,9 @@
     <div class="padding">
     <div class="center">
         <h2>일용근로자 급여 지급명세서 (<span id="year" th:text="${totalData.year}"></span>년 <span id="month" th:text="${totalData.month}"></span>월 귀속)</h2>
-        <h5>회사명: 나이스디앤알(주)</h5>
-        <h5>사번: <span id="employeeID"th:text="${totalData.employeeID}"></span>          성명: <span id="name" th:text="${totalData.name}"></span></h5>
-        <h5>생년월일: <span th:text="${totalData.birthday}"></span>        지급일: <span th:text="${payDay}"></span></h5>
+        <h4>회사명: 나이스디앤알(주)</h4>
+        <h4>사번: <span id="employeeID"th:text="${totalData.employeeID}"></span><span style="padding-left:200px;"></span>성명: <span id="name" th:text="${totalData.name}"></span></h4>
+        <h4>생년월일: <span th:text="${totalData.birthday}"></span><span style="padding-left:150px;"></span>지급일: <span th:text="${payDay}"></span></h4>
     </div>
 
     <!-- 메인 테이블 -->
@@ -290,8 +286,10 @@
 
 </div>
 
+<div class="center">
+    <button type="button" id="pdf" style="width: 200px; height: 40px;">pdf 다운</button>
+</div>
 
-<button type="button" id="pdf">pdf 다운</button>
 
 
 <script type="text/javascript">

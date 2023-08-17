@@ -31,30 +31,15 @@
             background-color: lightgray;
             position:sticky;
             top:0px;
+            white-space: nowrap;
         }
+
     </style>
 </head>
 <body>
-<div class="center">
-    <h1>관리자 페이지</h1>
-</div>
-<div style="float:left" class="margin">
-    <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
-    <div th:if="${errors}" class="error">
-        <ul>
-            <li th:each="error : ${errors}">
-                <p th:text="${error}"></p>
-            </li>
-        </ul>
-    </div>
-    <!-- 파일 업로드 -->
-    <form method="POST" action="/admin" enctype="multipart/form-data">
-        <input type="file" id="file" name="file">
-        <input type="submit" id="submitButton" value="Upload">
-    </form>
-</div>
-<div style="float: right;" class="margin">
-    <h3>조회할 년도와 월을 선택해주세요.</h3>
+
+<div style="float: left;" class="margin">
+    <h3>조회할 정보를 입력해주세요.</h3>
     <form method="GET" action="/admin">
         <select id="year" th:name="year" th:value="${year}">
             <option value="9999">전체</option>
@@ -88,26 +73,42 @@
             <option value="11">11</option>
             <option value="12">12</option>
         </select> <span>월</span>
-        <button>조회</button>
+        <h5>이름 : <input id="name" name="name" size=10> 사번 : <input id="employeeID" name="employeeID" size=10><span style="padding-left:20px;"><button>조회</button></span></h5>
+    </form>
+</div>
+
+<div style="float:right" class="margin">
+    <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
+    <div th:if="${errors}" class="error">
+        <ul>
+            <li th:each="error : ${errors}">
+                <p th:text="${error}"></p>
+            </li>
+        </ul>
+    </div>
+    <!-- 파일 업로드 -->
+    <form method="POST" action="/admin" enctype="multipart/form-data">
+        <input type="file" id="file" name="file">
+        <input type="submit" id="submitButton" value="Upload">
     </form>
 </div>
 
 <form method="POST" action="/adminDeleteSalary">
-    <div style="width: 100%; height: 500px; overflow: auto" class="center">
+    <div style="width: 100%; height: 600px; overflow: auto" class="center">
         <table>
             <thead>
             <tr>
-                <th class="sticky">선택</th>
-                <th class="sticky">일용직 근무자 사번</th>
-                <th class="sticky">이름</th>
-                <th class="sticky">근무년도</th>
-                <th class="sticky">근무 월</th>
+                <th class="sticky" >선택</th>
+                <th class="sticky">사번</th>
+                <th class="sticky">근무자 이름</th>
+                <th class="sticky">년도</th>
+                <th class="sticky">월</th>
                 <th class="sticky">생일</th>
                 <th class="sticky">기본수당</th>
                 <th class="sticky">주휴수당</th>
                 <th class="sticky">중식비 - 지급</th>
                 <th class="sticky">주휴수당(첫째주)</th>
-                <th class="sticky">주휴수당 (소급분)</th>
+                <th class="sticky">주휴수당(소급분)</th>
                 <th class="sticky">지급합계</th>
                 <th class="sticky">소득세</th>
                 <th class="sticky">주민세</th>
@@ -132,43 +133,46 @@
             </thead>
             <tbody>
             <tr th:each="response : ${responseDtos}">
+
                 <td><input type="checkbox" name="salaryKeys" th:value="${response.EmployeeID + '_' + response.year + '_' + response.month}"></td>
                 <td th:text="${response.EmployeeID}"></td>
                 <td th:text="${response.Name}"></td>
                 <td th:text="${response.year}"></td>
                 <td th:text="${response.month}"></td>
-                <td th:text="${response.birthday}"></td>
-                <td th:text="${response.BasicSalary}"></td>
-                <td th:text="${response.HolidayAllowance}"></td>
-                <td th:text="${response.LunchExpenses}"></td>
-                <td th:text="${response.FirstWeekHolidayAllowance}"></td>
-                <td th:text="${response.RetroactiveHolidayAllowance}"></td>
-                <td th:text="${response.TotalPayment}"></td>
-                <td th:text="${response.IncomeTax}"></td>
-                <td th:text="${response.ResidentTax}"></td>
-                <td th:text="${response.EmploymentInsurance}"></td>
-                <td th:text="${response.NationalPension}"></td>
-                <td th:text="${response.HealthInsurance}"></td>
-                <td th:text="${response.ElderlyCareInsurance}"></td>
-                <td th:text="${response.EmploymentInsuranceDeduction}"></td>
-                <td th:text="${response.NationalPensionDeduction}"></td>
-                <td th:text="${response.HealthInsuranceDeduction}"></td>
-                <td th:text="${response.ElderlyCareInsuranceDeduction}"></td>
-                <td th:text="${response.DeductionTotal}"></td>
-                <td th:text="${response.NetPayment}"></td>
+                <td th:text="${response.birthday.substring(0,4) + '.' + response.birthday.substring(4,6) + '.' + response.birthday.substring(6)}"></td>
+                <td th:text="${#numbers.formatInteger(response.BasicSalary, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.HolidayAllowance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.LunchExpenses, 3, 'COMMA')}"></td>
+
+                <td th:text="${#numbers.formatInteger(response.FirstWeekHolidayAllowance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.RetroactiveHolidayAllowance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.TotalPayment, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.IncomeTax, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.ResidentTax, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.EmploymentInsurance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.NationalPension, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.HealthInsurance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.ElderlyCareInsurance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.EmploymentInsuranceDeduction, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.NationalPensionDeduction, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.HealthInsuranceDeduction, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.ElderlyCareInsuranceDeduction, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.DeductionTotal, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.NetPayment, 3, 'COMMA')}"></td>
+
                 <td th:text="${response.TotalWorkDays}"></td>
                 <td th:text="${response.TotalWorkingHours}"></td>
                 <td th:text="${response.HolidayCalculationHours}"></td>
                 <td th:text="${response.OvertimeCalculationHours}"></td>
-                <td th:text="${response.HourlyWage}"></td>
-                <td th:text="${response.LunchAllowance}"></td>
+                <td th:text="${#numbers.formatInteger(response.HourlyWage, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.LunchAllowance, 3, 'COMMA')}"></td>
                 <td th:text="${response.EmailAddress}"></td>
             </tr>
             </tbody>
         </table>
     </div>
 <div>
-    <button type="submit">삭제</button>
+    <button type="submit" style="width: 200px; height: 40px;">삭제</button>
 </div>
 </body>
 </html>

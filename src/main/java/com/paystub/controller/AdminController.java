@@ -35,6 +35,8 @@ public class AdminController {
     @GetMapping("/admin")
     public String getUploadPage(@RequestParam(required = false, defaultValue = "9999") Long year,
                                 @RequestParam(required = false, defaultValue = "0") Long month,
+                                @RequestParam(required = false) String name,
+                                @RequestParam(required = false) String employeeID,
                                 Model model) {
 
         List<ResponseDto> responseDtos = adminService.findResponseByYearAndMonth(year, month);
