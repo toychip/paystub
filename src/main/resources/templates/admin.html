@@ -49,8 +49,9 @@
 </div>
 <div style="float: right;" class="margin">
     <h3>조회할 년도와 월을 선택해주세요.</h3>
-    <form method="POST" action="/admin">
-        <select id="year" th:name="month" th:value="${year}">
+    <form method="GET" action="/admin">
+        <select id="year" th:name="year" th:value="${year}">
+            <option value="9999">전체</option>
             <option value="2010">2010</option>
             <option value="2011">2011</option>
             <option value="2012">2012</option>
@@ -64,9 +65,10 @@
             <option value="2020">2020</option>
             <option value="2021">2021</option>
             <option value="2022">2022</option>
-            <option value="2022">2023</option>
+            <option value="2023">2023</option>
         </select> <span>년</span>
         <select id="month" th:name="month" th:value="${month}">
+            <option value="0">전체</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -91,6 +93,8 @@
             <th>선택</th>
             <th>일용직 근무자 사번</th>
             <th>이름</th>
+            <th>근무년도</th>
+            <th>근무 월</th>
             <th>생일</th>
             <th>기본수당</th>
             <th>주휴수당</th>
@@ -123,9 +127,9 @@
           <tr th:each="response : ${responseDtos}">
             <td><input type="checkbox" id="checkbox"></td>
             <td th:text="${response.EmployeeID}"></td>
+            <td th:text="${response.Name}"></td>
             <td th:text="${response.year}"></td>
             <td th:text="${response.month}"></td>
-            <td th:text="${response.Name}"></td>
             <td th:text="${response.birthday}"></td>
             <td th:text="${response.BasicSalary}"></td>
             <td th:text="${response.HolidayAllowance}"></td>

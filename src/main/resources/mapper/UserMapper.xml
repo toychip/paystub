@@ -38,14 +38,24 @@
 
     <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.dto.ResponseDto">
         SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
-               e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
-               e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
-               e.NationalPensionDeduction, e.HealthInsuranceDeduction, e.ElderlyCareInsuranceDeduction, e.DeductionTotal, e.NetPayment, e.TotalWorkDays,
-               e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
+        e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
+        e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
+        e.NationalPensionDeduction, e.HealthInsuranceDeduction, e.ElderlyCareInsuranceDeduction, e.DeductionTotal, e.NetPayment, e.TotalWorkDays,
+        e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
         FROM User u
-                 JOIN EmployeeSalary e ON u.EmployeeID = e.EmployeeID
-        WHERE e.year = #{year} AND e.month = #{month}
+        JOIN EmployeeSalary e ON u.EmployeeID = e.EmployeeID
+
+        <where>
+            <if test="year != 9999">
+                AND e.year = #{year}
+            </if>
+            <if test="month != 0">
+                AND e.month = #{month}
+            </if>
+        </where>
+        ORDER BY e.year DESC, e.month DESC
     </select>
+
 
     <select id="findByYearAndMonth" resultType="com.paystub.dto.PageDto">
         SELECT year, month

@@ -151,7 +151,7 @@ public class AdminService {
         int year = now.getYear();
 
         // 한 달 전의 월을 가져옵니다.
-        int month = now.minusMonths(2).getMonthValue();
+        int month = now.minusMonths(3).getMonthValue();
 
         BigDecimal BasicSalary = getNumericValueOrNull(row.getCell(3)); // 기본 수당
         BigDecimal HolidayAllowance = getNumericValueOrNull(row.getCell(4)); // 주휴 수당

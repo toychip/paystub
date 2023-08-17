@@ -32,19 +32,9 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String getUploadPage(@RequestParam(required = false) Long year,
-                                @RequestParam(required = false) Long month,
+    public String getUploadPage(@RequestParam(required = false, defaultValue = "9999") Long year,
+                                @RequestParam(required = false, defaultValue = "0") Long month,
                                 Model model) {
-        LocalDate now = LocalDate.now();
-        LocalDate oneMonthAgo = now.minusMonths(1);
-
-        // 매개변수가 제공되지 않은 경우 기본 값을 사용
-        if (year == null) {
-            year = (long) oneMonthAgo.getYear();
-        }
-        if (month == null) {
-            month = (long) oneMonthAgo.getMonthValue();
-        }
 
         List<ResponseDto> responseDtos = adminService.findResponseByYearAndMonth(year, month);
         model.addAttribute("responseDtos", responseDtos);
@@ -53,19 +43,11 @@ public class AdminController {
 
     @PostMapping("/admin")
     public String handleFileUpload(@ModelAttribute @Valid FileUploadForm form, BindingResult bindingResult,
-                                   @RequestParam(required = false) Long year,
-                                   @RequestParam(required = false) Long month, Model model) {
+                                   @RequestParam(required = false, defaultValue = "9999") Long year,
+                                   @RequestParam(required = false, defaultValue = "0") Long month,
+                                   Model model) {
 
         MultipartFile file = form.getFile();
-
-        if (year == null) {
-            year = (long) LocalDate.now().minusMonths(1).getYear();
-            System.out.println("AdminController.handleFileUpload.year=null");
-        }
-        if (month == null) {
-            month = (long) LocalDate.now().minusMonths(1).getMonthValue();
-            System.out.println("AdminController.handleFileUpload.month=null");
-        }
 
         if (file.isEmpty()) {
             // 파일이 비어 있을 경우 오류 메시지 설정
