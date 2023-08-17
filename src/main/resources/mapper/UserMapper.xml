@@ -38,14 +38,24 @@
 
     <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.dto.ResponseDto">
         SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
-               e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
-               e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
-               e.NationalPensionDeduction, e.HealthInsuranceDeduction, e.ElderlyCareInsuranceDeduction, e.DeductionTotal, e.NetPayment, e.TotalWorkDays,
-               e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
+        e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
+        e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
+        e.NationalPensionDeduction, e.HealthInsuranceDeduction, e.ElderlyCareInsuranceDeduction, e.DeductionTotal, e.NetPayment, e.TotalWorkDays,
+        e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
         FROM User u
-                 JOIN EmployeeSalary e ON u.EmployeeID = e.EmployeeID
-        WHERE e.year = #{year} AND e.month = #{month}
+        JOIN EmployeeSalary e ON u.EmployeeID = e.EmployeeID
+
+        <where>
+            <if test="year != 9999">
+                AND e.year = #{year}
+            </if>
+            <if test="month != 0">
+                AND e.month = #{month}
+            </if>
+        </where>
+        ORDER BY e.year DESC, e.month DESC
     </select>
+
 
     <select id="findByYearAndMonth" resultType="com.paystub.dto.PageDto">
         SELECT year, month
@@ -72,6 +82,15 @@
             LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <!--    해당 월에 맞는 사용자의 년, 월 데이터를 가져온다.-->
+    <select id="findByMonth" resultType="com.paystub.dto.PageDto">
+        SELECT year, month
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND month = #{month}
+        ORDER BY year DESC, month DESC
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
+
 <!--    조건 없이 사용자의 전체 데이터 갯수를 가져오는 쿼리-->
     <select id="countTotal" resultType="int">
         SELECT COUNT(*)
@@ -86,9 +105,38 @@
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
     </select>
 
+<!--    해당 월에 맞는 사용자의 데이터 갯수를 가져오는 쿼리-->
+    <select id="countMonth" resultType="int">
+        SELECT COUNT(*)
+        FROM EmployeeSalary
+        WHERE EmployeeSalary.EmployeeID = #{employeeID} AND month = #{month}
+    </select>
+
     <select id="findByAdminUser" resultType="com.paystub.dto.UserDto">
         SELECT *
         FROM User
     </select>
+
+    <delete id="deleteEmployeeSalaryByIds">
+        DELETE FROM EmployeeSalary
+        WHERE EmployeeID IN
+        <foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteUsersByIds">
+        DELETE FROM User
+        WHERE EmployeeID IN
+        <foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteEmployeeSalaryById">
+        DELETE FROM EmployeeSalary
+        WHERE EmployeeID = #{employeeId} AND year = #{year} AND month = #{month}
+    </delete>
+
 </mapper>
 

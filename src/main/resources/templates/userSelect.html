@@ -94,9 +94,8 @@
         const year = document.getElementById("year").value;
         const month = document.getElementById("month").value;
 
-        var offset = 0;
 
-        if(month == 0) {
+        if(year == 9999 || month == 0 || (year == 9999 && month == 0)) {
             getTotalPage(year, month);
         }
 
@@ -115,7 +114,7 @@
             data: { year: year, month: month },
             success: function(result) {
                 if(result) {
-                    alert("불러오기 성공");
+                    alert( year + "년 " + month + "월 급여명세서를 조회합니다.");
                     location.href = "/user?year=" + year + "&month=" + month; // 파라미터 추가
                 } else {
                     alert("불러오기 실패");
@@ -127,13 +126,18 @@
 
     var currentPage = 0; // 현재 페이지
     var totalPages = 0; // 전체 페이지 수
+    var offset = 0;
 
     // 전체 조회시 로드되는 함수
-    function getTotalPage(year, offset) {
+    function getTotalPage(year, month) {
+
+        console.log(year);
+        console.log(month);
+        console.log(offset);
         $.ajax({
             url: "/afterSelect",
             type: "GET",
-            data: { year: year, offset: offset },
+            data: { year: year, month: month, offset: offset },
             dataType: "json",
             success: function(response) {
                 if(response) {
@@ -171,11 +175,6 @@
             getTotalPage($('#year').val(), currentPage);
         }
     });
-
-
-
-
-
 
 </script>
 </html>

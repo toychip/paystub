@@ -31,12 +31,24 @@ public interface UserMapper {
    // 해당 년에 맞는 사용자의 년, 월 데이터를 가져온다.
    List<PageDto> findByYear(String employeeID, Integer year, Integer limit, Integer offset);
 
+    // 해당 월에 맞는 사용자의 년, 월 데이터를 가져온다.
+   List<PageDto> findByMonth(String employeeID, Integer month, Integer limit, Integer offset);
+
    // 조건 없이 사용자의 전체 데이터 갯수를 가져온다.
    int countTotal(String employeeID);
 
    // 해당 년에 맞는 사용자의 데이터 갯수를 가져온다.
    int countYear(String employeeID, Integer year);
 
+   // 해당 월에 맞는 사용자의 데이터 갯수를 가져온다.
+   int countMonth(String employeeID, Integer month);
+
    List<UserDto> findByAdminUser();
 
+    void deleteEmployeeSalaryByIds(List<Long> employeeIds);
+
+    void deleteUsersByIds(List<Long> employeeIds);
+
+    void deleteEmployeeSalaryById(@Param("employeeId") Long employeeId,
+                                  @Param("year") Long year, @Param("month") Long month);
 }
