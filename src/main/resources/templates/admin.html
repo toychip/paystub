@@ -180,26 +180,26 @@
 </body>
 
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var error = /*[[${searchErrors}]]*/ null;
 
-    if (error) {
-        var errorMessage = "employeeID: " + error.employeeID;
+    // 조회 에러 시 alert창 경고 띄우기
+    var searchError = /*[[${searchErrors}]]*/ null;
+
+    if (searchError) {
+        var errorMessage = "employeeID: " + searchError.employeeID;
         alert(errorMessage);
     }
 
-    /*<![CDATA[*/
-    var errors = /*[[${errors}]]*/ null;
+    // 파일 업로드 에러 시 새 창 띄우기
+    var uploadErrors = /*[[${errors}]]*/ null;
 
-    if (errors && errors.length > 0) {
-        var errorMessages = errors.join('\n');
+    if (uploadErrors && uploadErrors.length > 0) {
+        var errorMessages = uploadErrors.join('\n');
         var errorWindow = window.open("", "ErrorWindow", "width=600,height=400");
         errorWindow.document.write("<html><head><title>에러 메시지</title></head><body>");
         errorWindow.document.write("<h3>파일 업로드 에러</h3>");
         errorWindow.document.write("<pre>" + errorMessages + "</pre>");
         errorWindow.document.write("</body></html>");
     }
-
 
     document.getElementById("deleteButton").addEventListener("click", clickButton);
 
