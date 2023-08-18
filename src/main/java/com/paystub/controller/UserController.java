@@ -34,12 +34,10 @@ public class UserController {
     @GetMapping("/user")
     public String getTotalData(@RequestParam Integer year, @RequestParam Integer month, Model model) {
 
-        System.out.println("year = " + year);
-        System.out.println("month = " + month);
         // EmployeeSalary 와 User 테이블을 조인하여 필요한 데이터만 담아온다.
         List<UserResponse> userDtoList = userService.totalDataService(year, month);
 
-        if( month == 12) {
+        if(month == 12) {
             year++;
             month = 1;
         }

@@ -40,15 +40,17 @@ public class AdminService {
     // 엑셀 처리를 위한 메서드
     public List<AdminSalaryResponse> findResponseByYearAndMonth(
             Long year, Long month) {
-        return userMapper.findJoinedDataByYearAndMonth(year, month, null, null);
+
+
+        List<AdminSalaryResponse> joinedDataByYearAndMonth = userMapper.findJoinedDataByYearAndMonth(year, month, null, null);
+
+        return joinedDataByYearAndMonth;
     }
 
     // 검색을 위해 오버로딩
     public List<AdminSalaryResponse> findResponseByYearAndMonth(
             Long year, Long month, String name, Long employeeId
     ) {
-        System.out.println("service.year = " + year);
-        System.out.println("service.getMonth() = " + month);
         return userMapper.findJoinedDataByYearAndMonth(year, month, name, employeeId);
     }
 

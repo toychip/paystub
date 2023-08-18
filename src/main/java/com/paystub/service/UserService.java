@@ -69,7 +69,6 @@ public class UserService {
         else {
             count = userMapper.countYear(getCurrentMember(), year);
         }
-        System.out.println("count = " + count);
         return count;
     }
 
