@@ -4,6 +4,7 @@ import com.paystub.dto.FileUploadForm;
 import com.paystub.dto.ResponseDto;
 import com.paystub.dto.SalaryKey;
 import com.paystub.dto.UserDto;
+import com.paystub.request.AdminRequestDto;
 import com.paystub.service.AdminService;
 import com.paystub.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +12,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,13 +39,25 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String getUploadPage(@RequestParam(required = false, defaultValue = "9999") Long year,
-                                @RequestParam(required = false, defaultValue = "0") Long month,
-                                @RequestParam(required = false) String name,
-                                @RequestParam(required = false) String employeeID,
-                                Model model) {
+    public String getUploadPage(@Validated @ModelAttribute AdminRequestDto request, BindingResult bindingResult,
+                                Model model, RedirectAttributes redirectAttributes) {
 
-        List<ResponseDto> responseDtos = adminService.findResponseByYearAndMonth(year, month);
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError error : fieldErrors) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+            redirectAttributes.addFlashAttribute("errors", errorMap);
+            return "redirect:/admin";
+        }
+
+
+        List<ResponseDto> responseDtos = adminService.findResponseByYearAndMonth(
+                request.getYear(),
+                request.getMonth());
+//                request.getEmployeeID(),
+//                request.getName());
         model.addAttribute("responseDtos", responseDtos);
         return "admin";
     }

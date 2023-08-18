@@ -38,6 +38,8 @@ public class AdminService {
     private final AESUtilConfig aesUtilConfig;
 
     public List<ResponseDto> findResponseByYearAndMonth(Long year, Long month) {
+        System.out.println("service.year = " + year);
+        System.out.println("service.getMonth() = " + month);
         return userMapper.findJoinedDataByYearAndMonth(year, month);
     }
 
