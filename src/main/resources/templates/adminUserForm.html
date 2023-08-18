@@ -3,25 +3,31 @@
 <head>
     <title>Employee Salary</title>
     <style>
+
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0;
         }
+
         .container {
             text-align: center;
         }
+
+        /* 메인테이블 스타일 */
         table {
             width: 100%;
             border-collapse: collapse;
             margin: auto;
         }
+
         th, td {
             padding: 10px;
             border: 1px solid #ddd;
         }
 
+        /* 스크롤 이용 시 첫번째 셀 고정 */
         .sticky{
             background-color: lightgray;
             position:sticky;
@@ -39,8 +45,10 @@
 <body>
 <div class="container">
     <h3 class="center">관리자 페이지</h3>
+
+<!--    선택 후 삭제 버튼을 누르면 삭제되는 /adminUserForm 로 가게함-->
     <form method="POST" action="/adminUserForm">
-        <div class="margin" style="overflow:scroll; width:1000px; height:500px;">
+        <div class="margin" style="overflow:scroll; width:1000px; height:700px;">
 
             <table>
                 <thead>
@@ -48,7 +56,7 @@
                     <th class="sticky">선택</th>
                     <th class="sticky">일용직 근무자 사번</th>
                     <th class="sticky">이름</th>
-                    <th class="sticky">생일</th>
+                    <th class="sticky">생년월일</th>
                     <th class="sticky">이메일주소</th>
                 </tr>
                 </thead>
@@ -58,28 +66,36 @@
                     <td><input type="checkbox" name="employeeIds" th:value="${user.employeeID}"></td>
                     <td th:text="${user.employeeID}"></td>
                     <td th:text="${user.name}"></td>
-                    <td th:text="${user.birthday}"></td>
+                    <td th:text="${user.birthday.substring(0,4) + '.' + user.birthday.substring(4,6) + '.' + user.birthday.substring(6)}"></td>
                     <td th:text="${user.emailAddress}"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
+<!--        삭제버튼-->
         <button id="deleteButton" type="submit" style="width: 200px; height: 40px;">삭제</button>
     </form>
 </div>
 </body>
 
 <script>
+
     document.getElementById("deleteButton").addEventListener("click", clickButton);
 
-    function clickButton(){
+    // 삭제 버튼 클릭시 실행되는 메서드
+    function clickButton(event){
         if (confirm("삭제하시겠습니까?")){
             alert("삭제되었습니다");
         }
         else{
-            alert("취소되었습니다"); //취소시 이벤트 처리
+            // 폼 제출을 막아 삭제되지 않도록
+            alert("취소되었습니다");
+            event.preventDefault();
+            return false;
         }
     }
+
 </script>
+
 
 </html>
