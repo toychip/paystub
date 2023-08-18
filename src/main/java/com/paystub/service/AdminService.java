@@ -107,9 +107,9 @@ public class AdminService {
             Optional<UserDto> existingUserWithSameID = userMapper.findByEmployeeID(userDto.getEmployeeID());
 
             if (existingUserWithSameIDAndName.isPresent()) {
-                FieldError error = new FieldError("userDto", "Name",
-                        "[" + userDto.getName() + "]님은 이미 존재해서 회원이 추가되지 않았습니다");
-                bindingResult.addError(error);
+//                FieldError error = new FieldError("userDto", "Name",
+//                        "[" + userDto.getName() + "]님은 이미 존재해서 회원이 추가되지 않았습니다");
+//                bindingResult.addError(error);
             } else if (existingUserWithSameID.isPresent()) {
                 FieldError error = new FieldError("userDto", "EmployeeID",
                         "[" + userDto.getName() + "]님이 이미 [" + userDto.getEmployeeID() + "]를 사용중입니다.");
