@@ -74,6 +74,13 @@
             <option value="12">12</option>
         </select> <span>월</span>
         <h5>이름 : <input id="name" name="name" size=10> 사번 : <input id="employeeID" name="employeeID" size=10><span style="padding-left:20px;"><button>조회</button></span></h5>
+        <div th:if="${searchErrors}" class="error">
+            <ul>
+                <li th:each="error : ${searchErrors}">
+                    <p th:text="${error}"></p>
+                </li>
+            </ul>
+        </div>
     </form>
 </div>
 

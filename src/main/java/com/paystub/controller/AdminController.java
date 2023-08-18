@@ -48,7 +48,7 @@ public class AdminController {
             for (FieldError error : fieldErrors) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
-            redirectAttributes.addFlashAttribute("errors", errorMap);
+            redirectAttributes.addFlashAttribute("searchErrors", errorMap);
             return "redirect:/admin";
         }
 
