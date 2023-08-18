@@ -171,8 +171,22 @@
             </tbody>
         </table>
     </div>
+</form>
 <div>
-    <button type="submit" style="width: 200px; height: 40px;">삭제</button>
+    <button id="deleteButton" type="submit" style="width: 200px; height: 40px;">삭제</button>
 </div>
 </body>
+
+<script>
+    document.getElementById("deleteButton").addEventListener("click", clickButton);
+
+    function clickButton(){
+        if (confirm("삭제하시겠습니까?")){
+            alert("삭제되었습니다");
+        }
+        else{
+            alert("취소되었습니다"); //취소시 이벤트 처리
+        }
+    }
+</script>
 </html>
