@@ -39,30 +39,47 @@
 <body>
 <div class="container">
     <h3 class="center">관리자 페이지</h3>
-    <div class="margin" style="overflow:scroll; width:1000px; height:500px;">
-        <table>
-            <thead>
-            <tr>
-                <th class="sticky">선택</th>
-                <th class="sticky">일용직 근무자 사번</th>
-                <th class="sticky">이름</th>
-                <th class="sticky">생일</th>
-                <th class="sticky">이메일주소</th>
-            </tr>
-            </thead>
-            <tbody>
+    <form method="POST" action="/adminUserForm">
+        <div class="margin" style="overflow:scroll; width:1000px; height:500px;">
 
-            <tr th:each="user : ${adminUserForm}">
-                <td><input type="checkbox" name="employeeIds" th:value="${user.employeeID}"></td>
-                <td th:text="${user.employeeID}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.birthday}"></td>
-                <td th:text="${user.emailAddress}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <button type="submit">삭제</button>
+            <table>
+                <thead>
+                <tr>
+                    <th class="sticky">선택</th>
+                    <th class="sticky">일용직 근무자 사번</th>
+                    <th class="sticky">이름</th>
+                    <th class="sticky">생일</th>
+                    <th class="sticky">이메일주소</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="user : ${adminUserForm}">
+                    <td><input type="checkbox" name="employeeIds" th:value="${user.employeeID}"></td>
+                    <td th:text="${user.employeeID}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.birthday}"></td>
+                    <td th:text="${user.emailAddress}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <button id="deleteButton" type="submit" style="width: 200px; height: 40px;">삭제</button>
+    </form>
 </div>
 </body>
+
+<script>
+    document.getElementById("deleteButton").addEventListener("click", clickButton);
+
+    function clickButton(){
+        if (confirm("삭제하시겠습니까?")){
+            alert("삭제되었습니다");
+        }
+        else{
+            alert("취소되었습니다"); //취소시 이벤트 처리
+        }
+    }
+</script>
+
 </html>
