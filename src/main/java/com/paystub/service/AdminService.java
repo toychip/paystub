@@ -43,7 +43,7 @@ public class AdminService {
         return userMapper.findJoinedDataByYearAndMonth(year, month, null, null);
     }
 
-    // 검색을 위한 메서드
+    // 검색을 위해 오버로딩
     public List<ResponseDto> findResponseByYearAndMonth(
             Long year, Long month, String name, Long employeeId
     ) {
@@ -107,10 +107,12 @@ public class AdminService {
             Optional<UserDto> existingUserWithSameID = userMapper.findByEmployeeID(userDto.getEmployeeID());
 
             if (existingUserWithSameIDAndName.isPresent()) {
-                FieldError error = new FieldError("userDto", "Name", "[" + userDto.getName() + "]님이 이미 존재합니다.");
+                FieldError error = new FieldError("userDto", "Name",
+                        "[" + userDto.getName() + "]님은 이미 존재해서 회원이 추가되지 않았습니다");
                 bindingResult.addError(error);
             } else if (existingUserWithSameID.isPresent()) {
-                FieldError error = new FieldError("userDto", "EmployeeID", "[" + userDto.getName() + "]님이 이미 [" + userDto.getEmployeeID() + "]를 사용중입니다.");
+                FieldError error = new FieldError("userDto", "EmployeeID",
+                        "[" + userDto.getName() + "]님이 이미 [" + userDto.getEmployeeID() + "]를 사용중입니다.");
                 bindingResult.addError(error);
             } else {
                 userMapper.insertUser(userDto);
@@ -128,7 +130,11 @@ public class AdminService {
                     employeeSalaryDto.getEmployeeID()
             );
             if (existingData != null) {
-                FieldError error = new FieldError("employeeSalaryDto", "EmployeeID", "동일한 EmployeeID, year, month가 이미 존재합니다.");
+                FieldError error = new FieldError
+                        ("employeeSalaryDto", "EmployeeID",
+                                "이미 사번 [" + employeeSalaryDto.getEmployeeID() + "]님의 "
+                                        + employeeSalaryDto.getYear() + "년 "
+                                        + employeeSalaryDto.getMonth() + "월 데이터가 있습니다. 삭제하고 등록해주세요");
                 bindingResult.addError(error);
             } else {
                 employeeSalaryMapper.insertEmployeeSalaryDto(employeeSalaryDto);
