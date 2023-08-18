@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <title>관리자 페이지</title>
     <style>
+
+        /* 메인테이블 스타일 */
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
+
         th, td {
             padding: 10px;
             border: 1px solid #ddd;
@@ -23,14 +27,16 @@
             text-align: center;
         }
 
+        /* 에러 메시지 스타일 */
         .error {
             color: red;
         }
 
+        /* 스크롤 이용 시 첫번째 셀 고정 */
         .sticky{
             background-color: lightgray;
-            position:sticky;
-            top:0px;
+            position: sticky;
+            top: 0px;
             white-space: nowrap;
         }
 
@@ -38,6 +44,7 @@
 </head>
 <body>
 
+<!--년, 월, 이름, 사번을 정보를 조회하는 폼-->
 <div style="float: left;" class="margin">
     <h3>조회할 정보를 입력해주세요.</h3>
     <form method="GET" action="/admin">
@@ -77,9 +84,11 @@
     </form>
 </div>
 
+<!--파일 업로드 하는 폼-->
 <div style="float:right" class="margin">
     <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
-    <div th:if="${errors}" class="error">
+
+    <div id="error" th:if="${errors}" class="error">
         <ul>
             <li th:each="error : ${errors}">
                 <p th:text="${error}"></p>
@@ -171,9 +180,9 @@
             </tbody>
         </table>
     </div>
+    <button id="deleteButton" type="submit" style="width: 200px; height: 40px;">삭제</button>
 </form>
 <div>
-    <button id="deleteButton" type="submit" style="width: 200px; height: 40px;">삭제</button>
 </div>
 </body>
 
@@ -187,6 +196,10 @@
         else{
             alert("취소되었습니다"); //취소시 이벤트 처리
         }
+    }
+
+    if (errors.length > 0) {
+        document.getElementById('showErrors').style.display = 'block';
     }
 </script>
 </html>

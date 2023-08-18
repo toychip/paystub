@@ -29,6 +29,7 @@
             width: 200px;
             height: 1px;
         }
+
         /* 중앙 정렬 */
         .center {
             text-align: center;
@@ -83,7 +84,7 @@
         <h2>일용근로자 급여 지급명세서 (<span id="year" th:text="${totalData.year}"></span>년 <span id="month" th:text="${totalData.month}"></span>월 귀속)</h2>
         <h4>회사명: 나이스디앤알(주)</h4>
         <h4>사번: <span id="employeeID"th:text="${totalData.employeeID}"></span><span style="padding-left:200px;"></span>성명: <span id="name" th:text="${totalData.name}"></span></h4>
-        <h4>생년월일: <span th:text="${totalData.birthday}"></span><span style="padding-left:150px;"></span>지급일: <span th:text="${payDay}"></span></h4>
+        <h4>생년월일: <span th:text="${totalData.birthday.substring(0,4) + '-' + totalData.birthday.substring(4,6) + '-' + totalData.birthday.substring(6)}"></span><span style="padding-left:150px;"></span>지급일: <span th:text="${payDay}"></span></h4>
     </div>
 
     <!-- 메인 테이블 -->

@@ -47,7 +47,7 @@ public class UserController {
         else {
             month++;
         }
-        String payDay = year + "." + month + ".14";
+        String payDay = year + "-" + month + "-14";
 
         model.addAttribute("payDay", payDay);
         model.addAttribute("totalData", userDtoList);
