@@ -59,6 +59,14 @@ public class AdminController {
                 request.getName(),
                 request.getEmployeeID()
         );
+
+        if (!(request == null || request.getName() == null)) {
+            System.out.println("request.getYear().getClass() = " + request.getYear().getClass());
+            System.out.println("request.getYear() = " + request.getYear());
+
+
+        }
+        model.addAttribute("request", request);
         model.addAttribute("responseDtos", responseDtos);
         return "admin";
     }
@@ -69,9 +77,13 @@ public class AdminController {
                                    @RequestParam(required = false, defaultValue = "0") Long month,
                                    Model model) {
 
-        MultipartFile file = form.getFile();
+        MultipartFile file= null;
 
-        if (file.isEmpty()) {
+        if (form != null && form.getFile() != null) {
+            file = form.getFile();
+        }
+
+        if (file == null || file.isEmpty()) {
             // 파일이 비어 있을 경우 오류 메시지 설정
             bindingResult.rejectValue("file", "error.file", "파일을 선택해주세요.");
         }
@@ -99,6 +111,11 @@ public class AdminController {
             // 같은 뷰를 반환하여 현재 페이지에 오류를 표시
             return "admin";
         }
+        AdminRequestDto request = new AdminRequestDto();
+        request.setYear(year);
+        request.setMonth(month);
+
+        model.addAttribute("request", request); // 모델에 "req
 
         return "redirect:/admin"; // 성공적인 업로드 후 리다이렉션
     }

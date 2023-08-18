@@ -48,39 +48,42 @@
 <div style="float: left;" class="margin">
     <h3>조회할 정보를 입력해주세요.</h3>
     <form method="GET" action="/admin">
-        <select id="year" th:name="year" th:value="${year}">
-            <option value="9999">전체</option>
-            <option value="2010">2010</option>
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
-            <option value="2013">2013</option>
-            <option value="2014">2014</option>
-            <option value="2015">2015</option>
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
+        <select id="year" th:name="year" th:value="${request != null ? request.year : ''}">
+            <option value="9999" th:selected="${request != null and #strings.toString(request.year) == '9999'}">전체</option>
+            <option value="2010" th:selected="${request != null and #strings.toString(request.year) == '2010'}">2010</option>
+            <option value="2011" th:selected="${request != null and #strings.toString(request.year) == '2011'}">2011</option>
+            <option value="2012" th:selected="${request != null and #strings.toString(request.year) == '2012'}">2012</option>
+            <option value="2013" th:selected="${request != null and #strings.toString(request.year) == '2013'}">2013</option>
+            <option value="2014" th:selected="${request != null and #strings.toString(request.year) == '2014'}">2014</option>
+            <option value="2015" th:selected="${request != null and #strings.toString(request.year) == '2015'}">2015</option>
+            <option value="2016" th:selected="${request != null and #strings.toString(request.year) == '2016'}">2016</option>
+            <option value="2017" th:selected="${request != null and #strings.toString(request.year) == '2017'}">2017</option>
+            <option value="2018" th:selected="${request != null and #strings.toString(request.year) == '2018'}">2018</option>
+            <option value="2019" th:selected="${request != null and #strings.toString(request.year) == '2019'}">2019</option>
+            <option value="2020" th:selected="${request != null and #strings.toString(request.year) == '2020'}">2020</option>
+            <option value="2021" th:selected="${request != null and #strings.toString(request.year) == '2021'}">2021</option>
+            <option value="2022" th:selected="${request != null and #strings.toString(request.year) == '2022'}">2022</option>
+            <option value="2023" th:selected="${request != null and #strings.toString(request.year) == '2023'}">2023</option>
         </select> <span>년</span>
-        <select id="month" th:name="month" th:value="${month}">
-            <option value="0">전체</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
+        <select id="month" th:name="month" th:value="${request != null ? request.month : ''}">
+            <option value="0" th:selected="${request != null and #strings.toString(request.month) == '0'}">전체</option>
+            <option value="1" th:selected="${request != null and #strings.toString(request.month) == '1'}">1</option>
+            <option value="2" th:selected="${request != null and #strings.toString(request.month) == '2'}">2</option>
+            <option value="3" th:selected="${request != null and #strings.toString(request.month) == '3'}">3</option>
+            <option value="4" th:selected="${request != null and #strings.toString(request.month) == '4'}">4</option>
+            <option value="5" th:selected="${request != null and #strings.toString(request.month) == '5'}">5</option>
+            <option value="6" th:selected="${request != null and #strings.toString(request.month) == '6'}">6</option>
+            <option value="7" th:selected="${request != null and #strings.toString(request.month) == '7'}">7</option>
+            <option value="8" th:selected="${request != null and #strings.toString(request.month) == '8'}">8</option>
+            <option value="9" th:selected="${request != null and #strings.toString(request.month) == '9'}">9</option>
+            <option value="10" th:selected="${request != null and #strings.toString(request.month) == '10'}">10</option>
+            <option value="11" th:selected="${request != null and #strings.toString(request.month) == '11'}">11</option>
+            <option value="12" th:selected="${request != null and #strings.toString(request.month) == '12'}">12</option>
         </select> <span>월</span>
-        <h5>이름 : <input id="name" name="name" size=10> 사번 : <input id="employeeID" name="employeeID" size=10><span style="padding-left:20px;"><button>조회</button></span></h5>
+
+        <h5>이름 : <input id="name" name="name" size="10" th:value="${request != null ? request.name : ''}">
+            사번 : <input id="employeeID" name="employeeID" size="10" th:value="${request != null ? request.employeeID : ''}">
+            <span style="padding-left:20px;"><button>조회</button></span></h5>
         <div th:if="${searchErrors}" class="error">
             <ul>
                 <li th:each="error : ${searchErrors}">
