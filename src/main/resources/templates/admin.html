@@ -134,7 +134,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="response : ${responseDtos}">
+            <tr th:each="response : ${adminSalaryRespons}">
 
                 <td><input type="checkbox" name="salaryKeys" th:value="${response.EmployeeID + '_' + response.year + '_' + response.month}"></td>
                 <td th:text="${response.EmployeeID}"></td>

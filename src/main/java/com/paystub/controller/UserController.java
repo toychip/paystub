@@ -1,15 +1,14 @@
 package com.paystub.controller;
 
 import com.paystub.dto.*;
+import com.paystub.dto.response.UserResponse;
 import com.paystub.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
@@ -38,7 +37,7 @@ public class UserController {
         System.out.println("year = " + year);
         System.out.println("month = " + month);
         // EmployeeSalary 와 User 테이블을 조인하여 필요한 데이터만 담아온다.
-        List<UserFormDto> userDtoList = userService.totalDataService(year, month);
+        List<UserResponse> userDtoList = userService.totalDataService(year, month);
 
         if( month == 12) {
             year++;

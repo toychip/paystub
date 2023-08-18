@@ -1,26 +1,28 @@
-package com.paystub.dto;
+package com.paystub.dto.response;
 
 import lombok.*;
 
 import java.math.BigDecimal;
 
 
-
-
-
-
-
-
-@Builder
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class EmployeeSalaryDto {
+@RequiredArgsConstructor
+public class AdminSalaryResponse {
+
     private Integer EmployeeID; // 일용직 근무자 사번
 
     private Integer year;
     private Integer month;
+
+    private String Name; //성명
+    private Integer State; // 상태, 엑셀에 없는 컬럼, 내가 만들어야함 비활성화:1, 활성화:2
+    private Integer Role; // 역할 엑셀에 없는 컬럼, 내가 만들어야함 관리자:1, 근무자:2
+    private String birthday; // 생일
+    private String SocialNumber; // 주민번호
+    private String EmailAddress; //이메일
+
     private BigDecimal BasicSalary; // 기본수당
     private BigDecimal HolidayAllowance; // 주휴수당
     private BigDecimal LunchExpenses; // 지금 중식비
@@ -45,5 +47,6 @@ public class EmployeeSalaryDto {
     private BigDecimal OvertimeCalculationHours; // 주휴산정시간(소급분)
     private BigDecimal HourlyWage; // 시급
     private BigDecimal LunchAllowance; // 근태 중식비
+
 
 }

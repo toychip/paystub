@@ -7,14 +7,14 @@
         VALUES (#{EmployeeID}, #{Name}, #{State}, #{Role}, #{birthday}, #{SocialNumber}, #{EmailAddress})
     </insert>
 
-    <select id="findByUsername" resultType="com.paystub.dto.LoginFormDto">
+    <select id="findByUsername" resultType="com.paystub.dto.request.LoginRequest">
         SELECT EmployeeID AS username, SocialNumber AS password, Role AS role
         FROM User
         WHERE EmployeeID = #{username}
     </select>
 
 <!--    EmployeeSalary와 User 테이블을 조인하여 사용자의 해당 년, 월 데이터를 가져온다.-->
-    <select id="getTotalData" resultType="com.paystub.dto.UserFormDto">
+    <select id="getTotalData" resultType="com.paystub.dto.response.UserResponse">
         SELECT year, month, User.EmployeeID, BasicSalary, HolidayAllowance, LunchExpenses, FirstWeekHolidayAllowance, RetroactiveHolidayAllowance, TotalPayment, IncomeTax,
                 ResidentTax, EmploymentInsurance, NationalPension, HealthInsurance, ElderlyCareInsurance, EmploymentInsuranceDeduction, NationalPensionDeduction,
                 HealthInsuranceDeduction, ElderlyCareInsuranceDeduction, DeductionTotal, NetPayment, TotalWorkDays, TotalWorkingHours, HolidayCalculationHours,
@@ -25,18 +25,18 @@
 
     </select>
 
-    <select id="findByEmployeeIDAndName" resultType="com.paystub.dto.UserDto">
+    <select id="findByEmployeeIDAndName" resultType="com.paystub.dto.AdminUserListResponseAndUserSaveDao">
         SELECT * FROM User
         WHERE EmployeeID = #{EmployeeID} AND Name = #{Name}
     </select>
 
-    <select id="findByEmployeeID" resultType="com.paystub.dto.UserDto">
+    <select id="findByEmployeeID" resultType="com.paystub.dto.AdminUserListResponseAndUserSaveDao">
         SELECT * FROM User
         WHERE EmployeeID = #{EmployeeID}
     </select>
 
 
-    <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.dto.ResponseDto">
+    <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.dto.response.AdminSalaryResponse">
         SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
         e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
         e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
@@ -116,9 +116,10 @@
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND month = #{month}
     </select>
 
-    <select id="findByAdminUser" resultType="com.paystub.dto.UserDto">
+    <select id="findByAdminUser" resultType="com.paystub.dto.AdminUserListResponseAndUserSaveDao">
         SELECT *
         FROM User
+        WHERE Role = 1
     </select>
 
     <delete id="deleteEmployeeSalaryByIds">

@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class AdminUserListResponseAndUserSaveDao {
 
     private Integer EmployeeID; // 일용직근무자사번
     private String Name; //성명
@@ -16,6 +16,5 @@ public class UserDto {
     private String birthday; // 생일
     private String SocialNumber; // 주민번호
     private String EmailAddress; //이메일
-
 
 }
