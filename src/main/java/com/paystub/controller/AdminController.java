@@ -55,9 +55,10 @@ public class AdminController {
 
         List<ResponseDto> responseDtos = adminService.findResponseByYearAndMonth(
                 request.getYear(),
-                request.getMonth());
-//                request.getEmployeeID(),
-//                request.getName());
+                request.getMonth(),
+                request.getName(),
+                request.getEmployeeID()
+        );
         model.addAttribute("responseDtos", responseDtos);
         return "admin";
     }

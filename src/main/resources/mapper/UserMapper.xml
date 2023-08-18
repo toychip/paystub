@@ -44,7 +44,6 @@
         e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
         FROM User u
         JOIN EmployeeSalary e ON u.EmployeeID = e.EmployeeID
-
         <where>
             <if test="year != 9999">
                 AND e.year = #{year}
@@ -52,10 +51,15 @@
             <if test="month != 0">
                 AND e.month = #{month}
             </if>
+            <if test="name != null and name != ''">
+                AND u.Name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="employeeID != null">
+                AND CAST(u.EmployeeID AS CHAR) LIKE CONCAT('%', #{employeeID}, '%')
+            </if>
         </where>
         ORDER BY e.year DESC, e.month DESC
     </select>
-
 
     <select id="findByYearAndMonth" resultType="com.paystub.dto.PageDto">
         SELECT year, month
