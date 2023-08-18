@@ -77,7 +77,7 @@ public class AdminController {
                                    @RequestParam(required = false, defaultValue = "0") Long month,
                                    Model model) {
 
-        MultipartFile file= null;
+        MultipartFile file = null;
 
         if (form != null && form.getFile() != null) {
             file = form.getFile();
@@ -86,6 +86,15 @@ public class AdminController {
         if (file == null || file.isEmpty()) {
             // 파일이 비어 있을 경우 오류 메시지 설정
             bindingResult.rejectValue("file", "error.file", "파일을 선택해주세요.");
+        } else {
+            String contentType = file.getContentType();
+            if (contentType == null ||
+                    !(contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") ||
+                            contentType.equals("application/vnd.ms-excel") ||
+                            contentType.equals("application/vnd.ms-excel.sheet.macroEnabled.12") || // for .xlsm
+                            contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))) { // for .xlsx
+                bindingResult.rejectValue("file", "error.file", "엑셀 파일만 업로드 가능합니다.");
+            }
         }
 
         List<ResponseDto> responseDtos = null;

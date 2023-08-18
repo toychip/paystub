@@ -112,7 +112,7 @@ public class AdminService {
                 bindingResult.addError(error);
             } else if (existingUserWithSameID.isPresent()) {
                 FieldError error = new FieldError("userDto", "EmployeeID",
-                        "[" + userDto.getName() + "]님이 이미 [" + userDto.getEmployeeID() + "]를 사용중입니다.");
+                        " 이미 [" + userDto.getEmployeeID() + "] 사번을 가진 직원이 존재합니다..");
                 bindingResult.addError(error);
             } else {
                 userMapper.insertUser(userDto);

@@ -119,6 +119,7 @@
     <select id="findByAdminUser" resultType="com.paystub.dto.UserDto">
         SELECT *
         FROM User
+        WHERE Role = 1
     </select>
 
     <delete id="deleteEmployeeSalaryByIds">
