@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <title>관리자 페이지</title>
     <style>
+
+        /* 메인테이블 스타일 */
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
+
         th, td {
             padding: 10px;
             border: 1px solid #ddd;
@@ -23,91 +27,90 @@
             text-align: center;
         }
 
-        .error {
-            color: red;
-        }
-
+        /* 스크롤 이용 시 첫번째 셀 고정 */
         .sticky{
             background-color: lightgray;
-            position:sticky;
-            top:0px;
+            position: sticky;
+            top: 0px;
+            white-space: nowrap;
         }
+
     </style>
 </head>
 <body>
-<div class="center">
-    <h1>관리자 페이지</h1>
+
+<!--년, 월, 이름, 사번을 정보를 조회하는 폼-->
+<div style="float: left;" class="margin">
+    <h3>조회할 정보를 입력해주세요.</h3>
+    <form method="GET" action="/admin">
+        <select id="year" th:name="year" th:value="${request != null ? request.year : ''}">
+            <option value="9999" th:selected="${request != null and #strings.toString(request.year) == '9999'}">전체</option>
+            <option value="2010" th:selected="${request != null and #strings.toString(request.year) == '2010'}">2010</option>
+            <option value="2011" th:selected="${request != null and #strings.toString(request.year) == '2011'}">2011</option>
+            <option value="2012" th:selected="${request != null and #strings.toString(request.year) == '2012'}">2012</option>
+            <option value="2013" th:selected="${request != null and #strings.toString(request.year) == '2013'}">2013</option>
+            <option value="2014" th:selected="${request != null and #strings.toString(request.year) == '2014'}">2014</option>
+            <option value="2015" th:selected="${request != null and #strings.toString(request.year) == '2015'}">2015</option>
+            <option value="2016" th:selected="${request != null and #strings.toString(request.year) == '2016'}">2016</option>
+            <option value="2017" th:selected="${request != null and #strings.toString(request.year) == '2017'}">2017</option>
+            <option value="2018" th:selected="${request != null and #strings.toString(request.year) == '2018'}">2018</option>
+            <option value="2019" th:selected="${request != null and #strings.toString(request.year) == '2019'}">2019</option>
+            <option value="2020" th:selected="${request != null and #strings.toString(request.year) == '2020'}">2020</option>
+            <option value="2021" th:selected="${request != null and #strings.toString(request.year) == '2021'}">2021</option>
+            <option value="2022" th:selected="${request != null and #strings.toString(request.year) == '2022'}">2022</option>
+            <option value="2023" th:selected="${request != null and #strings.toString(request.year) == '2023'}">2023</option>
+        </select> <span>년</span>
+        <select id="month" th:name="month" th:value="${request != null ? request.month : ''}">
+            <option value="0" th:selected="${request != null and #strings.toString(request.month) == '0'}">전체</option>
+            <option value="1" th:selected="${request != null and #strings.toString(request.month) == '1'}">1</option>
+            <option value="2" th:selected="${request != null and #strings.toString(request.month) == '2'}">2</option>
+            <option value="3" th:selected="${request != null and #strings.toString(request.month) == '3'}">3</option>
+            <option value="4" th:selected="${request != null and #strings.toString(request.month) == '4'}">4</option>
+            <option value="5" th:selected="${request != null and #strings.toString(request.month) == '5'}">5</option>
+            <option value="6" th:selected="${request != null and #strings.toString(request.month) == '6'}">6</option>
+            <option value="7" th:selected="${request != null and #strings.toString(request.month) == '7'}">7</option>
+            <option value="8" th:selected="${request != null and #strings.toString(request.month) == '8'}">8</option>
+            <option value="9" th:selected="${request != null and #strings.toString(request.month) == '9'}">9</option>
+            <option value="10" th:selected="${request != null and #strings.toString(request.month) == '10'}">10</option>
+            <option value="11" th:selected="${request != null and #strings.toString(request.month) == '11'}">11</option>
+            <option value="12" th:selected="${request != null and #strings.toString(request.month) == '12'}">12</option>
+        </select> <span>월</span>
+
+        <h5>이름 : <input id="name" name="name" size="10" th:value="${request != null ? request.name : ''}">
+            사번 : <input id="employeeID" name="employeeID" size="10" th:value="${request != null ? request.employeeID : ''}">
+            <span style="padding-left:20px;"><button>조회</button></span></h5>
+        <div th:if="${searchErrors}" class="error"></div>
+    </form>
 </div>
-<div style="float:left" class="margin">
+
+<!--파일 업로드 하는 폼-->
+<div style="float:right" class="margin">
     <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
-    <div th:if="${errors}" class="error">
-        <ul>
-            <li th:each="error : ${errors}">
-                <p th:text="${error}"></p>
-            </li>
-        </ul>
-    </div>
+
+    <div id="error" th:if="${errors}" class="error"></div>
     <!-- 파일 업로드 -->
     <form method="POST" action="/admin" enctype="multipart/form-data">
         <input type="file" id="file" name="file">
         <input type="submit" id="submitButton" value="Upload">
     </form>
 </div>
-<div style="float: right;" class="margin">
-    <h3>조회할 년도와 월을 선택해주세요.</h3>
-    <form method="GET" action="/admin">
-        <select id="year" th:name="year" th:value="${year}">
-            <option value="9999">전체</option>
-            <option value="2010">2010</option>
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
-            <option value="2013">2013</option>
-            <option value="2014">2014</option>
-            <option value="2015">2015</option>
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-        </select> <span>년</span>
-        <select id="month" th:name="month" th:value="${month}">
-            <option value="0">전체</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-        </select> <span>월</span>
-        <button>조회</button>
-    </form>
-</div>
 
 <form method="POST" action="/adminDeleteSalary">
-    <div style="width: 100%; height: 500px; overflow: auto" class="center">
+    <div style="width: 100%; height: 600px; overflow: auto" class="center">
         <table>
             <thead>
             <tr>
-                <th class="sticky">선택</th>
-                <th class="sticky">일용직 근무자 사번</th>
-                <th class="sticky">이름</th>
-                <th class="sticky">근무년도</th>
-                <th class="sticky">근무 월</th>
+                <th class="sticky" >선택</th>
+                <th class="sticky">사번</th>
+                <th class="sticky">근무자 이름</th>
+                <th class="sticky">년도</th>
+                <th class="sticky">월</th>
                 <th class="sticky">생일</th>
                 <th class="sticky">기본수당</th>
                 <th class="sticky">주휴수당</th>
                 <th class="sticky">중식비 - 지급</th>
                 <th class="sticky">주휴수당(첫째주)</th>
-                <th class="sticky">주휴수당 (소급분)</th>
+                <th class="sticky">주휴수당(소급분)</th>
                 <th class="sticky">지급합계</th>
                 <th class="sticky">소득세</th>
                 <th class="sticky">주민세</th>
@@ -131,44 +134,87 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="response : ${responseDtos}">
+            <tr th:each="response : ${adminSalaryRespons}">
+
                 <td><input type="checkbox" name="salaryKeys" th:value="${response.EmployeeID + '_' + response.year + '_' + response.month}"></td>
                 <td th:text="${response.EmployeeID}"></td>
                 <td th:text="${response.Name}"></td>
                 <td th:text="${response.year}"></td>
                 <td th:text="${response.month}"></td>
-                <td th:text="${response.birthday}"></td>
-                <td th:text="${response.BasicSalary}"></td>
-                <td th:text="${response.HolidayAllowance}"></td>
-                <td th:text="${response.LunchExpenses}"></td>
-                <td th:text="${response.FirstWeekHolidayAllowance}"></td>
-                <td th:text="${response.RetroactiveHolidayAllowance}"></td>
-                <td th:text="${response.TotalPayment}"></td>
-                <td th:text="${response.IncomeTax}"></td>
-                <td th:text="${response.ResidentTax}"></td>
-                <td th:text="${response.EmploymentInsurance}"></td>
-                <td th:text="${response.NationalPension}"></td>
-                <td th:text="${response.HealthInsurance}"></td>
-                <td th:text="${response.ElderlyCareInsurance}"></td>
-                <td th:text="${response.EmploymentInsuranceDeduction}"></td>
-                <td th:text="${response.NationalPensionDeduction}"></td>
-                <td th:text="${response.HealthInsuranceDeduction}"></td>
-                <td th:text="${response.ElderlyCareInsuranceDeduction}"></td>
-                <td th:text="${response.DeductionTotal}"></td>
-                <td th:text="${response.NetPayment}"></td>
+                <td th:text="${response.birthday.substring(0,4) + '.' + response.birthday.substring(4,6) + '.' + response.birthday.substring(6)}"></td>
+                <td th:text="${#numbers.formatInteger(response.BasicSalary, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.HolidayAllowance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.LunchExpenses, 3, 'COMMA')}"></td>
+
+                <td th:text="${#numbers.formatInteger(response.FirstWeekHolidayAllowance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.RetroactiveHolidayAllowance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.TotalPayment, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.IncomeTax, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.ResidentTax, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.EmploymentInsurance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.NationalPension, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.HealthInsurance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.ElderlyCareInsurance, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.EmploymentInsuranceDeduction, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.NationalPensionDeduction, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.HealthInsuranceDeduction, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.ElderlyCareInsuranceDeduction, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.DeductionTotal, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.NetPayment, 3, 'COMMA')}"></td>
+
                 <td th:text="${response.TotalWorkDays}"></td>
                 <td th:text="${response.TotalWorkingHours}"></td>
                 <td th:text="${response.HolidayCalculationHours}"></td>
                 <td th:text="${response.OvertimeCalculationHours}"></td>
-                <td th:text="${response.HourlyWage}"></td>
-                <td th:text="${response.LunchAllowance}"></td>
+                <td th:text="${#numbers.formatInteger(response.HourlyWage, 3, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatInteger(response.LunchAllowance, 3, 'COMMA')}"></td>
                 <td th:text="${response.EmailAddress}"></td>
             </tr>
             </tbody>
         </table>
     </div>
+    <button id="deleteButton" type="submit" style="width: 200px; height: 40px;">삭제</button>
+</form>
 <div>
-    <button type="submit">삭제</button>
 </div>
 </body>
+
+<script th:inline="javascript">
+
+    // 조회 에러 시 alert창 경고 띄우기
+    var searchError = /*[[${searchErrors}]]*/ null;
+
+    if (searchError) {
+        var errorMessage = "employeeID: " + searchError.employeeID;
+        alert(errorMessage);
+    }
+
+    // 파일 업로드 에러 시 새 창 띄우기
+    var uploadErrors = /*[[${errors}]]*/ null;
+
+    if (uploadErrors && uploadErrors.length > 0) {
+        var errorMessages = uploadErrors.join('\n');
+        var errorWindow = window.open("", "ErrorWindow", "width=600,height=400");
+        errorWindow.document.write("<html><head><title>에러 메시지</title></head><body>");
+        errorWindow.document.write("<h3>파일 업로드 에러</h3>");
+        errorWindow.document.write("<pre>" + errorMessages + "</pre>");
+        errorWindow.document.write("</body></html>");
+    }
+
+    document.getElementById("deleteButton").addEventListener("click", clickButton);
+
+    // 삭제 버튼 클릭시 실행되는 메서드
+    function clickButton(event) {
+        if (confirm("삭제하시겠습니까?")) {
+            alert("삭제되었습니다");
+        } else {
+            // 폼 제출을 막아 삭제되지 않도록
+            alert("취소되었습니다");
+            event.preventDefault();
+            return false;
+        }
+    }
+    /*]]>*/
+</script>
+
 </html>

@@ -1,8 +1,7 @@
 package com.paystub.service;
 
 import com.paystub.dto.PageDto;
-import com.paystub.dto.UserDto;
-import com.paystub.dto.UserFormDto;
+import com.paystub.dto.response.UserResponse;
 import com.paystub.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,7 @@ public class UserService {
 
     // 메서드 레벨의 트랜잭션 선언이 우선 적용되기 때문
     @Transactional(readOnly = true)
-    public List<UserFormDto> totalDataService(Integer year, Integer month) {
+    public List<UserResponse> totalDataService(Integer year, Integer month) {
         return userMapper.getTotalData(getCurrentMember(), year, month);
 
     }
@@ -70,7 +69,6 @@ public class UserService {
         else {
             count = userMapper.countYear(getCurrentMember(), year);
         }
-        System.out.println("count = " + count);
         return count;
     }
 

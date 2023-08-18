@@ -1,17 +1,14 @@
 package com.paystub.repository;
 
 
-import com.paystub.dto.EmployeeSalaryDto;
-import com.paystub.dto.UserDto;
+import com.paystub.dto.EmployeeSalaryDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 @Mapper
 public interface EmployeeSalaryMapper {
-    void insertEmployeeSalaryDto(EmployeeSalaryDto employeeSalaryDto);
-    EmployeeSalaryDto findSalaryByYearMonthAndEmployeeID(
+    void insertEmployeeSalaryDto(EmployeeSalaryDao employeeSalaryDao);
+    EmployeeSalaryDao findSalaryByYearMonthAndEmployeeID(
             @Param("year") int year,
             @Param("month") int month,
             @Param("EmployeeID") Integer EmployeeID

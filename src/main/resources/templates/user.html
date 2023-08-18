@@ -6,30 +6,45 @@
     <style>
 
         /* 메인테이블 스타일 */
-        table {
+        .mainTable {
             border-collapse: collapse;
-            width: 100%;
+            width: 350mm;
+            height: 150mm;
+            margin: auto; /* 중앙 정렬 */
+            white-space: nowrap;
         }
 
-        /* 지급금액, 공제금액 테이블 스타일 */
-        .table2 {
+        /* 지급금액 테이블 스타일 */
+        .payTable {
             border-collapse: collapse;
-            width: 80%;
+            width: 280mm;
+            height: 60mm;
+            margin: auto; /* 중앙 정렬 */
+            white-space: nowrap;
+            transform: translateX(-135px); /* 왼쪽으로 10px 이동 */
         }
+
+        /* 공제금액 테이블 스타일 */
+        .deductTable {
+            border-collapse: collapse;
+            width: 280mm;
+            height: 70mm;
+            margin: auto; /* 중앙 정렬 */
+            white-space: nowrap;
+            transform: translateX(-135px); /* 왼쪽으로 10px 이동 */
+        }
+
 
         /* 숨겨야할 셀 스타일 */
         .hide {
             border: 1px white;
         }
 
-        /* 테이블 안 th, td 스타일 */
-        th,
-        td {
-            border: 1px solid black;
+        th, td {
+            border: 0.5px solid black; /* 이 부분의 1px 값을 원하는 굵기로 변경 */
             padding: 5px 5px;
             text-align: center;
-            border-width: 2px;
-            width: 200px;
+            width: 180px;
             height: 1px;
         }
 
@@ -45,12 +60,10 @@
         /* 텍스트 여백을 두어 테이블 간 거리 간격 조정 */
         .textMargin {
             margin-top: 50px;
+            text-align: center;
+            transform: translateX(-580px); /* 왼쪽으로 130px 이동 */
         }
 
-        /* 메인 테이블 여백을 두어 거리 간격 조절 */
-        .tableMargin {
-            margin-top: 50px;
-        }
 
 
         /* 각 테이블의 첫번째 Tr에만 해당하는 스타일 */
@@ -61,37 +74,39 @@
 
         /* 화면 여백 */
         .padding {
-            padding: 40px 40px 40px 40px;
+            padding: 80px 40px 40px 40px;
         }
 
+        /* 사진 스타일 */
         .img {
             text-align: right;
             margin-top: 90px;
+
         }
 
 
     </style>
 </head>
 
-
+<!--pdf 변환 및 다운 관련-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <body th:each="totalData : ${totalData}">
 
-
+<!--pdf 변환시 영역 시작-->
 <div id = "start" class="report" >
     <div class="padding">
     <div class="center">
         <h2>일용근로자 급여 지급명세서 (<span id="year" th:text="${totalData.year}"></span>년 <span id="month" th:text="${totalData.month}"></span>월 귀속)</h2>
-        <h5>회사명: 나이스디앤알(주)</h5>
-        <h5>사번: <span id="employeeID"th:text="${totalData.employeeID}"></span>          성명: <span id="name" th:text="${totalData.name}"></span></h5>
-        <h5>생년월일: <span th:text="${totalData.birthday}"></span>        지급일: <span th:text="${payDay}"></span></h5>
+        <h4>회사명: 나이스디앤알(주)</h4>
+        <h4>사번: <span id="employeeID"th:text="${totalData.employeeID}"></span><span style="padding-left:200px;"></span>성명: <span id="name" th:text="${totalData.name}"></span></h4>
+        <h4>생년월일: <span th:text="${totalData.birthday.substring(0,4) + '-' + totalData.birthday.substring(4,6) + '-' + totalData.birthday.substring(6)}"></span><span style="padding-left:150px;"></span>지급일: <span th:text="${payDay}"></span></h4>
     </div>
 
     <!-- 메인 테이블 -->
-    <table id="mainTable" class="tableMargin">
+    <table id="mainTable" class="mainTable">
         <tr class="firstTr">
             <td>지급</td>
             <td></td>
@@ -209,7 +224,7 @@
 
     <!-- 지급금액 산출내역 테이블 -->
     <h3 class="textMargin">[지급금액 산출내역]</h3>
-    <table id="payment" margin-align="left" class="table2">
+    <table id="payment" class="payTable">
         <tr class="firstTr">
             <td>지급내역</td>
             <td colspan="6">산출내역</td>
@@ -241,9 +256,10 @@
             <td th:text="${#numbers.formatInteger(totalData.retroactiveHolidayAllowance, 3, 'COMMA')}" class="right"></td>
         </tr>
     </table>
+
     <!-- 공제금액 산출내역 -->
     <h3 class="textMargin">[공제금액 산출내역]</h3>
-    <table id="deduction" class="table2">
+    <table id="deduction" class="deductTable">
         <tr class="firstTr">
             <td>공제내역</td>
             <td colspan="2">산출내역</td>
@@ -284,23 +300,26 @@
         <div class="img" >
             <img th:src="@{/img/nice.PNG}"/>
         </div>
+
+<!--        pdf 변환시 영역 끝-->
     <div id="end" class="report"></div>
 
 </div>
-
 </div>
 
 
-<button type="button" id="pdf">pdf 다운</button>
-
+<div class="center">
+<!--    pdf 다운 버튼-->
+    <button type="button" id="pdf" style="width: 200px; height: 40px;">pdf 다운</button>
+</div>
 
 <script type="text/javascript">
 
-    window.load = function() {
-        console.log("gg");
-    }
-    let all_area_array = ['#start','#end']; //전체영역 area
-    let area_array = ['#start']; //pdf 다운 영역
+    //전체영역 area
+    let all_area_array = ['#start','#end'];
+
+    //pdf 다운 영역
+    let area_array = ['#start', '#end'];
 
     $('#pdf').on("click", function () {
         let difference = all_area_array.filter(x => !area_array.includes(x));
@@ -315,8 +334,11 @@
         html2canvas($('.report')[0]).then(function(canvas) {
             let imgData = canvas.toDataURL('image/png');
 
-            let imgWidth = 210; // 이미지 가로 길이(mm) A4 기준
-            let pageHeight = imgWidth * 1.414;  // 출력 페이지 세로 길이 계산 A4 기준
+            // 이미지 가로 길이(mm) A4 기준
+            let imgWidth = 210;
+
+            // 출력 페이지 세로 길이 계산 A4 기준
+            let pageHeight = imgWidth * 1.414;
             let imgHeight = canvas.height * imgWidth / canvas.width;
             let heightLeft = imgHeight;
 

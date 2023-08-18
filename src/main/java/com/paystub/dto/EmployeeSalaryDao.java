@@ -1,19 +1,19 @@
 package com.paystub.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@Builder
 @Getter
 @Setter
-@RequiredArgsConstructor
-public class UserFormDto {
-
-    private Integer year; // 년
-    private Integer month; // 월
+@AllArgsConstructor
+@NoArgsConstructor
+public class EmployeeSalaryDao {
     private Integer EmployeeID; // 일용직 근무자 사번
+
+    private Integer year;
+    private Integer month;
     private BigDecimal BasicSalary; // 기본수당
     private BigDecimal HolidayAllowance; // 주휴수당
     private BigDecimal LunchExpenses; // 지금 중식비
@@ -37,8 +37,6 @@ public class UserFormDto {
     private BigDecimal HolidayCalculationHours; // 주휴산정시간
     private BigDecimal OvertimeCalculationHours; // 주휴산정시간(소급분)
     private BigDecimal HourlyWage; // 시급
-
-    private String Name; //성명
-    private String birthday; // 생일
+    private BigDecimal LunchAllowance; // 근태 중식비
 
 }

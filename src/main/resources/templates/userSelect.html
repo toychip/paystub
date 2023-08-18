@@ -2,39 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+<!--    ajax 요청-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>관리자 페이지</title>
     <style>
 
-
+        /* 메인테이블 스타일 */
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         th, td {
             padding: 10px;
             border: 1px solid #ddd;
-        }
-
-        .margin {
-            margin-left: 50px;
-            margin-right: 50px;
-            margin-bottom: 50px;
         }
 
         .center {
             text-align: center;
         }
 
-        .error {
-            color: red;
+        .margin {
+            margin-top: 50px;
+            text-align: center;
         }
+
     </style>
 </head>
 <body>
+
 <div class="center">
     <h1>사용자 페이지</h1>
 </div>
+
+<!--년도와 월을 선택받아 조회하는 테이블-->
 <div class="center">
     <h3>조회할 년도와 월을 선택해주세요.</h3>
         <select id="year" th:name="year" th:value="${year}">
@@ -72,42 +73,39 @@
         <button id="searchButton">조회</button>
 </div>
 
+<!--페이징 처리 결과 데이터가 나오는 영역-->
+<div id="dataList" class="margin"></div>
 
-<div id="dataList" class="center">
-
-</div>
-<div id="pagination" class="center">
+<!--페이지 이전, 다음 버튼-->
+<div id="pagination" class="margin">
     <button id="prevPage">이전</button>
     <span id="currentPage">1</span>/<span id="totalPages"></span>
     <button id="nextPage">다음</button>
 </div>
-
-
-
-
 </body>
+
 <script th:inline="javascript">
 
     document.getElementById("searchButton").addEventListener("click", clickButton);
 
+    // 조회 버튼 클릭시 실행되는 메서드
     function clickButton() {
         const year = document.getElementById("year").value;
         const month = document.getElementById("month").value;
 
-
+        // year와 month 중 하나 또는 모두 전체 옵션이 선택되었을때
         if(year == 9999 || month == 0 || (year == 9999 && month == 0)) {
             getTotalPage(year, month);
         }
 
+        // year와 month 모두 특정 값이 선택되었을때
         else {
             getYearAndMonth(year, month);
         }
     }
+
     // 한 건 조회시 로드되는 함수
     function getYearAndMonth(year, month) {
-
-        console.log(year);
-        console.log(month);
         $.ajax({
             url: "/user",
             type: "GET",
@@ -115,7 +113,9 @@
             success: function(result) {
                 if(result) {
                     alert( year + "년 " + month + "월 급여명세서를 조회합니다.");
-                    location.href = "/user?year=" + year + "&month=" + month; // 파라미터 추가
+
+                    // 파라미터 추가
+                    location.href = "/user?year=" + year + "&month=" + month;
                 } else {
                     alert("불러오기 실패");
                 }
@@ -123,17 +123,13 @@
         });
     }
 
-
+    // 페이징 처리를 위해 변수 초기화
     var currentPage = 0; // 현재 페이지
     var totalPages = 0; // 전체 페이지 수
     var offset = 0;
 
     // 전체 조회시 로드되는 함수
     function getTotalPage(year, month) {
-
-        console.log(year);
-        console.log(month);
-        console.log(offset);
         $.ajax({
             url: "/afterSelect",
             type: "GET",
@@ -147,16 +143,20 @@
                         dataListHtml += '<h4><a href="/user?year=' + item.year + '&month=' + item.month + '"><span>' + item.year + '</span>년 <span>' + item.month + '</span>월</a></h4>';
                     });
                     $('#dataList').html(dataListHtml);
-                    totalPages = response.totalPages; // 전체 페이지 수 설정
+
+                    // 전체 페이지 수 설정
+                    totalPages = response.totalPages;
+
                     $('#totalPages').text(totalPages);
-                    $('#currentPage').text(currentPage + 1); // 현재 페이지 표시
+
+                    // 현재 페이지 표시
+                    $('#currentPage').text(currentPage + 1);
                 } else {
                     alert("불러오기 실패");
                 }
             }
         });
     }
-
 
     // 이전 페이지 버튼 클릭 이벤트
     $("#prevPage").click(function() {
