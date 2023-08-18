@@ -1,10 +1,10 @@
 package com.paystub.service;
 
 import com.paystub.config.AESUtilConfig;
-import com.paystub.dto.EmployeeSalaryDto;
-import com.paystub.dto.ResponseDto;
-import com.paystub.dto.SalaryKey;
-import com.paystub.dto.UserDto;
+import com.paystub.dto.response.AdminSalaryResponse;
+import com.paystub.dto.EmployeeSalaryDao;
+import com.paystub.dto.request.AdminDeleteSalaryRequest;
+import com.paystub.dto.AdminUserListResponseAndUserSaveDao;
 import com.paystub.repository.EmployeeSalaryMapper;
 import com.paystub.repository.UserMapper;
 import lombok.Getter;
@@ -38,13 +38,13 @@ public class AdminService {
     private final AESUtilConfig aesUtilConfig;
 
     // 엑셀 처리를 위한 메서드
-    public List<ResponseDto> findResponseByYearAndMonth(
+    public List<AdminSalaryResponse> findResponseByYearAndMonth(
             Long year, Long month) {
         return userMapper.findJoinedDataByYearAndMonth(year, month, null, null);
     }
 
     // 검색을 위해 오버로딩
-    public List<ResponseDto> findResponseByYearAndMonth(
+    public List<AdminSalaryResponse> findResponseByYearAndMonth(
             Long year, Long month, String name, Long employeeId
     ) {
         System.out.println("service.year = " + year);
@@ -52,10 +52,10 @@ public class AdminService {
         return userMapper.findJoinedDataByYearAndMonth(year, month, name, employeeId);
     }
 
-    public List<ResponseDto> processExcelFile(MultipartFile file, BindingResult bindingResult,
-                                              Long year, Long month) {
-        List<UserDto> userDtos = new ArrayList<>();
-        List<EmployeeSalaryDto> employeeSalaryDtos = new ArrayList<>();
+    public List<AdminSalaryResponse> processExcelFile(MultipartFile file, BindingResult bindingResult,
+                                                      Long year, Long month) {
+        List<AdminUserListResponseAndUserSaveDao> adminUserListResponsAndUserSaveDaos = new ArrayList<>();
+        List<EmployeeSalaryDao> employeeSalaryDaos = new ArrayList<>();
 
         InputStream inputStream = null; // 여기서 변수 선언
 
@@ -70,11 +70,11 @@ public class AdminService {
                     continue;
                 }
 
-                UserDto userDto = createUserDto(row);
-                EmployeeSalaryDto employeeSalaryDto = createEmployeeSalaryDto(row, userDto.getEmployeeID());
+                AdminUserListResponseAndUserSaveDao adminUserListResponseAndUserSaveDao = createUserDto(row);
+                EmployeeSalaryDao employeeSalaryDao = createEmployeeSalaryDto(row, adminUserListResponseAndUserSaveDao.getEmployeeID());
 
-                userDtos.add(userDto);
-                employeeSalaryDtos.add(employeeSalaryDto);
+                adminUserListResponsAndUserSaveDaos.add(adminUserListResponseAndUserSaveDao);
+                employeeSalaryDaos.add(employeeSalaryDao);
             }
             workbook.close();
         } catch (Exception e) {
@@ -92,8 +92,8 @@ public class AdminService {
             }
         }
 
-        saveUsers(userDtos, bindingResult);
-        saveEmployeeSalaries(employeeSalaryDtos, bindingResult);
+        saveUsers(adminUserListResponsAndUserSaveDaos, bindingResult);
+        saveEmployeeSalaries(employeeSalaryDaos, bindingResult);
 
         // 저장된 데이터를 바로 반환하거나 필요한 경우 데이터베이스에서 다시 조회할 수 있습니다.
         return findResponseByYearAndMonth(year, month);
@@ -101,10 +101,12 @@ public class AdminService {
 
 
     @Transactional
-    public void saveUsers(List<UserDto> userDtos, BindingResult bindingResult) {
-        for (UserDto userDto : userDtos) {
-            Optional<UserDto> existingUserWithSameIDAndName = userMapper.findByEmployeeIDAndName(userDto.getEmployeeID(), userDto.getName());
-            Optional<UserDto> existingUserWithSameID = userMapper.findByEmployeeID(userDto.getEmployeeID());
+    public void saveUsers(List<AdminUserListResponseAndUserSaveDao> adminUserListResponsAndUserSaveDaos, BindingResult bindingResult) {
+        for (AdminUserListResponseAndUserSaveDao adminUserListResponseAndUserSaveDao : adminUserListResponsAndUserSaveDaos) {
+            Optional<AdminUserListResponseAndUserSaveDao> existingUserWithSameIDAndName =
+                    userMapper.findByEmployeeIDAndName(adminUserListResponseAndUserSaveDao.getEmployeeID(), adminUserListResponseAndUserSaveDao.getName());
+            Optional<AdminUserListResponseAndUserSaveDao> existingUserWithSameID =
+                    userMapper.findByEmployeeID(adminUserListResponseAndUserSaveDao.getEmployeeID());
 
             if (existingUserWithSameIDAndName.isPresent()) {
 //                FieldError error = new FieldError("userDto", "Name",
@@ -112,44 +114,44 @@ public class AdminService {
 //                bindingResult.addError(error);
             } else if (existingUserWithSameID.isPresent()) {
                 FieldError error = new FieldError("userDto", "EmployeeID",
-                        " 이미 [" + userDto.getEmployeeID() + "] 사번을 가진 직원이 존재합니다..");
+                        " 이미 [" + adminUserListResponseAndUserSaveDao.getEmployeeID() + "] 사번을 가진 직원이 존재합니다..");
                 bindingResult.addError(error);
             } else {
-                userMapper.insertUser(userDto);
+                userMapper.insertUser(adminUserListResponseAndUserSaveDao);
             }
         }
     }
 
 
     @Transactional
-    public void saveEmployeeSalaries(List<EmployeeSalaryDto> employeeSalaryDtos, BindingResult bindingResult) {
-        for (EmployeeSalaryDto employeeSalaryDto : employeeSalaryDtos) {
-            EmployeeSalaryDto existingData = employeeSalaryMapper.findSalaryByYearMonthAndEmployeeID(
-                    employeeSalaryDto.getYear(),
-                    employeeSalaryDto.getMonth(),
-                    employeeSalaryDto.getEmployeeID()
+    public void saveEmployeeSalaries(List<EmployeeSalaryDao> employeeSalaryDaos, BindingResult bindingResult) {
+        for (EmployeeSalaryDao employeeSalaryDao : employeeSalaryDaos) {
+            EmployeeSalaryDao existingData = employeeSalaryMapper.findSalaryByYearMonthAndEmployeeID(
+                    employeeSalaryDao.getYear(),
+                    employeeSalaryDao.getMonth(),
+                    employeeSalaryDao.getEmployeeID()
             );
             if (existingData != null) {
                 FieldError error = new FieldError
                         ("employeeSalaryDto", "EmployeeID",
-                                "이미 사번 [" + employeeSalaryDto.getEmployeeID() + "]님의 "
-                                        + employeeSalaryDto.getYear() + "년 "
-                                        + employeeSalaryDto.getMonth() + "월 데이터가 있습니다. 삭제하고 등록해주세요");
+                                "이미 사번 [" + employeeSalaryDao.getEmployeeID() + "]님의 "
+                                        + employeeSalaryDao.getYear() + "년 "
+                                        + employeeSalaryDao.getMonth() + "월 데이터가 있습니다. 삭제하고 등록해주세요");
                 bindingResult.addError(error);
             } else {
-                employeeSalaryMapper.insertEmployeeSalaryDto(employeeSalaryDto);
+                employeeSalaryMapper.insertEmployeeSalaryDto(employeeSalaryDao);
             }
         }
     }
 
-    private UserDto createUserDto(Row row) {
+    private AdminUserListResponseAndUserSaveDao createUserDto(Row row) {
         Integer EmployeeID = Integer.valueOf(getStringValueOrNull(row.getCell(0)));
         String name = getStringValueOrNull(row.getCell(1));
         String birthday = getStringValueOrNull(row.getCell(2));
         String emailAddress = getStringValueOrNull(row.getCell(27));
         String socialNumber = aesUtilConfig.encrypt(birthday);
 
-        return UserDto.builder()
+        return AdminUserListResponseAndUserSaveDao.builder()
                 .EmployeeID(EmployeeID)
                 .Name(name)
                 .State(2) // 활성화 상태
@@ -160,7 +162,7 @@ public class AdminService {
                 .build();
     }
 
-    private EmployeeSalaryDto createEmployeeSalaryDto(Row row, Integer EmployeeID) {
+    private EmployeeSalaryDao createEmployeeSalaryDto(Row row, Integer EmployeeID) {
         // 현재 날짜를 가져옵니다.
         LocalDate now = LocalDate.now();
 
@@ -200,7 +202,7 @@ public class AdminService {
         BigDecimal HourlyWage = getNumericValueOrNull(row.getCell(25)); // 시급
         BigDecimal LunchAllowance = getNumericValueOrNull(row.getCell(26)); // 근태 중식비
 
-        return EmployeeSalaryDto.builder()
+        return EmployeeSalaryDao.builder()
                 .year(year)
                 .month(month)
                 .EmployeeID(EmployeeID)
@@ -263,7 +265,7 @@ public class AdminService {
         }
     }
 
-    public List<UserDto> getAdminUserForm() {
+    public List<AdminUserListResponseAndUserSaveDao> getAdminUserForm() {
         return userMapper.findByAdminUser();
     }
 
@@ -275,8 +277,8 @@ public class AdminService {
 
     // 급여명세서 삭제
     @Transactional
-    public void deleteSalariesByIds(List<SalaryKey> salaryIds) {
-        for (SalaryKey key : salaryIds) {
+    public void deleteSalariesByIds(List<AdminDeleteSalaryRequest> salaryIds) {
+        for (AdminDeleteSalaryRequest key : salaryIds) {
             userMapper.deleteEmployeeSalaryById(key.getEmployeeId(), key.getYear(), key.getMonth());
         }
     }

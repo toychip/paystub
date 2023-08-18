@@ -1,4 +1,4 @@
-package com.paystub.dto;
+package com.paystub.dto.request;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-public class LoginFormDto {
+public class LoginRequest {
     private String username;    // EmployeeID
     private String password;    // birthday
     private Integer role;       // Role (관리자: 2, 사용자: 1)

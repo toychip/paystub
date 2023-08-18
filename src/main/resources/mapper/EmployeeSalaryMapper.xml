@@ -24,7 +24,7 @@
         )
     </insert>
 
-    <select id="findSalaryByYearMonthAndEmployeeID" resultType="com.paystub.dto.EmployeeSalaryDto">
+    <select id="findSalaryByYearMonthAndEmployeeID" resultType="com.paystub.dto.EmployeeSalaryDao">
         SELECT * FROM EmployeeSalary
         WHERE year = #{year} AND month = #{month} AND EmployeeID = #{EmployeeID}
     </select>

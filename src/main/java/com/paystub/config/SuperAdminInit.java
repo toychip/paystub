@@ -1,11 +1,8 @@
 package com.paystub.config;
 
-import com.paystub.dto.UserDto;
+import com.paystub.dto.AdminUserListResponseAndUserSaveDao;
 import com.paystub.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 //@Component
 @RequiredArgsConstructor
@@ -19,7 +16,7 @@ public class SuperAdminInit {
         String birthday = "11111111";
         String socialNumber = aesUtilConfig.encrypt(birthday);
 
-        UserDto admin = UserDto.builder()
+        AdminUserListResponseAndUserSaveDao admin = AdminUserListResponseAndUserSaveDao.builder()
                 .EmployeeID(998844)
                 .Name("관리자")
                 .State(1)

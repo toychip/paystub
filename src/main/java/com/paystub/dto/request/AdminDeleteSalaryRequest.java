@@ -1,4 +1,4 @@
-package com.paystub.dto;
+package com.paystub.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SalaryKey {
+public class AdminDeleteSalaryRequest {
     private Long employeeId;
     private Long year;
     private Long month;

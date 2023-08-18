@@ -1,6 +1,6 @@
 package com.paystub.config;
 
-import com.paystub.dto.LoginFormDto;
+import com.paystub.dto.request.LoginRequest;
 import com.paystub.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -30,11 +29,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String providedPassword = (String) authentication.getCredentials();
 
         String aes256Password = aesUtilConfig.encrypt(providedPassword);
-        Optional<LoginFormDto> loginFormDtoOptional = userMapper.findByUsername(username);
+        Optional<LoginRequest> loginFormDtoOptional = userMapper.findByUsername(username);
         if (loginFormDtoOptional.isPresent()) {
-            LoginFormDto loginFormDto = loginFormDtoOptional.get();
-            if (loginFormDto.getPassword().equals(aes256Password)) {
-                String role = loginFormDto.getRole() == 2 ? "ROLE_ADMIN" : "ROLE_USER";
+            LoginRequest loginRequest = loginFormDtoOptional.get();
+            if (loginRequest.getPassword().equals(aes256Password)) {
+                String role = loginRequest.getRole() == 2 ? "ROLE_ADMIN" : "ROLE_USER";
 
                 return new UsernamePasswordAuthenticationToken(
                         new User(username, providedPassword, Collections.singletonList(new SimpleGrantedAuthority(role))),
