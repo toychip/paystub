@@ -37,12 +37,20 @@ public class AdminService {
     private final EmployeeSalaryMapper employeeSalaryMapper;
     private final AESUtilConfig aesUtilConfig;
 
-    public List<ResponseDto> findResponseByYearAndMonth(Long year, Long month) {
-        System.out.println("service.year = " + year);
-        System.out.println("service.getMonth() = " + month);
-        return userMapper.findJoinedDataByYearAndMonth(year, month);
+    // 엑셀 처리를 위한 메서드
+    public List<ResponseDto> findResponseByYearAndMonth(
+            Long year, Long month) {
+        return userMapper.findJoinedDataByYearAndMonth(year, month, null, null);
     }
 
+    // 검색을 위한 메서드
+    public List<ResponseDto> findResponseByYearAndMonth(
+            Long year, Long month, String name, Long employeeId
+    ) {
+        System.out.println("service.year = " + year);
+        System.out.println("service.getMonth() = " + month);
+        return userMapper.findJoinedDataByYearAndMonth(year, month, name, employeeId);
+    }
 
     public List<ResponseDto> processExcelFile(MultipartFile file, BindingResult bindingResult,
                                               Long year, Long month) {

@@ -14,7 +14,13 @@ public interface UserMapper {
     void insertUser(UserDto userDto);
 
 
-    List<ResponseDto> findJoinedDataByYearAndMonth(@Param("year") Long year, @Param("month") Long month);
+//    List<ResponseDto> findJoinedDataByYearAndMonth(@Param("year") Long year, @Param("month") Long month);
+    List<ResponseDto> findJoinedDataByYearAndMonth(
+            @Param("year") Long year,
+            @Param("month") Long month,
+            @Param("name") String name,
+            @Param("employeeID") Long employeeId
+    );
 
     Optional<LoginFormDto> findByUsername(String username);
 

@@ -12,7 +12,7 @@ public class AdminRequestDto {
     private Long year;
     private Long month;
     private String name;
-    private String employeeID;
+    private Long employeeID;
     public AdminRequestDto() {
         this.year = 9999L;
         this.month = 0L;
