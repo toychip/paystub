@@ -58,7 +58,12 @@ public class AdminController {
                 request.getEmployeeID()
         );
 
-        
+        if (!(request == null || request.getName() == null)) {
+            System.out.println("request.getYear().getClass() = " + request.getYear().getClass());
+            System.out.println("request.getYear() = " + request.getYear());
+
+
+        }
         model.addAttribute("request", request);
         model.addAttribute("adminSalaryRespons", adminSalaryRespons);
         return "admin";
@@ -94,6 +99,7 @@ public class AdminController {
         if (!bindingResult.hasErrors()) {
             // 엑셀 파일 처리 로직 작성
             adminSalaryRespons = adminService.processExcelFile(file, bindingResult, year, month); // 결과를 받아옴
+            System.out.println("결과를 받아옴");
         }
 
         if (bindingResult.hasErrors()) {
