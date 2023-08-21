@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-<!--    ajax 요청-->
+    <!--    ajax 요청-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>관리자 페이지</title>
     <style>
@@ -38,39 +38,39 @@
 <!--년도와 월을 선택받아 조회하는 테이블-->
 <div class="center">
     <h3>조회할 년도와 월을 선택해주세요.</h3>
-        <select id="year" th:name="year" th:value="${year}">
-            <option value="9999">전체</option>
-            <option value="2010">2010</option>
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
-            <option value="2013">2013</option>
-            <option value="2014">2014</option>
-            <option value="2015">2015</option>
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-        </select> <span>년</span>
-        <select id="month" th:name="month" th:value="${month}">
-            <option value="0">전체</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-        </select> <span>월</span>
-        <button id="searchButton">조회</button>
+    <select id="year" th:name="year" th:value="${year}">
+        <option value="9999">전체</option>
+        <option value="2010">2010</option>
+        <option value="2011">2011</option>
+        <option value="2012">2012</option>
+        <option value="2013">2013</option>
+        <option value="2014">2014</option>
+        <option value="2015">2015</option>
+        <option value="2016">2016</option>
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+    </select> <span>년</span>
+    <select id="month" th:name="month" th:value="${month}">
+        <option value="0">전체</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+    </select> <span>월</span>
+    <button id="searchButton">조회</button>
 </div>
 
 <!--페이징 처리 결과 데이터가 나오는 영역-->
@@ -93,34 +93,9 @@
         const year = document.getElementById("year").value;
         const month = document.getElementById("month").value;
 
-        // year와 month 중 하나 또는 모두 전체 옵션이 선택되었을때
-        if(year == 9999 || month == 0 || (year == 9999 && month == 0)) {
-            getTotalPage(year, month);
-        }
+        // 날짜 조회시 로드되는 메서드
+        getTotalPage(year, month);
 
-        // year와 month 모두 특정 값이 선택되었을때
-        else {
-            getYearAndMonth(year, month);
-        }
-    }
-
-    // 한 건 조회시 로드되는 함수
-    function getYearAndMonth(year, month) {
-        $.ajax({
-            url: "/user",
-            type: "GET",
-            data: { year: year, month: month },
-            success: function(result) {
-                if(result) {
-                    alert( year + "년 " + month + "월 급여명세서를 조회합니다.");
-
-                    // 파라미터 추가
-                    location.href = "/user?year=" + year + "&month=" + month;
-                } else {
-                    alert("불러오기 실패");
-                }
-            }
-        });
     }
 
     // 페이징 처리를 위해 변수 초기화
@@ -128,7 +103,7 @@
     var totalPages = 0; // 전체 페이지 수
     var offset = 0;
 
-    // 전체 조회시 로드되는 함수
+    // 날짜 조회시 로드되는 함수
     function getTotalPage(year, month) {
         $.ajax({
             url: "/afterSelect",

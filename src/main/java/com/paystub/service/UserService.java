@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +25,12 @@ public class UserService {
     public String getCurrentMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
-        
+
     }
 
     // 메서드 레벨의 트랜잭션 선언이 우선 적용되기 때문
     @Transactional(readOnly = true)
-    public List<UserResponse> totalDataService(Integer year, Integer month) {
+    public List<UserResponse> getTotalData(Integer year, Integer month) {
         return userMapper.getTotalData(getCurrentMember(), year, month);
 
     }
@@ -52,6 +53,10 @@ public class UserService {
             getPageData = userMapper.findByYear(getCurrentMember(), year, limit, offset);
         }
 
+        else if (year != 9999 && month != 0) {
+            getPageData = userMapper.findByYearAndMonth(getCurrentMember(), year, month, limit, offset);
+        }
+
         return getPageData;
     }
 
@@ -60,15 +65,21 @@ public class UserService {
         int count = 0;
 
         if(year == 9999 && month == 0) {
-            count = userMapper.countTotal(getCurrentMember());
+            count = userMapper.getCountTotal(getCurrentMember());
         }
 
         else if(year == 9999 && month != 0) {
-            count = userMapper.countMonth(getCurrentMember(), month);
+            count = userMapper.getCountMonth(getCurrentMember(), month);
         }
+        else if (year != 9999 && month == 0) {
+            count = userMapper.getCountYear(getCurrentMember(), year);
+        }
+
         else {
-            count = userMapper.countYear(getCurrentMember(), year);
+            count = userMapper.getCountYearAndMonth(getCurrentMember(), year, month);
         }
+
+        System.out.println("count = " + count);
         return count;
     }
 

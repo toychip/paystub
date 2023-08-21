@@ -30,12 +30,12 @@ public class UserController {
     }
 
 
-    // 사용자가 년, 월을 모두 선택 후 조회했을 시 로드하는 메서드
+    // 급여명세서 팝업창 메서드
     @GetMapping("/user")
     public String getTotalData(@RequestParam Integer year, @RequestParam Integer month, Model model) {
 
         // EmployeeSalary 와 User 테이블을 조인하여 필요한 데이터만 담아온다.
-        List<UserResponse> userDtoList = userService.totalDataService(year, month);
+        List<UserResponse> userDtoList = userService.getTotalData(year, month);
 
         if(month == 12) {
             year++;
@@ -52,7 +52,7 @@ public class UserController {
         return "user";
     }
 
-    // 사용자가 년, 월 중 하나라도 "전체" 옵션을 선택했을 시 로드하는 메서드
+    // 사용자가 년, 월 옵션을 선택했을 시 로드하는 메서드
     @GetMapping("/afterSelect")
     public ResponseEntity<Map<String, Object>> getPage(@RequestParam Integer year,
                                                        @RequestParam Integer month,
@@ -74,10 +74,5 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
-
-
-
-
-
 
 }
