@@ -94,15 +94,30 @@
     document.getElementById("deleteButton").addEventListener("click", clickButton);
 
     // 삭제 버튼 클릭시 실행되는 메서드
-    function clickButton(event){
-        if (confirm("삭제하시겠습니까?")){
-            alert("삭제되었습니다");
+    function clickButton(event) {
+
+        var checkboxes = document.getElementsByName("employeeIds");
+        var count = 0;
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            if(checkboxes[i].checked) {
+                count++;
+            }
         }
-        else{
-            // 폼 제출을 막아 삭제되지 않도록
-            alert("취소되었습니다");
+
+        if(count == 0) {
+            alert("삭제할 항목을 선택해주세요.");
             event.preventDefault();
             return false;
+        } else {
+            if (confirm("삭제하시겠습니까?")) {
+                alert("삭제되었습니다");
+            } else {
+                // 폼 제출을 막아 삭제되지 않도록
+                alert("취소되었습니다");
+                event.preventDefault();
+                return false;
+            }
         }
     }
 

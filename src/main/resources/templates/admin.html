@@ -215,23 +215,48 @@
     if (uploadErrors && uploadErrors.length > 0) {
         var errorMessages = uploadErrors.join('\n');
         var errorWindow = window.open("", "ErrorWindow", "width=600,height=400");
-        errorWindow.document.write("<html><head><title>에러 메시지</title></head><body>");
+        errorWindow.document.write("<html><head><title>에러 메시지</title>");
+        errorWindow.document.write("<style>.error { color: red; }</style>"); // 스타일 정의 추가
+        errorWindow.document.write("</head><body>");
         errorWindow.document.write("<h3>파일 업로드 에러</h3>");
+        errorWindow.document.write("<h5 class='error'>급여명세서 화면 조회 버튼을 눌러주세요.</h5>");
         errorWindow.document.write("<pre>" + errorMessages + "</pre>");
         errorWindow.document.write("</body></html>");
     }
+
 
     document.getElementById("deleteButton").addEventListener("click", clickButton);
 
     // 삭제 버튼 클릭시 실행되는 메서드
     function clickButton(event) {
-        if (confirm("삭제하시겠습니까?")) {
-            alert("삭제되었습니다");
-        } else {
-            // 폼 제출을 막아 삭제되지 않도록
-            alert("취소되었습니다");
+
+        var checkboxes = document.getElementsByName("salaryKeys");
+        var count = 0;
+
+        // 반복문을 돌며 checkboxes에서 선택된 항목이 있는지 체크
+        for (var i = 0; i < checkboxes.length; i++) {
+            if(checkboxes[i].checked) {
+                count++;
+            }
+        }
+
+        // 선택된 항목이 하나도 없다면
+        if(count == 0) {
+            alert("삭제할 항목을 선택해주세요.");
             event.preventDefault();
             return false;
+        }
+
+        // 선택된 항목이 하나 이상이면
+        else {
+            if (confirm("삭제하시겠습니까?")) {
+                alert("삭제되었습니다");
+            } else {
+                // 폼 제출을 막아 삭제되지 않도록
+                alert("취소되었습니다");
+                event.preventDefault();
+                return false;
+            }
         }
     }
 
@@ -260,6 +285,34 @@
     function toAdminUserFormPage() {
         location.href = "/adminUserForm";
     }
+
+    // document.getElementById("submitButton").addEventListener("click", fileUploadButton);
+    //
+    // // 현재 시간을 가져오는 변수
+    // var currentTime = Date.now();
+    //
+    // // 가장 마지막으로 파일 업로드 버튼을 누른 시간을 가져오는 변수
+    // var lastCheckTime = 0;
+    //
+    // // 파일 업로드 시간 지정
+    // var delay = 6000;
+    //
+    // // 파일 업로드 중복 클릭 방지하는 메서드
+    // function fileUploadButton(event) {
+    //
+    //     console.log("currentTime: " + currentTime + "lastCheckTime: " + lastCheckTime);
+    //     if(currentTime - lastCheckTime < delay) {
+    //
+    //         setTimeout(function() {
+    //             alert("파일 업로드 중복 클릭을 금합니다.");
+    //             event.preventDefault();
+    //             return false;
+    //         }, 0);
+    //     }
+    //
+    //     // 마지막으로 파일 업로드 버튼을 누른 시간을 현재 시간으로 갱신한다.
+    //     lastCheckTime = currentTime;
+    // }
 </script>
 
 </html>
