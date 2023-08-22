@@ -89,12 +89,34 @@
     document.getElementById("searchButton").addEventListener("click", clickButton);
 
     // 조회 버튼 클릭시 실행되는 메서드
-    function clickButton() {
+    function clickButton(event) {
         const year = document.getElementById("year").value;
         const month = document.getElementById("month").value;
 
-        // 날짜 조회시 로드되는 메서드
-        getTotalPage(year, month);
+        // 현재 시간을 가져오는 변수
+        var currentTime = Date.now();
+
+        // 파일 업로드 시간 지정 (6초)
+        var delay = 2000;
+
+        // 마지막으로 조회 버튼을 누른 시간을 가져온다.
+        var userLastCheckTime = localStorage.getItem("userLastCheckTime");
+        if (userLastCheckTime === null) {
+            userLastCheckTime = 0;
+
+            // 날짜 조회시 로드되는 메서드
+            getTotalPage(year, month);
+        }
+
+        // 현재 시간과 마지막으로 조회 버튼을 누른 시간의 차이가 지연 시간보다 작다면
+        if (currentTime - userLastCheckTime < delay) {
+            alert("조회 중복 클릭을 금합니다. 2초 뒤에 다시 실행해주세요.");
+            event.preventDefault();
+            return false;
+        }
+
+        // 마지막으로 조회 버튼을 누른 시간을 현재 시간으로 갱신한다.
+        localStorage.setItem("userLastCheckTime", currentTime);
 
     }
 
@@ -150,6 +172,7 @@
             getTotalPage($('#year').val(), currentPage);
         }
     });
+
 
 </script>
 </html>
