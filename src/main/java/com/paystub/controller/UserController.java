@@ -58,7 +58,6 @@ public class UserController {
                                                        @RequestParam Integer month,
                                                        @RequestParam Integer offset) {
 
-
         // 조건에 맞는 데이터만 담아온다.
         List<PageDto> pageDtoList = userService.getPage(year, month, limit, offset * limit);
 
