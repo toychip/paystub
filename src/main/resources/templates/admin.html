@@ -35,11 +35,13 @@
             white-space: nowrap;
         }
 
-        /* 텍스트 여백을 두어 테이블 간 거리 간격 조정 */
+        /* 전체 선택 버튼 */
         .checkButton {
-            text-align: center;
-            white-space: nowrap;
-            transform: translateX(-655px); /* 왼쪽으로 130px 이동 */
+            position: fixed;
+            top: 220px; /* 버튼의 상단 위치 조정 */
+            left: 10px; /* 버튼의 오른쪽 위치 조정 */
+            width: 70px;
+            height: 25px;
         }
 
     </style>
@@ -85,7 +87,7 @@
 
         <h5>이름 : <input id="name" name="name" size="10" th:value="${request != null ? request.name : ''}">
             사번 : <input id="employeeID" name="employeeID" size="10" th:value="${request != null ? request.employeeID : ''}">
-            <span style="padding-left:20px;"><button>조회</button></span></h5>
+            <span style="padding-left:20px;"><button id="searchButton">조회</button></span></h5>
         <div th:if="${searchErrors}" class="error"></div>
     </form>
 </div>
@@ -103,11 +105,14 @@
 </div>
 
 <form method="POST" action="/adminDeleteSalary">
+
     <div style="width: 100%; height: 600px; overflow: auto" class="center">
 
-        <button id="checkAllButton" type="button" class="checkButton" style="width: 70px; height: 25px; margin-right: 100px">전체선택</button>
 
         <table>
+            <!--        전체 선택 버튼-->
+            <button id="checkAllButton" type="button" class="checkButton" style="width: 70px; height: 25px;">전체선택</button>
+
             <thead>
             <tr>
                 <th class="sticky" >선택</th>
@@ -183,8 +188,11 @@
             </tbody>
         </table>
     </div>
+
+    <!--    삭제 버튼-->
     <button id="deleteButton" type="submit" style="width: 200px; height: 40px; float: left">삭제</button>
 
+    <!--    회원 관리 페이지로 이동하는 버튼-->
     <button id="toAdminUserForm" type="button" style="width: 200px; height: 40px; float: right">회원 관리 페이지로 이동</button>
 
 </form>
@@ -207,34 +215,68 @@
     if (uploadErrors && uploadErrors.length > 0) {
         var errorMessages = uploadErrors.join('\n');
         var errorWindow = window.open("", "ErrorWindow", "width=600,height=400");
-        errorWindow.document.write("<html><head><title>에러 메시지</title></head><body>");
+        errorWindow.document.write("<html><head><title>에러 메시지</title>");
+        errorWindow.document.write("<style>.error { color: red; }</style>"); // 스타일 정의 추가
+        errorWindow.document.write("</head><body>");
         errorWindow.document.write("<h3>파일 업로드 에러</h3>");
+        errorWindow.document.write("<h5 class='error'>급여명세서 화면 조회 버튼을 눌러주세요.</h5>");
         errorWindow.document.write("<pre>" + errorMessages + "</pre>");
         errorWindow.document.write("</body></html>");
     }
+
 
     document.getElementById("deleteButton").addEventListener("click", clickButton);
 
     // 삭제 버튼 클릭시 실행되는 메서드
     function clickButton(event) {
-        if (confirm("삭제하시겠습니까?")) {
-            alert("삭제되었습니다");
-        } else {
-            // 폼 제출을 막아 삭제되지 않도록
-            alert("취소되었습니다");
+
+        var checkboxes = document.getElementsByName("salaryKeys");
+        var count = 0;
+
+        // 반복문을 돌며 checkboxes에서 선택된 항목이 있는지 체크
+        for (var i = 0; i < checkboxes.length; i++) {
+            if(checkboxes[i].checked) {
+                count++;
+            }
+        }
+
+        // 선택된 항목이 하나도 없다면
+        if(count == 0) {
+            alert("삭제할 항목을 선택해주세요.");
             event.preventDefault();
             return false;
+        }
+
+        // 선택된 항목이 하나 이상이면
+        else {
+            if (confirm("삭제하시겠습니까?")) {
+                alert("삭제되었습니다");
+            } else {
+                // 폼 제출을 막아 삭제되지 않도록
+                alert("취소되었습니다");
+                event.preventDefault();
+                return false;
+            }
         }
     }
 
     document.getElementById("checkAllButton").addEventListener("click", checkAllButton);
 
     // 전체 선택 버튼 클릭시 실행되는 메서드
+    var isAllChecked = false; // 전체 선택 상태를 추적하는 변수
+
     function checkAllButton() {
+        // 체크박스를 가져옵니다.
         var checkboxes = document.getElementsByName("salaryKeys");
+
+        // 상태를 반전시키고 모든 체크박스에 적용합니다.
+        isAllChecked = !isAllChecked;
         for (var i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = true;
+            checkboxes[i].checked = isAllChecked;
         }
+
+        // 버튼의 텍스트를 변경합니다.
+        this.textContent = isAllChecked ? "전체해제" : "전체선택";
     }
 
     document.getElementById("toAdminUserForm").addEventListener("click", toAdminUserFormPage);
@@ -243,6 +285,35 @@
     function toAdminUserFormPage() {
         location.href = "/adminUserForm";
     }
+
+
+    document.getElementById("searchButton").addEventListener("click", searchButton);
+
+    // 조회 중복 클릭 방지하는 메서드
+    function searchButton(event) {
+        // 현재 시간을 가져오는 변수
+        var currentTime = Date.now();
+
+        // 파일 업로드 시간 지정 (6초)
+        var delay = 2000;
+
+        // 마지막으로 조회 버튼을 누른 시간을 가져온다.
+        var adminLastCheckTime = localStorage.getItem("adminLastCheckTime");
+        if (adminLastCheckTime === null) {
+            adminLastCheckTime = 0;
+        }
+
+        // 현재 시간과 마지막으로 조회 버튼을 누른 시간의 차이가 지연 시간보다 작다면
+        if (currentTime - adminLastCheckTime < delay) {
+            alert("조회 중복 클릭을 금합니다. 2초 뒤에 다시 실행해주세요.");
+            event.preventDefault();
+            return false;
+        }
+
+        // 마지막으로 조회 버튼을 누른 시간을 현재 시간으로 갱신한다.
+        localStorage.setItem("adminLastCheckTime", currentTime);
+    }
+
 </script>
 
 </html>

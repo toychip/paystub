@@ -82,7 +82,7 @@
         </div>
         <!--        삭제 버튼-->
         <button id="deleteButton" type="submit" style="width: 200px; height: 40px; float:left; transform: translateX(75px)">삭제</button>
-        <!--        전체 선택 버튼-->
+        <!--        admin 페이지로 이동 -->
         <button id="toAdminForm" type="button" style="width: 230px; height: 40px; float: right; transform: translateX(-60px)">급여명세서 관리 페이지로 이동</button>
 
     </form>
@@ -94,26 +94,50 @@
     document.getElementById("deleteButton").addEventListener("click", clickButton);
 
     // 삭제 버튼 클릭시 실행되는 메서드
-    function clickButton(event){
-        if (confirm("삭제하시겠습니까?")){
-            alert("삭제되었습니다");
+    function clickButton(event) {
+
+        var checkboxes = document.getElementsByName("employeeIds");
+        var count = 0;
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            if(checkboxes[i].checked) {
+                count++;
+            }
         }
-        else{
-            // 폼 제출을 막아 삭제되지 않도록
-            alert("취소되었습니다");
+
+        if(count == 0) {
+            alert("삭제할 항목을 선택해주세요.");
             event.preventDefault();
             return false;
+        } else {
+            if (confirm("삭제하시겠습니까?")) {
+                alert("삭제되었습니다");
+            } else {
+                // 폼 제출을 막아 삭제되지 않도록
+                alert("취소되었습니다");
+                event.preventDefault();
+                return false;
+            }
         }
     }
 
     document.getElementById("checkAllButton").addEventListener("click", checkAllButton);
 
     // 전체 선택 버튼 클릭시 실행되는 메서드
+    var isAllChecked = false; // 전체 선택 상태를 추적하는 변수
+
     function checkAllButton() {
+        // 체크박스를 가져옵니다.
         var checkboxes = document.getElementsByName("employeeIds");
+
+        // 상태를 반전시키고 모든 체크박스에 적용합니다.
+        isAllChecked = !isAllChecked;
         for (var i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = true;
+            checkboxes[i].checked = isAllChecked;
         }
+
+        // 버튼의 텍스트를 변경합니다.
+        this.textContent = isAllChecked ? "전체해제" : "전체선택";
     }
 
     document.getElementById("toAdminForm").addEventListener("click", toAdminFormPage);

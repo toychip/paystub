@@ -78,29 +78,49 @@
 
 <!--페이지 이전, 다음 버튼-->
 <div id="pagination" class="margin">
-    <button id="prevPage">이전</button>
-    <span id="currentPage">1</span>/<span id="totalPages"></span>
-    <button id="nextPage">다음</button>
+    <button id="prevPage" style="display: none">이전</button>
+    <span id="currentPage" style="display: none">1</span ><span id="/" style="display: none">/</span><span id="totalPages" style="display: none"></span>
+    <button id="nextPage" style="display: none">다음</button>
 </div>
 </body>
 
 <script th:inline="javascript">
 
-    document.getElementById("searchButton").addEventListener("click", clickButton);
+    document.getElementById("searchButton").addEventListener("click", searchButton);
 
     // 조회 버튼 클릭시 실행되는 메서드
-    function clickButton() {
+    function searchButton(event) {
         const year = document.getElementById("year").value;
         const month = document.getElementById("month").value;
 
-        // 날짜 조회시 로드되는 메서드
-        getTotalPage(year, month);
+        // 현재 시간을 가져오는 변수
+        var currentTime = Date.now();
+
+        // 파일 업로드 시간 지정 (6초)
+        var delay = 2000;
+
+        // 마지막으로 조회 버튼을 누른 시간을 가져온다.
+        var userLastCheckTime = localStorage.getItem("userLastCheckTime");
+
+        // 현재 시간과 마지막으로 조회 버튼을 누른 시간의 차이가 지연 시간보다 작다면
+        if (currentTime - userLastCheckTime < delay) {
+            alert("조회 중복 클릭을 금합니다. 2초 뒤에 다시 실행해주세요.");
+            event.preventDefault();
+            return false;
+        }
+
+        // delay 이후에 조회 버튼을 누른거라면
+        else{
+            getTotalPage(year, month);
+        }
+
+        // 마지막으로 조회 버튼을 누른 시간을 현재 시간으로 갱신한다.
+        localStorage.setItem("userLastCheckTime", currentTime);
 
     }
 
     // 페이징 처리를 위해 변수 초기화
     var currentPage = 0; // 현재 페이지
-    var totalPages = 0; // 전체 페이지 수
     var offset = 0;
 
     // 날짜 조회시 로드되는 함수
@@ -122,6 +142,8 @@
                     // 전체 페이지 수 설정
                     totalPages = response.totalPages;
 
+                    console.log(totalPages);
+
                     $('#totalPages').text(totalPages);
 
                     // 현재 페이지 표시
@@ -131,25 +153,64 @@
                 }
             }
         });
+
+        checkPage(totalPages);
     }
 
-    // 이전 페이지 버튼 클릭 이벤트
-    $("#prevPage").click(function() {
+    document.getElementById("prevPage").addEventListener("click", prevPageButton);
+    document.getElementById("nextPage").addEventListener("click", nextPageButton);
+
+    // 이전 버튼 누를시 로드 되는 메소드
+    function prevPageButton() {
         if(currentPage > 0) {
             currentPage--;
-            console.log(currentPage);
-            getTotalPage($('#year').val(), currentPage);
+            offset--;
+            getTotalPage($('#year').val(),$('#month').val());
         }
-    });
+    }
 
-    // 다음 페이지 버튼 클릭 이벤트
-    $("#nextPage").click(function() {
+    // 다음 버튼 누를시 로드 되는 메소드
+    function nextPageButton() {
         if(currentPage < totalPages - 1) {
             currentPage++;
-            console.log(currentPage);
-            getTotalPage($('#year').val(), currentPage);
+            offset++;
+            getTotalPage($('#year').val(), $('#month').val());
         }
-    });
+    }
+
+    // 현재 페이지에 따라 이전, 다음 버튼 display 구분
+    function checkPage(totalPages) {
+
+        console.log("current: " + currentPage);
+        console.log("total: " + totalPages);
+        document.getElementById("currentPage").style.display = "inline";
+        document.getElementById("/").style.display = "inline";
+        document.getElementById("totalPages").style.display = "inline";
+
+        // 만약 현재 페이지가 첫페이지면서 다음페이지가 있다면
+        if(currentPage == 0 && currentPage != totalPages - 1) {
+            document.getElementById("prevPage").style.display = "none";
+            document.getElementById("nextPage").style.display = "inline";
+        }
+
+        // 만약 현재 페이지가 마지막페이지면서 이전페이지가 있다면
+        else if (currentPage != 0 && currentPage == totalPages - 1) {
+            document.getElementById("prevPage").style.display = "inline";
+            document.getElementById("nextPage").style.display = "none";
+        }
+
+        // 만약 현재 페이지가 첫페이지면서 마지막페이지라면
+        else if(currentPage == 0 && currentPage == totalPages - 1) {
+            document.getElementById("prevPage").style.display = "none";
+            document.getElementById("nextPage").style.display = "none";
+        }
+
+        // 만약 현재 페이지가 첫페이지도 아니고 마지막페이지도 아니라면
+        else {
+            document.getElementById("prevPage").style.display = "inline";
+            document.getElementById("nextPage").style.display = "inline";
+        }
+    }
 
 </script>
 </html>
