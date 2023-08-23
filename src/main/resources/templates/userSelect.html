@@ -88,10 +88,17 @@
 
     document.getElementById("searchButton").addEventListener("click", searchButton);
 
+    // 페이징 처리를 위해 변수 초기화
+    var currentPage = 0; // 현재 페이지
+    var offset = 0;
+
     // 조회 버튼 클릭시 실행되는 메서드
     function searchButton(event) {
         const year = document.getElementById("year").value;
         const month = document.getElementById("month").value;
+
+        currentPage = 0;
+        offset = 0;
 
         // 현재 시간을 가져오는 변수
         var currentTime = Date.now();
@@ -119,12 +126,11 @@
 
     }
 
-    // 페이징 처리를 위해 변수 초기화
-    var currentPage = 0; // 현재 페이지
-    var offset = 0;
-
     // 날짜 조회시 로드되는 함수
     function getTotalPage(year, month) {
+
+        console.log("현재 페이지: " + currentPage);
+
         $.ajax({
             url: "/afterSelect",
             type: "GET",
@@ -148,13 +154,13 @@
 
                     // 현재 페이지 표시
                     $('#currentPage').text(currentPage + 1);
+
+                    checkPage(totalPages);
                 } else {
                     alert("불러오기 실패");
                 }
             }
         });
-
-        checkPage(totalPages);
     }
 
     document.getElementById("prevPage").addEventListener("click", prevPageButton);
@@ -181,32 +187,45 @@
     // 현재 페이지에 따라 이전, 다음 버튼 display 구분
     function checkPage(totalPages) {
 
-        console.log("current: " + currentPage);
         console.log("total: " + totalPages);
+
         document.getElementById("currentPage").style.display = "inline";
         document.getElementById("/").style.display = "inline";
         document.getElementById("totalPages").style.display = "inline";
 
+        // 만약 전체 페이지가 0이라면
+        if(totalPages == 0) {
+            alert("조건에 맞는 데이터가 존재하지 않습니다.");
+            document.getElementById("currentPage").style.display = "none";
+            document.getElementById("/").style.display = "none";
+            document.getElementById("totalPages").style.display = "none";
+            currentPage = 0;
+        }
+
         // 만약 현재 페이지가 첫페이지면서 다음페이지가 있다면
-        if(currentPage == 0 && currentPage != totalPages - 1) {
+        else if(currentPage == 0 && currentPage != totalPages - 1) {
+            console.log("첫페이지");
             document.getElementById("prevPage").style.display = "none";
             document.getElementById("nextPage").style.display = "inline";
         }
 
         // 만약 현재 페이지가 마지막페이지면서 이전페이지가 있다면
         else if (currentPage != 0 && currentPage == totalPages - 1) {
+            console.log("마지막페이지");
             document.getElementById("prevPage").style.display = "inline";
             document.getElementById("nextPage").style.display = "none";
         }
 
         // 만약 현재 페이지가 첫페이지면서 마지막페이지라면
         else if(currentPage == 0 && currentPage == totalPages - 1) {
+            console.log("첫페이지면서 마지막");
             document.getElementById("prevPage").style.display = "none";
             document.getElementById("nextPage").style.display = "none";
         }
 
         // 만약 현재 페이지가 첫페이지도 아니고 마지막페이지도 아니라면
         else {
+            console.log("중간페이지");
             document.getElementById("prevPage").style.display = "inline";
             document.getElementById("nextPage").style.display = "inline";
         }
