@@ -86,6 +86,10 @@
 
 <script th:inline="javascript">
 
+    window.onload = function() {
+        searchButton();
+    }
+
     document.getElementById("searchButton").addEventListener("click", searchButton);
 
     // 페이징 처리를 위해 변수 초기화

@@ -54,8 +54,8 @@ public class UserController {
 
     // 사용자가 년, 월 옵션을 선택했을 시 로드하는 메서드
     @GetMapping("/afterSelect")
-    public ResponseEntity<Map<String, Object>> getPage(@RequestParam Integer year,
-                                                       @RequestParam Integer month,
+    public ResponseEntity<Map<String, Object>> getPage(@RequestParam(defaultValue = "9999") Integer year,
+                                                       @RequestParam(defaultValue = "0") Integer month,
                                                        @RequestParam Integer offset) {
 
         // 조건에 맞는 데이터만 담아온다.

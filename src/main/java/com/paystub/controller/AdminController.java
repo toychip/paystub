@@ -3,7 +3,7 @@ package com.paystub.controller;
 import com.paystub.dto.response.AdminSalaryResponse;
 import com.paystub.dto.request.FileUploadRequest;
 import com.paystub.dto.request.AdminDeleteSalaryRequest;
-import com.paystub.dto.AdminUserListResponseAndUserSaveDao;
+import com.paystub.dto.UserDao;
 import com.paystub.dto.request.AdminSearchRequest;
 import com.paystub.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -131,7 +131,7 @@ public class AdminController {
     @GetMapping("/adminUserForm")
     public String getAdminUserForm(Model model) {
 
-        List<AdminUserListResponseAndUserSaveDao> userList = adminService.getAdminUserForm();
+        List<UserDao> userList = adminService.getAdminUserForm();
 
         model.addAttribute("adminUserForm", userList);
         return "adminUserForm";

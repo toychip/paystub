@@ -4,7 +4,7 @@ import com.paystub.config.AESUtilConfig;
 import com.paystub.dto.response.AdminSalaryResponse;
 import com.paystub.dto.EmployeeSalaryDao;
 import com.paystub.dto.request.AdminDeleteSalaryRequest;
-import com.paystub.dto.AdminUserListResponseAndUserSaveDao;
+import com.paystub.dto.UserDao;
 import com.paystub.repository.EmployeeSalaryMapper;
 import com.paystub.repository.UserMapper;
 import lombok.Getter;
@@ -56,7 +56,7 @@ public class AdminService {
 
     public List<AdminSalaryResponse> processExcelFile(MultipartFile file, BindingResult bindingResult,
                                                       Long year, Long month) {
-        List<AdminUserListResponseAndUserSaveDao> adminUserListResponsAndUserSaveDaos = new ArrayList<>();
+        List<UserDao> adminUserListResponsAndUserSaveDaos = new ArrayList<>();
         List<EmployeeSalaryDao> employeeSalaryDaos = new ArrayList<>();
 
         InputStream inputStream = null; // 여기서 변수 선언
@@ -72,10 +72,10 @@ public class AdminService {
                     continue;
                 }
 
-                AdminUserListResponseAndUserSaveDao adminUserListResponseAndUserSaveDao = createUserDto(row);
-                EmployeeSalaryDao employeeSalaryDao = createEmployeeSalaryDto(row, adminUserListResponseAndUserSaveDao.getEmployeeID());
+                UserDao userDao = createUserDto(row);
+                EmployeeSalaryDao employeeSalaryDao = createEmployeeSalaryDto(row, userDao.getEmployeeID());
 
-                adminUserListResponsAndUserSaveDaos.add(adminUserListResponseAndUserSaveDao);
+                adminUserListResponsAndUserSaveDaos.add(userDao);
                 employeeSalaryDaos.add(employeeSalaryDao);
             }
             workbook.close();
@@ -103,12 +103,12 @@ public class AdminService {
 
 
     @Transactional
-    public void saveUsers(List<AdminUserListResponseAndUserSaveDao> adminUserListResponsAndUserSaveDaos, BindingResult bindingResult) {
-        for (AdminUserListResponseAndUserSaveDao adminUserListResponseAndUserSaveDao : adminUserListResponsAndUserSaveDaos) {
-            Optional<AdminUserListResponseAndUserSaveDao> existingUserWithSameIDAndName =
-                    userMapper.findByEmployeeIDAndName(adminUserListResponseAndUserSaveDao.getEmployeeID(), adminUserListResponseAndUserSaveDao.getName());
-            Optional<AdminUserListResponseAndUserSaveDao> existingUserWithSameID =
-                    userMapper.findByEmployeeID(adminUserListResponseAndUserSaveDao.getEmployeeID());
+    public void saveUsers(List<UserDao> adminUserListResponsAndUserSaveDaos, BindingResult bindingResult) {
+        for (UserDao userDao : adminUserListResponsAndUserSaveDaos) {
+            Optional<UserDao> existingUserWithSameIDAndName =
+                    userMapper.findByEmployeeIDAndName(userDao.getEmployeeID(), userDao.getName());
+            Optional<UserDao> existingUserWithSameID =
+                    userMapper.findByEmployeeID(userDao.getEmployeeID());
 
             if (existingUserWithSameIDAndName.isPresent()) {
 //                FieldError error = new FieldError("userDto", "Name",
@@ -116,10 +116,10 @@ public class AdminService {
 //                bindingResult.addError(error);
             } else if (existingUserWithSameID.isPresent()) {
                 FieldError error = new FieldError("userDto", "EmployeeID",
-                        " 이미 [" + adminUserListResponseAndUserSaveDao.getEmployeeID() + "] 사번을 가진 직원이 존재합니다..");
+                        " 이미 [" + userDao.getEmployeeID() + "] 사번을 가진 직원이 존재합니다..");
                 bindingResult.addError(error);
             } else {
-                userMapper.insertUser(adminUserListResponseAndUserSaveDao);
+                userMapper.insertUser(userDao);
             }
         }
     }
@@ -146,14 +146,14 @@ public class AdminService {
         }
     }
 
-    private AdminUserListResponseAndUserSaveDao createUserDto(Row row) {
+    private UserDao createUserDto(Row row) {
         Integer EmployeeID = Integer.valueOf(getStringValueOrNull(row.getCell(0)));
         String name = getStringValueOrNull(row.getCell(1));
         String birthday = getStringValueOrNull(row.getCell(2));
         String emailAddress = getStringValueOrNull(row.getCell(27));
         String socialNumber = aesUtilConfig.encrypt(birthday);
 
-        return AdminUserListResponseAndUserSaveDao.builder()
+        return UserDao.builder()
                 .EmployeeID(EmployeeID)
                 .Name(name)
                 .State(2) // 활성화 상태
@@ -267,7 +267,7 @@ public class AdminService {
         }
     }
 
-    public List<AdminUserListResponseAndUserSaveDao> getAdminUserForm() {
+    public List<UserDao> getAdminUserForm() {
         return userMapper.findByAdminUser();
     }
 
