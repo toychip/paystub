@@ -47,9 +47,19 @@
             transform: translateX(-405px); /* 왼쪽으로 130px 이동 */
         }
 
+        .logoutButton {
+            position: fixed;
+            top: 5px; /* 버튼의 상단 위치 조정 */
+            right: 5px; /* 버튼의 오른쪽 위치 조정 */
+        }
+
     </style>
 </head>
 <body>
+
+<!--    로그아웃버튼-->
+<button id="logoutButton" type="button" class="logoutButton">로그아웃</button>
+
 <div class="container">
     <h2 class="center">회원 관리</h2>
 
@@ -145,6 +155,13 @@
     // 급여명세서 관리 페이지로 이동하는 버튼 클릭시 실행되는 메서드
     function toAdminFormPage() {
         location.href = "/admin";
+    }
+
+    document.getElementById("logoutButton").addEventListener("click", toLogout);
+
+    // 로그아웃 버튼 누를 시 로그아웃
+    function toLogout() {
+        location.href = "/logout";
     }
 
 </script>

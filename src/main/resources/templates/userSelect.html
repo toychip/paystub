@@ -27,13 +27,20 @@
             text-align: center;
         }
 
+        .logoutButton {
+            position: fixed;
+            top: 5px; /* 버튼의 상단 위치 조정 */
+            right: 5px; /* 버튼의 오른쪽 위치 조정 */
+        }
+
     </style>
 </head>
 <body>
 
-<div class="center">
-    <h1>사용자 페이지</h1>
-</div>
+<!--    로그아웃버튼-->
+    <button id="logoutButton" type="button" class="logoutButton">로그아웃</button>
+
+    <h1 class="center">사용자 페이지</h1>
 
 <!--년도와 월을 선택받아 조회하는 테이블-->
 <div class="center">
@@ -233,6 +240,13 @@
             document.getElementById("prevPage").style.display = "inline";
             document.getElementById("nextPage").style.display = "inline";
         }
+    }
+
+    document.getElementById("logoutButton").addEventListener("click", toLogout);
+
+    // 로그아웃 버튼 누를 시 로그아웃
+    function toLogout() {
+        location.href = "/logout";
     }
 
 </script>

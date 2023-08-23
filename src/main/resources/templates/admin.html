@@ -44,9 +44,20 @@
             height: 25px;
         }
 
+        .logoutButton {
+            position: fixed;
+            top: 5px; /* 버튼의 상단 위치 조정 */
+            right: 5px; /* 버튼의 오른쪽 위치 조정 */
+        }
+
+
     </style>
 </head>
 <body>
+
+<!--    로그아웃버튼-->
+<button id="logoutButton" type="button" class="logoutButton">로그아웃</button>
+
 <h2 class="center">급여명세서 관리</h2>
 <!--년, 월, 이름, 사번을 정보를 조회하는 폼-->
 <div style="float: left;" class="margin">
@@ -312,6 +323,13 @@
 
         // 마지막으로 조회 버튼을 누른 시간을 현재 시간으로 갱신한다.
         localStorage.setItem("adminLastCheckTime", currentTime);
+    }
+
+    document.getElementById("logoutButton").addEventListener("click", toLogout);
+
+    // 로그아웃 버튼 누를 시 로그아웃
+    function toLogout() {
+        location.href = "/logout";
     }
 
 </script>
