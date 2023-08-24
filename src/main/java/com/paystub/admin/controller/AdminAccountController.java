@@ -31,7 +31,7 @@ public class AdminAccountController {
     @PostMapping("/adminUserForm")
     public String deleteUsers(@RequestParam List<Long> employeeIds) {
         managementUserService.deleteUsersByIds(employeeIds);
-        return "redirect:admin/adminUserForm"; // 삭제 후 관리자 페이지로 리다이렉트
+        return "redirect:adminUserForm"; // 삭제 후 관리자 페이지로 리다이렉트
     }
 
 }

@@ -48,7 +48,7 @@ public class AdminExelController {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
             redirectAttributes.addFlashAttribute("searchErrors", errorMap);
-            return "redirect:/admin/admin";
+            return "redirect:/admin";
         }
 
 
@@ -125,7 +125,7 @@ public class AdminExelController {
 
         model.addAttribute("request", request); // 모델에 "req
 
-        return "redirect:/admin/admin"; // 성공적인 업로드 후 리다이렉션
+        return "redirect:/admin"; // 성공적인 업로드 후 리다이렉션
     }
 
     @PostMapping("/adminDeleteSalary")
@@ -137,6 +137,6 @@ public class AdminExelController {
                 })
                 .collect(Collectors.toList());
         salaryService.deleteSalariesByIds(salaryIds);
-        return "redirect:/admin/admin";
+        return "redirect:/admin";
     }
 }
