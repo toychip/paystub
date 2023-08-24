@@ -327,23 +327,27 @@
     });
 
     const pdfMake = () => {
-        html2canvas($('.report')[0]).then(function(canvas) {
+        // 원본 요소 선택
+        let originalElement = $('.report')[0];
+
+        // 복사본 생성 (크기 등을 조정할 수 있음)
+        let clonedElement = originalElement.cloneNode(true);
+        clonedElement.style.width = '400mm';
+        clonedElement.style.height = '500mm';
+
+        // 복사본을 문서에 임시로 추가
+        document.body.appendChild(clonedElement);
+
+        // 복사본을 캡처
+        html2canvas(clonedElement).then(function (canvas) {
             let imgData = canvas.toDataURL('image/png');
 
             // 이미지 가로 길이(mm) A4 기준
             let imgWidth = 210;
-
-            // 출력 페이지 세로 길이 계산 A4 기준
-            let pageHeight = imgWidth * 1.414;
             let imgHeight = canvas.height * imgWidth / canvas.width;
-            let heightLeft = imgHeight;
 
             let doc = new jsPDF('p', 'mm');
-            let position = 0;
-
-            // 첫 페이지 출력
-            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
+            doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
             const year = document.getElementById('year').textContent;
             const month = document.getElementById('month').textContent;
@@ -353,8 +357,11 @@
             // 파일 저장
             doc.save(year + '년_' + month + '월_' + employeeID + '_' + name + '_급여명세서.pdf');
 
+            // 복사본 제거
+            document.body.removeChild(clonedElement);
         });
     }
+
 </script>
 
 </body>
