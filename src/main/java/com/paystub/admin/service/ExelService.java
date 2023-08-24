@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +29,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Getter
 @Slf4j
-public class AdminService {
+public class ExelService {
 
     private final UserMapper userMapper;
     private final EmployeeSalaryMapper employeeSalaryMapper;
@@ -73,7 +72,7 @@ public class AdminService {
                 }
 
                 UserDao userDao = createUserDto(row);
-                EmployeeSalaryDao employeeSalaryDao = createEmployeeSalaryDto(row, userDao.getEmployeeID());
+                EmployeeSalaryDao employeeSalaryDao = salaryService.createEmployeeSalaryDto(row, userDao.getEmployeeID());
 
                 adminUserListResponsAndUserSaveDaos.add(userDao);
                 employeeSalaryDaos.add(employeeSalaryDao);
@@ -127,7 +126,7 @@ public class AdminService {
 
 
 
-    private UserDao createUserDto(Row row) {
+    public UserDao createUserDto(Row row) {
         Integer EmployeeID = Integer.valueOf(getStringValueOrNull(row.getCell(0)));
         String name = getStringValueOrNull(row.getCell(1));
         String birthday = getStringValueOrNull(row.getCell(2));
@@ -145,78 +144,9 @@ public class AdminService {
                 .build();
     }
 
-    private EmployeeSalaryDao createEmployeeSalaryDto(Row row, Integer EmployeeID) {
-        // 현재 날짜를 가져옵니다.
-        LocalDate now = LocalDate.now();
 
-        // 현재 년도를 가져옵니다.
-        int year = now.getYear();
 
-        // 한 달 전의 월을 가져옵니다.
-        int month = now.minusMonths(1).getMonthValue();
-
-        BigDecimal BasicSalary = getNumericValueOrNull(row.getCell(3)); // 기본 수당
-        BigDecimal HolidayAllowance = getNumericValueOrNull(row.getCell(4)); // 주휴 수당
-        BigDecimal LunchExpenses = getNumericValueOrNull(row.getCell(5)); // 중식비
-        BigDecimal FirstWeekHolidayAllowance = getNumericValueOrNull(row.getCell(6)); // 주휴수당 첫째주
-        BigDecimal RetroactiveHolidayAllowance = getNumericValueOrNull(row.getCell(7)); // 주휴수당 소급분
-        BigDecimal TotalPayment = getNumericValueOrNull(row.getCell(8)); // 지급합계
-        BigDecimal IncomeTax = getNumericValueOrNull(row.getCell(9)); // 소득세
-        BigDecimal ResidentTax = getNumericValueOrNull(row.getCell(10)); // 주민세
-        BigDecimal EmploymentInsurance = getNumericValueOrNull(row.getCell(11)); // 고용 보험
-        BigDecimal NationalPension = getNumericValueOrNull(row.getCell(12)); // 국민 연금
-        BigDecimal HealthInsurance = getNumericValueOrNull(row.getCell(13)); // 건강 보험
-        BigDecimal ElderlyCareInsurance = getNumericValueOrNull(row.getCell(14)); // 노인 요양
-        BigDecimal EmploymentInsuranceDeduction = getNumericValueOrNull(row.getCell(15)); // 고용 보험 (소급공제)
-        BigDecimal NationalPensionDeduction = getNumericValueOrNull(row.getCell(16)); // 국민 연금 (소급공제)
-        BigDecimal HealthInsuranceDeduction = getNumericValueOrNull(row.getCell(17)); // 건강 보험 (소급공제)
-        BigDecimal ElderlyCareInsuranceDeduction = getNumericValueOrNull(row.getCell(18)); // 노인 요양 (소급공제)
-        BigDecimal DeductionTotal = getNumericValueOrNull(row.getCell(19)); // 공제 합계
-        BigDecimal NetPayment = getNumericValueOrNull(row.getCell(20)); // 실지금액
-        BigDecimal TotalWorkDays = getNumericValueOrNull(row.getCell(21)); // 총 근로일수
-        BigDecimal TotalWorkingHours = getNumericValueOrNull(row.getCell(22)); // 총 근무시간
-
-        BigDecimal HolidayCalculationHours = getNumericValueOrNull(row.getCell(23)); // 주휴산정시간
-        HolidayCalculationHours = HolidayCalculationHours != null ? HolidayCalculationHours.setScale(1, BigDecimal.ROUND_HALF_UP) : null;// 두번째 자리에서 반올림
-
-        BigDecimal OvertimeCalculationHours = getNumericValueOrNull(row.getCell(24)); // 주휴산정시간(소급분)
-        OvertimeCalculationHours = OvertimeCalculationHours != null ? OvertimeCalculationHours.setScale(1, BigDecimal.ROUND_HALF_UP) : null; // 두번째 자리에서 반올림
-
-        BigDecimal HourlyWage = getNumericValueOrNull(row.getCell(25)); // 시급
-        BigDecimal LunchAllowance = getNumericValueOrNull(row.getCell(26)); // 근태 중식비
-
-        return EmployeeSalaryDao.builder()
-                .year(year)
-                .month(month)
-                .EmployeeID(EmployeeID)
-                .BasicSalary(BasicSalary)
-                .HolidayAllowance(HolidayAllowance)
-                .LunchExpenses(LunchExpenses)
-                .FirstWeekHolidayAllowance(FirstWeekHolidayAllowance)
-                .RetroactiveHolidayAllowance(RetroactiveHolidayAllowance)
-                .TotalPayment(TotalPayment)
-                .IncomeTax(IncomeTax)
-                .ResidentTax(ResidentTax)
-                .EmploymentInsurance(EmploymentInsurance)
-                .NationalPension(NationalPension)
-                .HealthInsurance(HealthInsurance)
-                .ElderlyCareInsurance(ElderlyCareInsurance)
-                .EmploymentInsuranceDeduction(EmploymentInsuranceDeduction)
-                .NationalPensionDeduction(NationalPensionDeduction)
-                .HealthInsuranceDeduction(HealthInsuranceDeduction)
-                .ElderlyCareInsuranceDeduction(ElderlyCareInsuranceDeduction)
-                .DeductionTotal(DeductionTotal)
-                .NetPayment(NetPayment)
-                .TotalWorkDays(TotalWorkDays)
-                .TotalWorkingHours(TotalWorkingHours)
-                .HolidayCalculationHours(HolidayCalculationHours)
-                .OvertimeCalculationHours(OvertimeCalculationHours)
-                .HourlyWage(HourlyWage)
-                .LunchAllowance(LunchAllowance)
-                .build();
-    }
-
-    private BigDecimal getNumericValueOrNull(Cell cell) {
+    public BigDecimal getNumericValueOrNull(Cell cell) {
         if (cell == null || cell.getCellType() != CellType.NUMERIC) {
             return null;
         }
@@ -224,7 +154,7 @@ public class AdminService {
     }
 
 
-    private String getStringValueOrNull(Cell cell) {
+    public String getStringValueOrNull(Cell cell) {
         if (cell == null) {
             return null;
         }

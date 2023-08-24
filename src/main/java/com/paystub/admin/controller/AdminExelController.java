@@ -4,7 +4,7 @@ import com.paystub.admin.dto.response.AdminSalaryResponse;
 import com.paystub.admin.dto.request.FileUploadRequest;
 import com.paystub.admin.dto.request.AdminDeleteSalaryRequest;
 import com.paystub.admin.dto.request.AdminSearchRequest;
-import com.paystub.admin.service.AdminService;
+import com.paystub.admin.service.ExelService;
 import com.paystub.admin.service.SalaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminExelController {
 
-    private final AdminService adminService;
+    private final ExelService exelService;
     private final SalaryService salaryService;
 
     @GetMapping("/adminSelect")
@@ -52,7 +52,7 @@ public class AdminExelController {
         }
 
 
-        List<AdminSalaryResponse> adminSalaryRespons = adminService.findResponseByYearAndMonth(
+        List<AdminSalaryResponse> adminSalaryRespons = exelService.findResponseByYearAndMonth(
                 request.getYear(),
                 request.getMonth(),
                 request.getName(),
@@ -99,7 +99,7 @@ public class AdminExelController {
         List<AdminSalaryResponse> adminSalaryRespons = null;
         if (!bindingResult.hasErrors()) {
             // 엑셀 파일 처리 로직 작성
-            adminSalaryRespons = adminService.processExcelFile(file, bindingResult, year, month); // 결과를 받아옴
+            adminSalaryRespons = exelService.processExcelFile(file, bindingResult, year, month); // 결과를 받아옴
             System.out.println("결과를 받아옴");
         }
 
@@ -112,7 +112,7 @@ public class AdminExelController {
 
             // 현재 페이지 데이터를 다시 로드할 필요가 없음
             if (adminSalaryRespons == null) {
-                adminSalaryRespons = adminService.processExcelFile(file, bindingResult, year, month);
+                adminSalaryRespons = exelService.processExcelFile(file, bindingResult, year, month);
             }
             model.addAttribute("responseDtos", adminSalaryRespons);
 
