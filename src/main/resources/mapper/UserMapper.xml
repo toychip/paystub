@@ -49,12 +49,12 @@
 
     </select>
 
-    <select id="findByEmployeeIDAndName" resultType="com.paystub.dto.AdminUserListResponseAndUserSaveDao">
+    <select id="findByEmployeeIDAndName" resultType="com.paystub.dto.UserDao">
         SELECT * FROM User
         WHERE EmployeeID = #{EmployeeID} AND Name = #{Name}
     </select>
 
-    <select id="findByEmployeeID" resultType="com.paystub.dto.AdminUserListResponseAndUserSaveDao">
+    <select id="findByEmployeeID" resultType="com.paystub.dto.UserDao">
         SELECT * FROM User
         WHERE EmployeeID = #{EmployeeID}
     </select>
@@ -151,7 +151,7 @@
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year} AND month = #{month}
     </select>
 
-    <select id="findByAdminUser" resultType="com.paystub.dto.AdminUserListResponseAndUserSaveDao">
+    <select id="findByAdminUser" resultType="com.paystub.dto.UserDao">
         SELECT *
         FROM User
         WHERE Role = 1

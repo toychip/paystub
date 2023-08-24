@@ -4,11 +4,10 @@ package com.paystub.repository;
 import com.paystub.dto.*;
 import com.paystub.dto.request.LoginRequest;
 import com.paystub.dto.response.AdminSalaryResponse;
-import com.paystub.dto.AdminUserListResponseAndUserSaveDao;
+import com.paystub.dto.UserDao;
 import com.paystub.dto.response.UserResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import sun.jvm.hotspot.debugger.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,7 @@ import java.util.Optional;
 
 @Mapper
 public interface UserMapper {
-    void insertUser(AdminUserListResponseAndUserSaveDao adminUserListResponseAndUserSaveDao);
+    void insertUser(UserDao userDao);
 
 
     //    List<ResponseDto> findJoinedDataByYearAndMonth(@Param("year") Long year, @Param("month") Long month);
@@ -32,9 +31,9 @@ public interface UserMapper {
     // EmployeeSalary와 User 테이블을 조인하여 사용자의 해당 년, 월 데이터를 가져온다.
     List<UserResponse> getTotalData(String employeeID, Integer year, Integer month);
 
-    Optional<AdminUserListResponseAndUserSaveDao> findByEmployeeIDAndName(@Param("EmployeeID") Integer EmployeeID, @Param("Name") String Name);
+    Optional<UserDao> findByEmployeeIDAndName(@Param("EmployeeID") Integer EmployeeID, @Param("Name") String Name);
 
-    Optional<AdminUserListResponseAndUserSaveDao> findByEmployeeID(@Param("EmployeeID") Integer EmployeeID);
+    Optional<UserDao> findByEmployeeID(@Param("EmployeeID") Integer EmployeeID);
 
     // 조건 없이 사용자의 전체 년, 월 데이터를 가져온다.
     List<PageDto> findByTotal(String employeeID, Integer limit, Integer offset);
@@ -60,7 +59,7 @@ public interface UserMapper {
     // 해당 년, 월에 맞는 사용자의 데이터 갯수를 가져온다.
     int getCountYearAndMonth(String employeeID, Integer year, Integer month);
 
-    List<AdminUserListResponseAndUserSaveDao> findByAdminUser();
+    List<UserDao> findByAdminUser();
 
     void deleteEmployeeSalaryByIds(List<Long> employeeIds);
 

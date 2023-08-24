@@ -5,9 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import javax.servlet.http.HttpSession;
+
 
 @Configuration
 @EnableWebSecurity
@@ -19,34 +22,40 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+       return http
                 .csrf().disable()
-                // 로그인 페이지 및 성공 URL, 실패 핸들러 설정
-                    .formLogin()
-                    .loginPage("/login")
-                    .loginProcessingUrl("/login")
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
                 .successHandler(successHandler)
                 .and()
-                // 요청에 대한 권한 설정
                 .authorizeHttpRequests()
-//                .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/adminSelect").hasRole("ADMIN")
                 .antMatchers("/userSelect").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-                //.antMatchers("/admin")//.hasAuthority() //.hasAuthority("ADMIN") // 관리자만 접근 가능
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                    .invalidSessionUrl("/login")    // 세션이 유효하지 않을 때 리다이렉트 될 URL
-                    .maximumSessions(1)  // 동시 세션 제한 수
-                    .expiredUrl("/login")  // 세션이 만료될 때 리다이렉트 될 URL
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .invalidSessionUrl("/login")
+                .maximumSessions(1)
+                .expiredUrl("/login")
                 .and()
-                    .sessionFixation().newSession()  // 로그인 할 때마다 새로운 세션을 생성
+                .sessionFixation().newSession()
                 .and()
                 .authenticationProvider(customAuthenticationProvider)
+                .logout() // Logout 설정
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .addLogoutHandler((request, response, authentication) -> {
+                    HttpSession session = request.getSession();
+                    if (session != null) {
+                        session.invalidate();
+                    }
+                })
+                .deleteCookies("JSESSIONID")
+                .and()
                 .build();
     }
-
 }

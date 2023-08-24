@@ -12,8 +12,6 @@
       <h2 class="text-center">NICE디앤알</h2>
       <h3 class="text-center">나이스 급여대장</h3>
 
-<!--      &lt;!&ndash; Error Message &ndash;&gt;-->
-<!--      <div th:if="${session.errorMessage}" class="alert alert-danger" role="alert" th:text="${session.errorMessage}"></div>-->
 
 
       <form th:action="@{/login}" th:object="${loginDto}" method="post">
@@ -36,11 +34,11 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-<script th:inline="javascript">
-  /*<![CDATA[*/
-  var errorMessage = [[${session.errorMessage}]];
-  if (errorMessage) {
-    alert(errorMessage);
-  }
-  /*]]>*/
-</script>
+<!--<script th:inline="javascript">-->
+<!--  /*<![CDATA[*/-->
+<!--  var errorMessage = [[${loginError}]];-->
+<!--  if (errorMessage) {-->
+<!--    alert(errorMessage);-->
+<!--  }-->
+<!--  /*]]>*/-->
+<!--</script>-->

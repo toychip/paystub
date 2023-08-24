@@ -1,6 +1,6 @@
 package com.paystub.config;
 
-import com.paystub.dto.AdminUserListResponseAndUserSaveDao;
+import com.paystub.dto.UserDao;
 import com.paystub.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ public class SuperAdminInit {
         String birthday = "11111111";
         String socialNumber = aesUtilConfig.encrypt(birthday);
 
-        AdminUserListResponseAndUserSaveDao admin = AdminUserListResponseAndUserSaveDao.builder()
+        UserDao admin = UserDao.builder()
                 .EmployeeID(998844)
                 .Name("관리자")
                 .State(1)

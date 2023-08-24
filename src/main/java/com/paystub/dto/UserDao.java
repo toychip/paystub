@@ -7,7 +7,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminUserListResponseAndUserSaveDao {
+
+// 관리자가 사용자 테이블을 저장할때, 관리자 페이지 내에서 회원 관리 시 테이블 불러올때 사용되는 Dao
+public class UserDao {
 
     private Integer EmployeeID; // 일용직근무자사번
     private String Name; //성명
