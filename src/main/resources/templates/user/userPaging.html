@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--    ajax 요청-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>관리자 페이지</title>
+    <style>
+
+        /* 메인테이블 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .margin {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .logoutButton {
+            position: fixed;
+            top: 5px;
+            right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<!--    로그아웃버튼-->
+    <button id="logoutButton" type="button" class="logoutButton">로그아웃</button>
+
+    <h1 class="center">사용자 페이지</h1>
+
+<!--년도와 월을 선택받아 조회하는 테이블-->
+<div class="center">
+    <h3>조회할 년도와 월을 선택해주세요.</h3>
+    <select id="year" th:name="year" th:value="${year}">
+        <option value="9999">전체</option>
+        <option value="2010">2010</option>
+        <option value="2011">2011</option>
+        <option value="2012">2012</option>
+        <option value="2013">2013</option>
+        <option value="2014">2014</option>
+        <option value="2015">2015</option>
+        <option value="2016">2016</option>
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+    </select> <span>년</span>
+    <select id="month" th:name="month" th:value="${month}">
+        <option value="0">전체</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+    </select> <span>월</span>
+    <button id="searchButton">조회</button>
+</div>
+
+<!--페이징 처리 결과 데이터가 나오는 영역-->
+<div id="dataList" class="margin"></div>
+
+<!--페이지 이전, 다음 버튼-->
+<div id="pagination" class="margin">
+    <button id="prevPage" style="display: none">이전</button>
+    <span id="currentPage" style="display: none">1</span ><span id="/" style="display: none">/</span><span id="totalPages" style="display: none"></span>
+    <button id="nextPage" style="display: none">다음</button>
+</div>
+</body>
+
+<script th:inline="javascript">
+
+    // 페이지 로드 시 기본값으로 전체를 출력하게끔
+    window.onload = function() {
+        searchButton();
+    }
+
+    document.getElementById("searchButton").addEventListener("click", searchButton);
+
+    // 페이징 처리를 위해 변수 초기화
+    var currentPage = 0; // 현재 페이지
+    var offset = 0;
+
+    // 조회 버튼 클릭시 실행되는 메서드
+    function searchButton(event) {
+        const year = document.getElementById("year").value;
+        const month = document.getElementById("month").value;
+
+        // currentPage가 0이 아니게 됐을때, 조회를 누르면 처음페이지로 돌아가야하니까
+        currentPage = 0;
+        offset = 0;
+
+        // 현재 시간을 가져오는 변수
+        var currentTime = Date.now();
+
+        // 파일 업로드 시간 지정 (2초)
+        var delay = 2000;
+
+        // 마지막으로 조회 버튼을 누른 시간을 가져온다.
+        var userLastCheckTime = localStorage.getItem("userLastCheckTime");
+
+        // 현재 시간과 마지막으로 조회 버튼을 누른 시간의 차이가 지연 시간보다 작다면
+        if (currentTime - userLastCheckTime < delay) {
+            alert("조회 중복 클릭을 금합니다. 2초 뒤에 다시 실행해주세요.");
+            event.preventDefault();
+            return false;
+        }
+
+        // delay 이후에 조회 버튼을 누른거라면
+        else{
+            getTotalPage(year, month);
+        }
+
+        // 마지막으로 조회 버튼을 누른 시간을 현재 시간으로 갱신한다.
+        localStorage.setItem("userLastCheckTime", currentTime);
+
+    }
+
+    // 날짜 조회시 로드되는 함수
+    function getTotalPage(year, month) {
+
+        $.ajax({
+            url: "/afterPaging",
+            type: "GET",
+            data: { year: year, month: month, offset: offset },
+            dataType: "json",
+            success: function(response) {
+                if(response) {
+                    var dataListHtml = "";
+                    response.yearAndMonth.forEach(function(item) {
+                        // userSalary.html 페이지로 이동하고, 년도와 월을 파라미터로 전달하는 링크 생성
+                        dataListHtml += '<h4><a href="/userSalary?year=' + item.year + '&month=' + item.month + '"><span>' + item.year + '</span>년 <span>' + item.month + '</span>월</a></h4>';
+                    });
+                    $('#dataList').html(dataListHtml);
+
+                    // 전체 페이지 수 설정
+                    totalPages = response.totalPages;
+
+                    $('#totalPages').text(totalPages);
+
+                    // 현재 페이지 표시
+                    $('#currentPage').text(currentPage + 1);
+
+                    checkPage(totalPages);
+                } else {
+                    alert("불러오기 실패");
+                }
+            }
+        });
+    }
+
+    document.getElementById("prevPage").addEventListener("click", prevPageButton);
+    document.getElementById("nextPage").addEventListener("click", nextPageButton);
+
+    // 이전 버튼 누를시 로드 되는 메소드
+    function prevPageButton() {
+        if(currentPage > 0) {
+            currentPage--;
+            offset--;
+            getTotalPage($('#year').val(),$('#month').val());
+        }
+    }
+
+    // 다음 버튼 누를시 로드 되는 메소드
+    function nextPageButton() {
+        if(currentPage < totalPages - 1) {
+            currentPage++;
+            offset++;
+            getTotalPage($('#year').val(), $('#month').val());
+        }
+    }
+
+    // 현재 페이지에 따라 이전, 다음 버튼 display 구분
+    function checkPage(totalPages) {
+
+        document.getElementById("currentPage").style.display = "inline";
+        document.getElementById("/").style.display = "inline";
+        document.getElementById("totalPages").style.display = "inline";
+
+        // 만약 전체 페이지가 0이라면
+        if(totalPages == 0) {
+            alert("조건에 맞는 데이터가 존재하지 않습니다.");
+            document.getElementById("currentPage").style.display = "none";
+            document.getElementById("/").style.display = "none";
+            document.getElementById("totalPages").style.display = "none";
+            currentPage = 0;
+        }
+
+        // 만약 현재 페이지가 첫페이지면서 다음페이지가 있다면
+        else if(currentPage == 0 && currentPage != totalPages - 1) {
+            document.getElementById("prevPage").style.display = "none";
+            document.getElementById("nextPage").style.display = "inline";
+        }
+
+        // 만약 현재 페이지가 마지막페이지면서 이전페이지가 있다면
+        else if (currentPage != 0 && currentPage == totalPages - 1) {
+            document.getElementById("prevPage").style.display = "inline";
+            document.getElementById("nextPage").style.display = "none";
+        }
+
+        // 만약 현재 페이지가 첫페이지면서 마지막페이지라면
+        else if(currentPage == 0 && currentPage == totalPages - 1) {
+            document.getElementById("prevPage").style.display = "none";
+            document.getElementById("nextPage").style.display = "none";
+        }
+
+        // 만약 현재 페이지가 첫페이지도 아니고 마지막페이지도 아니라면
+        else {
+            document.getElementById("prevPage").style.display = "inline";
+            document.getElementById("nextPage").style.display = "inline";
+        }
+    }
+
+    document.getElementById("logoutButton").addEventListener("click", toLogout);
+
+    // 로그아웃 버튼 누를 시 로그아웃
+    function toLogout(event) {
+        if (confirm("로그아웃 하시겠습니까?")) {
+            location.href = "/logout";
+            alert("로그아웃 되었습니다. 로그인 페이지로 돌아갑니다.");
+        } else {
+            // 폼 제출을 막아 삭제되지 않도록
+            alert("취소되었습니다");
+            event.preventDefault();
+            return false;
+        }
+    }
+
+</script>
+</html>

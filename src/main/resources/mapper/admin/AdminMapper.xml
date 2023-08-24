@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.paystub.admin.repository.AdminMapper">
+
+    <insert id="insertEmployeeSalaryDto">
+
+        INSERT INTO EmployeeSalary (
+        `year`, `month`, EmployeeID, BasicSalary, HolidayAllowance, LunchExpenses,
+        FirstWeekHolidayAllowance, RetroactiveHolidayAllowance, TotalPayment,
+        IncomeTax, ResidentTax, EmploymentInsurance, NationalPension,
+        HealthInsurance, ElderlyCareInsurance, EmploymentInsuranceDeduction,
+        NationalPensionDeduction, HealthInsuranceDeduction, ElderlyCareInsuranceDeduction,
+        DeductionTotal, NetPayment, TotalWorkDays, TotalWorkingHours,
+        HolidayCalculationHours, OvertimeCalculationHours, HourlyWage, LunchAllowance
+        )
+        VALUES (
+        #{year}, #{month}, #{EmployeeID}, #{BasicSalary}, #{HolidayAllowance}, #{LunchExpenses},
+        #{FirstWeekHolidayAllowance}, #{RetroactiveHolidayAllowance}, #{TotalPayment},
+        #{IncomeTax}, #{ResidentTax}, #{EmploymentInsurance}, #{NationalPension},
+        #{HealthInsurance}, #{ElderlyCareInsurance}, #{EmploymentInsuranceDeduction},
+        #{NationalPensionDeduction}, #{HealthInsuranceDeduction}, #{ElderlyCareInsuranceDeduction},
+        #{DeductionTotal}, #{NetPayment}, #{TotalWorkDays}, #{TotalWorkingHours},
+        #{HolidayCalculationHours}, #{OvertimeCalculationHours}, #{HourlyWage}, #{LunchAllowance}
+        )
+    </insert>
+
+    <select id="findSalaryByYearMonthAndEmployeeID" resultType="com.paystub.admin.dto.EmployeeSalaryDao">
+        SELECT * FROM EmployeeSalary
+        WHERE year = #{year} AND month = #{month} AND EmployeeID = #{EmployeeID}
+    </select>
+
+    <insert id="insertUser">
+        INSERT INTO User (EmployeeID, Name, State, Role, birthday, SocialNumber, EmailAddress)
+        VALUES (#{EmployeeID}, #{Name}, #{State}, #{Role}, #{birthday}, #{SocialNumber}, #{EmailAddress})
+    </insert>
+
+    <select id="findByAdminUser" resultType="com.paystub.user.dto.UserDao">
+        SELECT *
+        FROM User
+        WHERE Role = 1
+    </select>
+
+    <delete id="deleteEmployeeSalaryByIds">
+        DELETE FROM EmployeeSalary
+        WHERE EmployeeID IN
+        <foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteUsersByIds">
+        DELETE FROM User
+        WHERE EmployeeID IN
+        <foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteEmployeeSalaryById">
+        DELETE FROM EmployeeSalary
+        WHERE EmployeeID = #{employeeId} AND year = #{year} AND month = #{month}
+    </delete>
+
+    <select id="findByEmployeeIDAndName" resultType="com.paystub.user.dto.UserDao">
+        SELECT * FROM User
+        WHERE EmployeeID = #{EmployeeID} AND Name = #{Name}
+    </select>
+
+    <select id="findByEmployeeID" resultType="com.paystub.user.dto.UserDao">
+        SELECT * FROM User
+        WHERE EmployeeID = #{EmployeeID}
+    </select>
+
+    <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.admin.dto.response.AdminSalaryResponse">
+        SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
+        e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
+        e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
+        e.NationalPensionDeduction, e.HealthInsuranceDeduction, e.ElderlyCareInsuranceDeduction, e.DeductionTotal, e.NetPayment, e.TotalWorkDays,
+        e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
+        FROM User u
+        JOIN EmployeeSalary e ON u.EmployeeID = e.EmployeeID
+        <where>
+            <if test="year != 9999">
+                AND e.year = #{year}
+            </if>
+            <if test="month != 0">
+                AND e.month = #{month}
+            </if>
+            <if test="name != null and name != ''">
+                AND u.Name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="employeeID != null">
+                AND CAST(u.EmployeeID AS CHAR) LIKE CONCAT('%', #{employeeID}, '%')
+            </if>
+        </where>
+        ORDER BY e.year DESC, e.month DESC
+    </select>
+</mapper>
