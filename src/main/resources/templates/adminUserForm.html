@@ -44,13 +44,13 @@
             margin-top: 30px;
             text-align: center;
             white-space: nowrap;
-            transform: translateX(-405px); /* 왼쪽으로 130px 이동 */
+            transform: translateX(-405px);
         }
 
         .logoutButton {
             position: fixed;
-            top: 5px; /* 버튼의 상단 위치 조정 */
-            right: 5px; /* 버튼의 오른쪽 위치 조정 */
+            top: 5px;
+            right: 5px;
         }
 
     </style>
@@ -115,6 +115,7 @@
             }
         }
 
+        // 선택된 항목이 없다면 삭제할 항목을 선택해달라고 alert창 띄움
         if(count == 0) {
             alert("삭제할 항목을 선택해주세요.");
             event.preventDefault();
@@ -137,16 +138,15 @@
     var isAllChecked = false; // 전체 선택 상태를 추적하는 변수
 
     function checkAllButton() {
-        // 체크박스를 가져옵니다.
         var checkboxes = document.getElementsByName("employeeIds");
 
-        // 상태를 반전시키고 모든 체크박스에 적용합니다.
+        // 상태를 반전시키고 모든 체크박스에 적용
         isAllChecked = !isAllChecked;
         for (var i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = isAllChecked;
         }
 
-        // 버튼의 텍스트를 변경합니다.
+        // 버튼의 텍스트를 변경
         this.textContent = isAllChecked ? "전체해제" : "전체선택";
     }
 

@@ -29,8 +29,8 @@
 
         .logoutButton {
             position: fixed;
-            top: 5px; /* 버튼의 상단 위치 조정 */
-            right: 5px; /* 버튼의 오른쪽 위치 조정 */
+            top: 5px;
+            right: 5px;
         }
 
     </style>
@@ -93,6 +93,7 @@
 
 <script th:inline="javascript">
 
+    // 페이지 로드 시 기본값으로 전체를 출력하게끔
     window.onload = function() {
         searchButton();
     }
@@ -108,13 +109,14 @@
         const year = document.getElementById("year").value;
         const month = document.getElementById("month").value;
 
+        // currentPage가 0이 아니게 됐을때, 조회를 누르면 처음페이지로 돌아가야하니까
         currentPage = 0;
         offset = 0;
 
         // 현재 시간을 가져오는 변수
         var currentTime = Date.now();
 
-        // 파일 업로드 시간 지정 (6초)
+        // 파일 업로드 시간 지정 (2초)
         var delay = 2000;
 
         // 마지막으로 조회 버튼을 누른 시간을 가져온다.
@@ -140,8 +142,6 @@
     // 날짜 조회시 로드되는 함수
     function getTotalPage(year, month) {
 
-        console.log("현재 페이지: " + currentPage);
-
         $.ajax({
             url: "/afterSelect",
             type: "GET",
@@ -158,8 +158,6 @@
 
                     // 전체 페이지 수 설정
                     totalPages = response.totalPages;
-
-                    console.log(totalPages);
 
                     $('#totalPages').text(totalPages);
 
@@ -198,8 +196,6 @@
     // 현재 페이지에 따라 이전, 다음 버튼 display 구분
     function checkPage(totalPages) {
 
-        console.log("total: " + totalPages);
-
         document.getElementById("currentPage").style.display = "inline";
         document.getElementById("/").style.display = "inline";
         document.getElementById("totalPages").style.display = "inline";
@@ -215,28 +211,24 @@
 
         // 만약 현재 페이지가 첫페이지면서 다음페이지가 있다면
         else if(currentPage == 0 && currentPage != totalPages - 1) {
-            console.log("첫페이지");
             document.getElementById("prevPage").style.display = "none";
             document.getElementById("nextPage").style.display = "inline";
         }
 
         // 만약 현재 페이지가 마지막페이지면서 이전페이지가 있다면
         else if (currentPage != 0 && currentPage == totalPages - 1) {
-            console.log("마지막페이지");
             document.getElementById("prevPage").style.display = "inline";
             document.getElementById("nextPage").style.display = "none";
         }
 
         // 만약 현재 페이지가 첫페이지면서 마지막페이지라면
         else if(currentPage == 0 && currentPage == totalPages - 1) {
-            console.log("첫페이지면서 마지막");
             document.getElementById("prevPage").style.display = "none";
             document.getElementById("nextPage").style.display = "none";
         }
 
         // 만약 현재 페이지가 첫페이지도 아니고 마지막페이지도 아니라면
         else {
-            console.log("중간페이지");
             document.getElementById("prevPage").style.display = "inline";
             document.getElementById("nextPage").style.display = "inline";
         }
