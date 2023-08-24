@@ -5,6 +5,7 @@ import com.paystub.admin.dto.request.FileUploadRequest;
 import com.paystub.admin.dto.request.AdminDeleteSalaryRequest;
 import com.paystub.admin.dto.request.AdminSearchRequest;
 import com.paystub.admin.service.AdminService;
+import com.paystub.admin.service.SalaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class AdminExelController {
 
     private final AdminService adminService;
+    private final SalaryService salaryService;
 
     @GetMapping("/adminSelect")
     public String getAdminSelect() {
@@ -134,7 +136,7 @@ public class AdminExelController {
                     return new AdminDeleteSalaryRequest(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]));
                 })
                 .collect(Collectors.toList());
-        adminService.deleteSalariesByIds(salaryIds);
+        salaryService.deleteSalariesByIds(salaryIds);
         return "redirect:/admin";
     }
 }
