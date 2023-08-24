@@ -143,7 +143,7 @@
     function getTotalPage(year, month) {
 
         $.ajax({
-            url: "/afterSelect",
+            url: "/afterPaging",
             type: "GET",
             data: { year: year, month: month, offset: offset },
             dataType: "json",
@@ -151,8 +151,8 @@
                 if(response) {
                     var dataListHtml = "";
                     response.yearAndMonth.forEach(function(item) {
-                        // user.html 페이지로 이동하고, 년도와 월을 파라미터로 전달하는 링크 생성
-                        dataListHtml += '<h4><a href="/user?year=' + item.year + '&month=' + item.month + '"><span>' + item.year + '</span>년 <span>' + item.month + '</span>월</a></h4>';
+                        // userSalary.html 페이지로 이동하고, 년도와 월을 파라미터로 전달하는 링크 생성
+                        dataListHtml += '<h4><a href="/userSalary?year=' + item.year + '&month=' + item.month + '"><span>' + item.year + '</span>년 <span>' + item.month + '</span>월</a></h4>';
                     });
                     $('#dataList').html(dataListHtml);
 

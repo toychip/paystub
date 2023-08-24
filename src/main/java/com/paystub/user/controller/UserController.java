@@ -24,14 +24,14 @@ public class UserController {
     private final int limit = 6;
 
     // 사용자 년,월 조회 페이지 로드하는 메서드
-    @GetMapping("/userSelect")
+    @GetMapping("/userPaging")
     public String getUserSelect() {
-        return "userSelect";
+        return "user/userPaging";
     }
 
 
     // 급여명세서 팝업창 메서드
-    @GetMapping("/user")
+    @GetMapping("/userSalary")
     public String getTotalData(@RequestParam Integer year, @RequestParam Integer month, Model model) {
 
         // EmployeeSalary 와 User 테이블을 조인하여 필요한 데이터만 담아온다.
@@ -49,11 +49,11 @@ public class UserController {
         model.addAttribute("payDay", payDay);
         model.addAttribute("totalData", userDtoList);
 
-        return "user";
+        return "user/userSalary";
     }
 
     // 사용자가 년, 월 옵션을 선택했을 시 로드하는 메서드
-    @GetMapping("/afterSelect")
+    @GetMapping("/afterPaging")
     public ResponseEntity<Map<String, Object>> getPage(@RequestParam(defaultValue = "9999") Integer year,
                                                        @RequestParam(defaultValue = "0") Integer month,
                                                        @RequestParam Integer offset) {
