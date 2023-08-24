@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.paystub.repository.UserMapper">
+<mapper namespace="com.paystub.user.repository.UserMapper">
     <insert id="insertUser">
         INSERT INTO User (EmployeeID, Name, State, Role, birthday, SocialNumber, EmailAddress)
         VALUES (#{EmployeeID}, #{Name}, #{State}, #{Role}, #{birthday}, #{SocialNumber}, #{EmailAddress})
     </insert>
 
-    <select id="findByUsername" resultType="com.paystub.dto.request.LoginRequest">
+    <select id="findByUsername" resultType="com.paystub.comon.dto.request.LoginRequest">
         SELECT EmployeeID AS username, SocialNumber AS password, Role AS role
         FROM User
         WHERE EmployeeID = #{username}
     </select>
 
     <!--    EmployeeSalary와 User 테이블을 조인하여 사용자의 해당 년, 월 데이터를 가져온다.-->
-    <select id="getTotalData" resultType="com.paystub.dto.response.UserResponse">
+    <select id="getTotalData" resultType="com.paystub.user.dto.response.UserResponse">
         SELECT year,
             month,
             User.EmployeeID,
@@ -49,18 +49,18 @@
 
     </select>
 
-    <select id="findByEmployeeIDAndName" resultType="com.paystub.dto.UserDao">
+    <select id="findByEmployeeIDAndName" resultType="com.paystub.user.dto.UserDao">
         SELECT * FROM User
         WHERE EmployeeID = #{EmployeeID} AND Name = #{Name}
     </select>
 
-    <select id="findByEmployeeID" resultType="com.paystub.dto.UserDao">
+    <select id="findByEmployeeID" resultType="com.paystub.user.dto.UserDao">
         SELECT * FROM User
         WHERE EmployeeID = #{EmployeeID}
     </select>
 
 
-    <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.dto.response.AdminSalaryResponse">
+    <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.admin.dto.response.AdminSalaryResponse">
         SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
         e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
         e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
@@ -87,7 +87,7 @@
 
 
     <!--    조건 없이 사용자의 전체 년, 월 데이터를 가져온다.-->
-    <select id="findByTotal" resultType="com.paystub.dto.PageDto">
+    <select id="findByTotal" resultType="com.paystub.comon.util.PageUtil">
         SELECT year, month
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID}
@@ -97,7 +97,7 @@
 
 
     <!--    해당 년에 맞는 사용자의 년, 월 데이터를 가져온다.-->
-    <select id="findByYear" resultType="com.paystub.dto.PageDto">
+    <select id="findByYear" resultType="com.paystub.comon.util.PageUtil">
         SELECT year, month
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
@@ -106,7 +106,7 @@
     </select>
 
     <!--    해당 월에 맞는 사용자의 년, 월 데이터를 가져온다.-->
-    <select id="findByMonth" resultType="com.paystub.dto.PageDto">
+    <select id="findByMonth" resultType="com.paystub.comon.util.PageUtil">
         SELECT year, month
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND month = #{month}
@@ -115,7 +115,7 @@
     </select>
 
     <!--    해당 년, 월에 맞는 사용자의 년, 월 데이터를 가져온다.-->
-    <select id="findByYearAndMonth" resultType="com.paystub.dto.PageDto">
+    <select id="findByYearAndMonth" resultType="com.paystub.comon.util.PageUtil">
         SELECT year, month
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year} AND month = #{month}
@@ -151,7 +151,7 @@
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year} AND month = #{month}
     </select>
 
-    <select id="findByAdminUser" resultType="com.paystub.dto.UserDao">
+    <select id="findByAdminUser" resultType="com.paystub.user.dto.UserDao">
         SELECT *
         FROM User
         WHERE Role = 1

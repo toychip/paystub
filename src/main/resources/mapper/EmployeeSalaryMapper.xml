@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.paystub.repository.EmployeeSalaryMapper">
+<mapper namespace="com.paystub.admin.repository.EmployeeSalaryMapperr">
     <insert id="insertEmployeeSalaryDto">
 
         INSERT INTO EmployeeSalary (
@@ -24,7 +24,7 @@
         )
     </insert>
 
-    <select id="findSalaryByYearMonthAndEmployeeID" resultType="com.paystub.dto.EmployeeSalaryDao">
+    <select id="findSalaryByYearMonthAndEmployeeID" resultType="com.paystub.admin.dto.EmployeeSalaryDao">
         SELECT * FROM EmployeeSalary
         WHERE year = #{year} AND month = #{month} AND EmployeeID = #{EmployeeID}
     </select>
