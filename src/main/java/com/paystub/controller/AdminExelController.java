@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class AdminController {
+public class AdminExelController {
 
     private final AdminService adminService;
 
@@ -127,22 +127,6 @@ public class AdminController {
         return "redirect:/admin"; // 성공적인 업로드 후 리다이렉션
     }
 
-    // 관리자 페이지에서 UserForm을 선택했을 시 페이지 로드하는 메서드
-    @GetMapping("/adminUserForm")
-    public String getAdminUserForm(Model model) {
-
-        List<UserDao> userList = adminService.getAdminUserForm();
-
-        model.addAttribute("adminUserForm", userList);
-        return "adminUserForm";
-    }
-
-    @PostMapping("/adminUserForm")
-    public String deleteUsers(@RequestParam List<Long> employeeIds) {
-        adminService.deleteUsersByIds(employeeIds);
-        return "redirect:/adminUserForm"; // 삭제 후 관리자 페이지로 리다이렉트
-    }
-
     @PostMapping("/adminDeleteSalary")
     public String deleteSalaries(@RequestParam List<String> salaryKeys) {
         List<AdminDeleteSalaryRequest> salaryIds = salaryKeys.stream()
@@ -154,6 +138,4 @@ public class AdminController {
         adminService.deleteSalariesByIds(salaryIds);
         return "redirect:/admin";
     }
-
-
 }
