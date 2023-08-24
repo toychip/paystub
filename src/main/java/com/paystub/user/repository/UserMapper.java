@@ -15,25 +15,13 @@ import java.util.Optional;
 
 @Mapper
 public interface UserMapper {
-    void insertUser(UserDao userDao);
-
-
-    //    List<ResponseDto> findJoinedDataByYearAndMonth(@Param("year") Long year, @Param("month") Long month);
-    List<AdminSalaryResponse> findJoinedDataByYearAndMonth(
-            @Param("year") Long year,
-            @Param("month") Long month,
-            @Param("name") String name,
-            @Param("employeeID") Long employeeId
-    );
 
     Optional<LoginRequest> findByUsername(String username);
 
     // EmployeeSalary와 User 테이블을 조인하여 사용자의 해당 년, 월 데이터를 가져온다.
     List<UserResponse> getTotalData(String employeeID, Integer year, Integer month);
 
-    Optional<UserDao> findByEmployeeIDAndName(@Param("EmployeeID") Integer EmployeeID, @Param("Name") String Name);
 
-    Optional<UserDao> findByEmployeeID(@Param("EmployeeID") Integer EmployeeID);
 
     // 조건 없이 사용자의 전체 년, 월 데이터를 가져온다.
     List<PageUtil> findByTotal(String employeeID, Integer limit, Integer offset);
@@ -59,12 +47,4 @@ public interface UserMapper {
     // 해당 년, 월에 맞는 사용자의 데이터 갯수를 가져온다.
     int getCountYearAndMonth(String employeeID, Integer year, Integer month);
 
-    List<UserDao> findByAdminUser();
-
-    void deleteEmployeeSalaryByIds(List<Long> employeeIds);
-
-    void deleteUsersByIds(List<Long> employeeIds);
-
-    void deleteEmployeeSalaryById(@Param("employeeId") Long employeeId,
-                                  @Param("year") Long year, @Param("month") Long month);
 }

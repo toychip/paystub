@@ -2,9 +2,8 @@ package com.paystub.admin.service;
 
 import com.paystub.admin.dto.EmployeeSalaryDao;
 import com.paystub.admin.dto.request.AdminDeleteSalaryRequest;
-import com.paystub.admin.repository.EmployeeSalaryMapper;
+import com.paystub.admin.repository.AdminMapper;
 import com.paystub.comon.util.ExelTransObjectUtil;
-import com.paystub.user.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,14 +22,14 @@ import java.util.List;
 public class SalaryService {
     // 급여 명세서 저장 및 삭제 서비스
 
-    private final UserMapper userMapper;
+//    private final UserMapper userMapper;
     private final ExelTransObjectUtil exelTransObjectUtil;
-    private final EmployeeSalaryMapper employeeSalaryMapper;
+    private final AdminMapper adminMapper;
 
     @Transactional
     public void saveEmployeeSalaries(List<EmployeeSalaryDao> employeeSalaryDaos, BindingResult bindingResult) {
         for (EmployeeSalaryDao employeeSalaryDao : employeeSalaryDaos) {
-            EmployeeSalaryDao existingData = employeeSalaryMapper.findSalaryByYearMonthAndEmployeeID(
+            EmployeeSalaryDao existingData = adminMapper.findSalaryByYearMonthAndEmployeeID(
                     employeeSalaryDao.getYear(),
                     employeeSalaryDao.getMonth(),
                     employeeSalaryDao.getEmployeeID()
@@ -43,7 +42,7 @@ public class SalaryService {
                                         + employeeSalaryDao.getMonth() + "월 데이터가 있습니다. 삭제하고 등록해주세요");
                 bindingResult.addError(error);
             } else {
-                employeeSalaryMapper.insertEmployeeSalaryDto(employeeSalaryDao);
+                adminMapper.insertEmployeeSalaryDto(employeeSalaryDao);
             }
         }
     }
@@ -52,7 +51,7 @@ public class SalaryService {
     @Transactional
     public void deleteSalariesByIds(List<AdminDeleteSalaryRequest> salaryIds) {
         for (AdminDeleteSalaryRequest key : salaryIds) {
-            userMapper.deleteEmployeeSalaryById(key.getEmployeeId(), key.getYear(), key.getMonth());
+            adminMapper.deleteEmployeeSalaryById(key.getEmployeeId(), key.getYear(), key.getMonth());
         }
     }
 

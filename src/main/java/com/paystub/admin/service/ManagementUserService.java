@@ -1,9 +1,9 @@
 package com.paystub.admin.service;
 
+import com.paystub.admin.repository.AdminMapper;
 import com.paystub.comon.util.AESUtilUtil;
 import com.paystub.comon.util.ExelTransObjectUtil;
 import com.paystub.user.dto.UserDao;
-import com.paystub.user.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,9 +20,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ManagementUserService {
 
-    private final UserMapper userMapper;
+//    private final UserMapper userMapper;
     private final AESUtilUtil aesUtilUtil;
     private final ExelTransObjectUtil exelTransObjectUtil;
+    private final AdminMapper adminMapper;
 
     public UserDao createUserDto(Row row) {
         Integer EmployeeID = Integer.valueOf(exelTransObjectUtil.getStringValueOrNull(row.getCell(0)));
@@ -46,9 +47,9 @@ public class ManagementUserService {
     public void saveUsers(List<UserDao> adminUserListResponsAndUserSaveDaos, BindingResult bindingResult) {
         for (UserDao userDao : adminUserListResponsAndUserSaveDaos) {
             Optional<UserDao> existingUserWithSameIDAndName =
-                    userMapper.findByEmployeeIDAndName(userDao.getEmployeeID(), userDao.getName());
+                    adminMapper.findByEmployeeIDAndName(userDao.getEmployeeID(), userDao.getName());
             Optional<UserDao> existingUserWithSameID =
-                    userMapper.findByEmployeeID(userDao.getEmployeeID());
+                    adminMapper.findByEmployeeID(userDao.getEmployeeID());
 
             if (existingUserWithSameIDAndName.isPresent()) {
 //                FieldError error = new FieldError("userDto", "Name",
@@ -59,19 +60,19 @@ public class ManagementUserService {
                         " 이미 [" + userDao.getEmployeeID() + "] 사번을 가진 직원이 존재합니다..");
                 bindingResult.addError(error);
             } else {
-                userMapper.insertUser(userDao);
+                adminMapper.insertUser(userDao);
             }
         }
     }
 
     public List<UserDao> getAdminUserForm() {
-        return userMapper.findByAdminUser();
+        return adminMapper.findByAdminUser();
     }
 
     @Transactional
     public void deleteUsersByIds(List<Long> employeeIds) {
-        userMapper.deleteEmployeeSalaryByIds(employeeIds);
-        userMapper.deleteUsersByIds(employeeIds);
+        adminMapper.deleteEmployeeSalaryByIds(employeeIds);
+        adminMapper.deleteUsersByIds(employeeIds);
     }
 
 }

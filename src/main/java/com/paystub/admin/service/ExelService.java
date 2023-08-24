@@ -4,26 +4,20 @@ import com.paystub.comon.util.AESUtilUtil;
 import com.paystub.admin.dto.response.AdminSalaryResponse;
 import com.paystub.admin.dto.EmployeeSalaryDao;
 import com.paystub.user.dto.UserDao;
-import com.paystub.admin.repository.EmployeeSalaryMapper;
-import com.paystub.user.repository.UserMapper;
+import com.paystub.admin.repository.AdminMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,24 +25,24 @@ import java.util.Optional;
 @Slf4j
 public class ExelService {
 
-    private final UserMapper userMapper;
+//    private final UserMapper userMapper;
     private final AESUtilUtil aesUtilUtil;
     private final SalaryService salaryService;
-    private final EmployeeSalaryMapper employeeSalaryMapper;
+    private final AdminMapper adminMapper;
     private final ManagementUserService managementUserService;
 
     // 엑셀 처리를 위한 메서드
     public List<AdminSalaryResponse> findResponseByYearAndMonth(Long year, Long month) {
 
         List<AdminSalaryResponse> joinedDataByYearAndMonth =
-                userMapper.findJoinedDataByYearAndMonth(year, month, null, null);
+                adminMapper.findJoinedDataByYearAndMonth(year, month, null, null);
         return joinedDataByYearAndMonth;
     }
 
     // 검색을 위해 오버로딩
     public List<AdminSalaryResponse> findResponseByYearAndMonth(Long year, Long month,
                                                                 String name, Long employeeId) {
-        return userMapper.findJoinedDataByYearAndMonth(year, month, name, employeeId);
+        return adminMapper.findJoinedDataByYearAndMonth(year, month, name, employeeId);
     }
 
     public List<AdminSalaryResponse> processExcelFile(MultipartFile file, BindingResult bindingResult,
