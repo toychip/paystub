@@ -160,8 +160,16 @@
     document.getElementById("logoutButton").addEventListener("click", toLogout);
 
     // 로그아웃 버튼 누를 시 로그아웃
-    function toLogout() {
-        location.href = "/logout";
+    function toLogout(event) {
+        if (confirm("로그아웃 하시겠습니까?")) {
+            alert("로그아웃 되었습니다. 로그인 페이지로 돌아갑니다.");
+            location.href = "/logout";
+        } else {
+            // 폼 제출을 막아 삭제되지 않도록
+            alert("취소되었습니다");
+            event.preventDefault();
+            return false;
+        }
     }
 
 </script>
