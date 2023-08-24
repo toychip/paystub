@@ -2,7 +2,6 @@ package com.paystub.admin.controller;
 
 import com.paystub.admin.service.ManagementUserService;
 import com.paystub.user.dto.UserDao;
-import com.paystub.admin.service.ExelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,13 +25,13 @@ public class AdminAccountController {
 
         List<UserDao> userList = managementUserService.getAdminUserForm();
         model.addAttribute("adminUserForm", userList);
-        return "adminUserForm";
+        return "admin/adminUserForm";
     }
 
     @PostMapping("/adminUserForm")
     public String deleteUsers(@RequestParam List<Long> employeeIds) {
         managementUserService.deleteUsersByIds(employeeIds);
-        return "redirect:/adminUserForm"; // 삭제 후 관리자 페이지로 리다이렉트
+        return "redirect:admin/adminUserForm"; // 삭제 후 관리자 페이지로 리다이렉트
     }
 
 }

@@ -34,7 +34,7 @@ public class AdminExelController {
 
     @GetMapping("/adminSelect")
     public String getAdminSelect() {
-        return "adminSelect";
+        return "admin/adminSelect";
     }
 
     @GetMapping("/admin")
@@ -48,7 +48,7 @@ public class AdminExelController {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
             redirectAttributes.addFlashAttribute("searchErrors", errorMap);
-            return "redirect:/admin";
+            return "redirect:/admin/admin";
         }
 
 
@@ -67,7 +67,7 @@ public class AdminExelController {
         }
         model.addAttribute("request", request);
         model.addAttribute("adminSalaryRespons", adminSalaryRespons);
-        return "admin";
+        return "admin/admin";
     }
 
     @PostMapping("/admin")
@@ -117,7 +117,7 @@ public class AdminExelController {
             model.addAttribute("responseDtos", adminSalaryRespons);
 
             // 같은 뷰를 반환하여 현재 페이지에 오류를 표시
-            return "admin";
+            return "admin/admin";
         }
         AdminSearchRequest request = new AdminSearchRequest();
         request.setYear(year);
@@ -125,7 +125,7 @@ public class AdminExelController {
 
         model.addAttribute("request", request); // 모델에 "req
 
-        return "redirect:/admin"; // 성공적인 업로드 후 리다이렉션
+        return "redirect:/admin/admin"; // 성공적인 업로드 후 리다이렉션
     }
 
     @PostMapping("/adminDeleteSalary")
@@ -137,6 +137,6 @@ public class AdminExelController {
                 })
                 .collect(Collectors.toList());
         salaryService.deleteSalariesByIds(salaryIds);
-        return "redirect:/admin";
+        return "redirect:/admin/admin";
     }
 }
