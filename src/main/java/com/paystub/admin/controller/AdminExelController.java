@@ -32,12 +32,12 @@ public class AdminExelController {
     private final ExelService exelService;
     private final SalaryService salaryService;
 
-    @GetMapping("/adminSelect")
+    @GetMapping("/adminDefaultSuccess")
     public String getAdminSelect() {
-        return "admin/adminSelect";
+        return "admin/adminDefaultSuccess";
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/adminSalary")
     public String getUploadPage(@Validated @ModelAttribute AdminSearchRequest request, BindingResult bindingResult,
                                 Model model, RedirectAttributes redirectAttributes) {
 
@@ -48,7 +48,7 @@ public class AdminExelController {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
             redirectAttributes.addFlashAttribute("searchErrors", errorMap);
-            return "redirect:/admin";
+            return "redirect:/adminSalary";
         }
 
 
@@ -59,18 +59,12 @@ public class AdminExelController {
                 request.getEmployeeID()
         );
 
-        if (!(request == null || request.getName() == null)) {
-            System.out.println("request.getYear().getClass() = " + request.getYear().getClass());
-            System.out.println("request.getYear() = " + request.getYear());
-
-
-        }
         model.addAttribute("request", request);
         model.addAttribute("adminSalaryRespons", adminSalaryRespons);
-        return "admin/admin";
+        return "admin/adminSalary";
     }
 
-    @PostMapping("/admin")
+    @PostMapping("/adminSalary")
     public String handleFileUpload(@ModelAttribute @Valid FileUploadRequest form, BindingResult bindingResult,
                                    @RequestParam(required = false, defaultValue = "9999") Long year,
                                    @RequestParam(required = false, defaultValue = "0") Long month,
@@ -100,7 +94,6 @@ public class AdminExelController {
         if (!bindingResult.hasErrors()) {
             // 엑셀 파일 처리 로직 작성
             adminSalaryRespons = exelService.processExcelFile(file, bindingResult, year, month); // 결과를 받아옴
-            System.out.println("결과를 받아옴");
         }
 
         if (bindingResult.hasErrors()) {
@@ -117,7 +110,7 @@ public class AdminExelController {
             model.addAttribute("responseDtos", adminSalaryRespons);
 
             // 같은 뷰를 반환하여 현재 페이지에 오류를 표시
-            return "admin/admin";
+            return "admin/adminSalary";
         }
         AdminSearchRequest request = new AdminSearchRequest();
         request.setYear(year);
@@ -125,7 +118,7 @@ public class AdminExelController {
 
         model.addAttribute("request", request); // 모델에 "req
 
-        return "redirect:/admin"; // 성공적인 업로드 후 리다이렉션
+        return "redirect:/adminSalary"; // 성공적인 업로드 후 리다이렉션
     }
 
     @PostMapping("/adminDeleteSalary")
@@ -137,6 +130,6 @@ public class AdminExelController {
                 })
                 .collect(Collectors.toList());
         salaryService.deleteSalariesByIds(salaryIds);
-        return "redirect:/admin";
+        return "redirect:/adminSalary";
     }
 }

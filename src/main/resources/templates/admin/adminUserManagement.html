@@ -64,7 +64,7 @@
     <h2 class="center">회원 관리</h2>
 
     <!--    선택 후 삭제 버튼을 누르면 삭제되는 /adminUserForm 로 가게함-->
-    <form method="POST" action="/adminUserForm">
+    <form method="POST" action="/adminUserManagement">
         <div class="margin" style="overflow:scroll; width:1000px; height:700px;">
 
             <button id="checkAllButton" type="button" class="checkButton" style="width: 70px; height: 25px; margin-right: 100px">전체선택</button>
@@ -154,7 +154,7 @@
 
     // 급여명세서 관리 페이지로 이동하는 버튼 클릭시 실행되는 메서드
     function toAdminFormPage() {
-        location.href = "/admin";
+        location.href = "/adminSalary";
     }
 
     document.getElementById("logoutButton").addEventListener("click", toLogout);

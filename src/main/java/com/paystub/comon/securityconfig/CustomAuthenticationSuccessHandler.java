@@ -15,7 +15,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 사용자 권한에 따라 리다이렉트
         if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            response.sendRedirect("/adminSelect");
+            response.sendRedirect("/adminDefaultSuccess");
         } else {
             response.sendRedirect("/userPaging");
         }

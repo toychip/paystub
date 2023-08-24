@@ -78,7 +78,6 @@ public class UserService {
             count = userMapper.getCountYearAndMonth(getCurrentMember(), year, month);
         }
 
-        System.out.println("count = " + count);
         return count;
     }
 

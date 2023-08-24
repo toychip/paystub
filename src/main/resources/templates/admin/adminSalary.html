@@ -62,7 +62,7 @@
 <!--년, 월, 이름, 사번을 정보를 조회하는 폼-->
 <div style="float: left;" class="margin">
     <h3>조회할 정보를 입력해주세요.</h3>
-    <form method="GET" action="/admin">
+    <form method="GET" action="/adminSalary">
         <select id="year" th:name="year" th:value="${request != null ? request.year : ''}">
             <option value="9999" th:selected="${request != null and #strings.toString(request.year) == '9999'}">전체</option>
             <option value="2010" th:selected="${request != null and #strings.toString(request.year) == '2010'}">2010</option>
@@ -109,7 +109,7 @@
 
     <div id="error" th:if="${errors}" class="error"></div>
     <!-- 파일 업로드 -->
-    <form method="POST" action="/admin" enctype="multipart/form-data">
+    <form method="POST" action="/adminSalary" enctype="multipart/form-data">
         <input type="file" id="file" name="file" accept=".xls, .xlsx, .xlsm">
         <input type="submit" id="submitButton" value="Upload">
     </form>
@@ -294,7 +294,7 @@
 
     // 회원 관리 페이지로 이동하는 버튼 클릭시 실행되는 메서드
     function toAdminUserFormPage() {
-        location.href = "/adminUserForm";
+        location.href = "/adminUserManagement";
     }
 
 
