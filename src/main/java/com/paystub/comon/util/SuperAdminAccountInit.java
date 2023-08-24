@@ -1,4 +1,4 @@
-package com.paystub.comon.config;
+package com.paystub.comon.util;
 
 import com.paystub.comon.util.AESUtilUtil;
 import com.paystub.user.dto.UserDao;
@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 //@Component
 @RequiredArgsConstructor
-public class SuperAdminInit {
+public class SuperAdminAccountInit {
     private final UserMapper userMapper;
     private final AESUtilUtil aesUtilUtil;
 

@@ -1,16 +1,14 @@
-package com.paystub.comon.config;
+package com.paystub.comon.util;
 
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-@Configuration
-public class MessageConfig {
+//@Configuration
+public class MessageUtil {
 
-    @Bean
+    // 아직 미사용
+//    @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:errors");
@@ -18,7 +16,7 @@ public class MessageConfig {
         return messageSource;
     }
 
-    @Bean
+//    @Bean
     public LocalValidatorFactoryBean validator(MessageSource messageSource) {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource);

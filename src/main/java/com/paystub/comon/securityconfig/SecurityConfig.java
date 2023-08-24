@@ -1,4 +1,4 @@
-package com.paystub.comon.config;
+package com.paystub.comon.securityconfig;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

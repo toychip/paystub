@@ -1,4 +1,4 @@
-package com.paystub.comon.config;
+package com.paystub.comon.securityconfig;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

@@ -1,4 +1,4 @@
-package com.paystub.comon.config;
+package com.paystub.comon.securityconfig;
 
 import com.paystub.comon.dto.request.LoginRequest;
 import com.paystub.comon.util.AESUtilUtil;
