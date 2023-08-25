@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Pattern;
 
 
 @Getter
@@ -13,8 +14,8 @@ public class AdminSearchRequest {
     private Long year;
     private Long month;
     private String name;
-    @Digits(integer = 10, fraction = 0, message = "사번은 숫자만 입력가능합니다.")
-    private Long employeeID;
+    @Pattern(regexp = "^[0-9]*$", message = "사번은 숫자만 입력 가능합니다!")
+    private String employeeID;
     public AdminSearchRequest() {
         this.year = 9999L;
         this.month = 0L;

@@ -20,36 +20,42 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final AESUtilUtil aesUtilUtil;
-    private final UserMapper userMapper;
+    private final AESUtilUtil aesUtilUtil; // 암호화 유틸리티
+    private final UserMapper userMapper; // 사용자 정보를 조회하기 위한 매퍼
 
-    // TODO 비밀번호 정책 어떻게할지
+    // 사용자 인증을 처리하는 메서드
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = authentication.getName();
-        String providedPassword = (String) authentication.getCredentials();
+        String username = authentication.getName();  // 사용자로부터 입력받은 아이디
+        String providedPassword = (String) authentication.getCredentials(); // 사용자로부터 입력받은 비밀번호
 
         String aes256Password = aesUtilUtil.encrypt(providedPassword);
         Optional<LoginRequest> loginFormDtoOptional = userMapper.findByUsername(username);
-        if (loginFormDtoOptional.isPresent()) {
-            LoginRequest loginRequest = loginFormDtoOptional.get();
-            if (loginRequest.getPassword().equals(aes256Password)) {
-                String role = loginRequest.getRole() == 2 ? "ROLE_ADMIN" : "ROLE_USER";
 
+        if (loginFormDtoOptional.isPresent()) {  // 사용자 정보가 존재하는 경우
+            LoginRequest loginRequest = loginFormDtoOptional.get();
+
+            if (loginRequest.getPassword().equals(aes256Password)) {    // 비밀번호가 일치하는 경우
+                String role = loginRequest.getRole() == 2 ? "ROLE_ADMIN" : "ROLE_USER"; // 역할에 따른 권한 부여
+
+                // 인증 토큰 생성 및 반환
                 return new UsernamePasswordAuthenticationToken(
                         new User(username, providedPassword, Collections.singletonList(new SimpleGrantedAuthority(role))),
                         null,
                         Collections.singletonList(new SimpleGrantedAuthority(role))
                 );
             } else {
+                // 비밀번호가 일치하지 않는 경우 예외 발생
                 throw new BadCredentialsException("Authentication failed");
             }
         } else {
+            // 사용자 정보가 존재하지 않는 경우 예외 발생
             throw new BadCredentialsException("Authentication failed");
         }
 
     }
 
+    // UsernamePasswordAuthenticationToken 클래스를 지원하는지 여부를 반환
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);

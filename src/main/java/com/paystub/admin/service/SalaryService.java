@@ -20,21 +20,23 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SalaryService {
-    // 급여 명세서 저장 및 삭제 서비스
+//     급여 명세서 저장 및 삭제 서비스
 
-//    private final UserMapper userMapper;
     private final ExelTransObjectUtil exelTransObjectUtil;
     private final AdminMapper adminMapper;
 
+    // 급여 명세서를 저장하는 메서드 (트랜잭션 처리)
     @Transactional
-    public void saveEmployeeSalaries(List<EmployeeSalaryDao> employeeSalaryDaos, BindingResult bindingResult) {
-        for (EmployeeSalaryDao employeeSalaryDao : employeeSalaryDaos) {
+    public void saveEmployeeSalaries(List<EmployeeSalaryDao> employeeSalaryDaoList, BindingResult bindingResult) {
+        for (EmployeeSalaryDao employeeSalaryDao : employeeSalaryDaoList) {
+            // 해당 년, 월, 직원 ID에 대한 급여 데이터 조회
             EmployeeSalaryDao existingData = adminMapper.findSalaryByYearMonthAndEmployeeID(
                     employeeSalaryDao.getYear(),
                     employeeSalaryDao.getMonth(),
                     employeeSalaryDao.getEmployeeID()
             );
             if (existingData != null) {
+                // 동일한 년, 월, 직원 ID의 데이터가 이미 있으면 오류 추가
                 FieldError error = new FieldError
                         ("employeeSalaryDto", "EmployeeID",
                                 "이미 사번 [" + employeeSalaryDao.getEmployeeID() + "]님의 "
@@ -42,19 +44,22 @@ public class SalaryService {
                                         + employeeSalaryDao.getMonth() + "월 데이터가 있습니다. 삭제하고 등록해주세요");
                 bindingResult.addError(error);
             } else {
+                // 급여 데이터 삽입
                 adminMapper.insertEmployeeSalaryDto(employeeSalaryDao);
             }
         }
     }
 
-    // 급여명세서 삭제
+    // 급여명세서 삭제 메서드 (트랜잭션 처리)
     @Transactional
     public void deleteSalariesByIds(List<AdminDeleteSalaryRequest> salaryIds) {
         for (AdminDeleteSalaryRequest key : salaryIds) {
+            // 주어진 직원 ID, 년, 월에 대한 급여 데이터 삭제
             adminMapper.deleteEmployeeSalaryById(key.getEmployeeId(), key.getYear(), key.getMonth());
         }
     }
 
+    // 엑셀의 행(Row)을 EmployeeSalaryDao 객체로 변환
     public EmployeeSalaryDao createEmployeeSalaryDto(Row row, Integer EmployeeID) {
         // 현재 날짜를 가져옵니다.
         LocalDate now = LocalDate.now();
@@ -95,6 +100,7 @@ public class SalaryService {
         BigDecimal HourlyWage = exelTransObjectUtil.getNumericValueOrNull(row.getCell(25)); // 시급
         BigDecimal LunchAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(26)); // 근태 중식비
 
+        // EmployeeSalaryDao 객체 생성 및 반환
         return EmployeeSalaryDao.builder()
                 .year(year)
                 .month(month)

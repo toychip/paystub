@@ -12,6 +12,9 @@
       <h2 class="text-center">NICE디앤알</h2>
       <h3 class="text-center">나이스 급여대장</h3>
 
+      <!-- 오류 메시지 출력 영역 -->
+      <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
       <form th:action="@{/login}" th:object="${loginDto}" method="post">
         <div class="form-group">
           <label for="username">아이디</label>
@@ -23,6 +26,7 @@
         </div>
         <button type="submit" class="btn btn-primary btn-block">로그인</button>
       </form>
+
 <!--      <button style="margin-top: 20px;" onclick="location.href='/main'" type="button" class="btn btn-primary btn-lg">급여대장 사이트</button>-->
     </div>
   </div>

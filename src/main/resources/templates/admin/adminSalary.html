@@ -105,7 +105,7 @@
 
 <!--파일 업로드 하는 폼-->
 <div style="float:right" class="margin">
-    <h3>급여 정보 엑셀 파일을 업로드 해주세요.</h3>
+    <h3 style="padding-top: 30px">급여 정보 엑셀 파일을 업로드 해주세요.</h3>
 
     <div id="error" th:if="${errors}" class="error"></div>
     <!-- 파일 업로드 -->
@@ -117,7 +117,7 @@
 
 <form method="POST" action="/adminDeleteSalary">
 
-    <div style="width: 100%; height: 600px; overflow: auto" class="center">
+    <div style="width: 100%; height: 600px; overflow: auto" class="center" >
 
 
         <table>
@@ -216,7 +216,8 @@
     var searchError = /*[[${searchErrors}]]*/ null;
 
     if (searchError) {
-        var errorMessage = "employeeID: " + searchError.employeeID;
+        // var errorMessage = "employeeID: " + searchError.employeeID;
+        var errorMessage = searchError.employeeID; // 사용자에게 보여줄 메시지
         alert(errorMessage);
     }
 
@@ -229,12 +230,14 @@
         errorWindow.document.write("<html><head><title>에러 메시지</title>");
         errorWindow.document.write("<style>.error { color: red; }</style>"); // 스타일 정의 추가
         errorWindow.document.write("</head><body>");
-        errorWindow.document.write("<h3>파일 업로드 에러</h3>");
-        errorWindow.document.write("<h5 class='error'>급여명세서 화면 조회 버튼을 눌러주세요.</h5>");
+        errorWindow.document.write("<h3 class='error'>파일 업로드 에러</h3>");
         errorWindow.document.write("<pre>" + errorMessages + "</pre>");
         errorWindow.document.write("</body></html>");
-    }
 
+        // 자식 창 로드 후 부모 창 조회 버튼 자동 클릭
+        document.getElementById("searchButton").click();
+
+    }
 
     document.getElementById("deleteButton").addEventListener("click", clickButton);
 

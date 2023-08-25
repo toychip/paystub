@@ -31,7 +31,7 @@ public class ExelService {
     private final AdminMapper adminMapper;
     private final ManagementUserService managementUserService;
 
-    // 엑셀 처리를 위한 메서드
+    // 년, 월에 따른 AdminSalaryResponse 목록을 반환
     public List<AdminSalaryResponse> findResponseByYearAndMonth(Long year, Long month) {
 
         List<AdminSalaryResponse> joinedDataByYearAndMonth =
@@ -39,31 +39,35 @@ public class ExelService {
         return joinedDataByYearAndMonth;
     }
 
-    // 검색을 위해 오버로딩
+    // 이름과 직원 ID로 검색하여 AdminSalaryResponse 목록을 반환 (오버로딩)
     public List<AdminSalaryResponse> findResponseByYearAndMonth(Long year, Long month,
                                                                 String name, Long employeeId) {
         return adminMapper.findJoinedDataByYearAndMonth(year, month, name, employeeId);
     }
 
+    // 엑셀 파일 처리 메서드
     public List<AdminSalaryResponse> processExcelFile(MultipartFile file, BindingResult bindingResult,
                                                       Long year, Long month) {
 
+        // UserDao와 EmployeeSalaryDao를 담을 리스트
         List<UserDao> userDaos = new ArrayList<>();
         List<EmployeeSalaryDao> employeeSalaryDaos = new ArrayList<>();
 
-        InputStream inputStream = null; // 여기서 변수 선언
+        InputStream inputStream = null;
 
         try {
             inputStream = file.getInputStream();
             Workbook workbook = WorkbookFactory.create(inputStream);
             Sheet sheet = workbook.getSheetAt(2); // 세 번째 시트
+
             // 첫 번째 행은 헤더이므로 두 번째 행부터 시작합니다.
             for (int i = 2; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) {
-                    continue;
+                    continue;   // 행이 비어 있으면 건너뛰기
                 }
 
+                // UserDao와 EmployeeSalaryDao 생성
                 UserDao userDao = managementUserService.createUserDto(row);
                 EmployeeSalaryDao employeeSalaryDao = salaryService.createEmployeeSalaryDto(row, userDao.getEmployeeID());
 
@@ -72,13 +76,13 @@ public class ExelService {
             }
             workbook.close();
         } catch (Exception e) {
-            // 오류 발생 시 BindingResult에 오류 추가
+            // 파일 처리 중 오류 발생 시 오류 추가
             FieldError error = new FieldError("file", "file", "파일 처리 중 오류가 발생했습니다: " + e.getMessage());
             bindingResult.addError(error);
         } finally {
             if (inputStream != null) {
                 try {
-                    inputStream.close();
+                    inputStream.close();     // 스트림 닫기
                 } catch (IOException e) {
                     FieldError error = new FieldError("file", "file", "파일 스트림 닫기 중 오류가 발생했습니다: " + e.getMessage());
                     bindingResult.addError(error);
@@ -86,10 +90,11 @@ public class ExelService {
             }
         }
 
+        // UserDao와 EmployeeSalaryDao 저장
         managementUserService.saveUsers(userDaos, bindingResult);
         salaryService.saveEmployeeSalaries(employeeSalaryDaos, bindingResult);
 
-        // 저장된 데이터를 바로 반환하거나 필요한 경우 데이터베이스에서 다시 조회할 수 있습니다.
+        // 저장된 데이터를 바로 반환하거나 필요한 경우 데이터베이스에서 다시 조회
         return findResponseByYearAndMonth(year, month);
     }
 }
