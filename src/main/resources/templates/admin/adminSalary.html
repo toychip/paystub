@@ -229,12 +229,14 @@
         errorWindow.document.write("<html><head><title>에러 메시지</title>");
         errorWindow.document.write("<style>.error { color: red; }</style>"); // 스타일 정의 추가
         errorWindow.document.write("</head><body>");
-        errorWindow.document.write("<h3>파일 업로드 에러</h3>");
-        errorWindow.document.write("<h5 class='error'>급여명세서 화면 조회 버튼을 눌러주세요.</h5>");
+        errorWindow.document.write("<h3 class='error'>파일 업로드 에러</h3>");
         errorWindow.document.write("<pre>" + errorMessages + "</pre>");
         errorWindow.document.write("</body></html>");
-    }
 
+        // 자식 창 로드 후 부모 창 조회 버튼 자동 클릭
+        document.getElementById("searchButton").click();
+
+    }
 
     document.getElementById("deleteButton").addEventListener("click", clickButton);
 
