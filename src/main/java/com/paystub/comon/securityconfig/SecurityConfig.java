@@ -18,6 +18,7 @@ public class SecurityConfig {
 
     private final CustomAuthenticationProvider customAuthenticationProvider;
     private final CustomAuthenticationSuccessHandler successHandler;
+    private final CustomAuthenticationFailureHandler failureHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,6 +28,7 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .successHandler(successHandler)
+               .failureHandler(failureHandler)
                 .and()
                 .authorizeHttpRequests()
                 .antMatchers("/login").permitAll()
