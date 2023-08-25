@@ -52,6 +52,7 @@ public class UserService {
             PageData = userMapper.findByYear(getCurrentMember(), year, limit, offset);
         }
 
+        // 만약 사용자가 특정 년, 월을 선택했을 시
         else if (year != 9999 && month != 0) {
             PageData = userMapper.findByYearAndMonth(getCurrentMember(), year, month, limit, offset);
         }
