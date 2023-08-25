@@ -223,32 +223,32 @@
         <table id="payment" class="payTable">
             <tr class="firstTr">
                 <td>지급내역</td>
-                <td colspan="6">산출내역</td>
+                <td colspan="4">산출내역</td>
                 <td>금액</td>
             </tr>
             <tr>
                 <td>기본수당</td>
-                <td colspan="6"><span th:text="${totalData.hourlyWage}"></span> 원 * 근로시간</td>
+                <td colspan="4"><span th:text="${totalData.hourlyWage}"></span> 원 * 근로시간</td>
                 <td th:text="${#numbers.formatDecimal(totalData.basicSalary, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>주휴수당</td>
-                <td colspan="6"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
+                <td colspan="4"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
                 <td th:text="${#numbers.formatDecimal(totalData.holidayAllowance, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>중식비</td>
-                <td colspan="6">       원 * 근무일수</td>
+                <td colspan="4">       원 * 근무일수</td>
                 <td th:text="${#numbers.formatDecimal(totalData.lunchExpenses, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>주휴수당(첫째주)</td>
-                <td colspan="6"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
+                <td colspan="4"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
                 <td th:text="${#numbers.formatDecimal(totalData.firstWeekHolidayAllowance, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>주휴수당(소급분)</td>
-                <td colspan="6"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
+                <td colspan="4"><span th:text="${totalData.hourlyWage}"></span> 원 * 주휴시간</td>
                 <td th:text="${#numbers.formatDecimal(totalData.retroactiveHolidayAllowance, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
         </table>
@@ -258,37 +258,37 @@
         <table id="deduction" class="deductTable">
             <tr class="firstTr">
                 <td>공제내역</td>
-                <td colspan="2">산출내역</td>
+                <td colspan="4">산출내역</td>
                 <td>금액</td>
             </tr>
             <tr>
                 <td>소득세</td>
-                <td colspan="2">간이세액표 참조</td>
+                <td colspan="4">간이세액표 참조</td>
                 <td th:text="${#numbers.formatDecimal(totalData.incomeTax, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>주민세</td>
-                <td colspan="2">소득세 * 0.1000</td>
+                <td colspan="4">소득세 * 0.1000</td>
                 <td th:text="${#numbers.formatDecimal(totalData.residentTax, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>고용보험</td>
-                <td colspan="2">과세총액 * 0.0090</td>
+                <td colspan="4">과세총액 * 0.0090</td>
                 <td th:text="${#numbers.formatDecimal(totalData.employmentInsurance, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>국민연금</td>
-                <td colspan="2">과세총액 * 0.0450</td>
+                <td colspan="4">과세총액 * 0.0450</td>
                 <td th:text="${#numbers.formatDecimal(totalData.nationalPension, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>건강보험</td>
-                <td colspan="2">과세총액 * 0.03545</td>
+                <td colspan="4">과세총액 * 0.03545</td>
                 <td th:text="${#numbers.formatDecimal(totalData.healthInsurance, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
             <tr>
                 <td>노인요양보험</td>
-                <td colspan="2">건강보험 * 0.1281</td>
+                <td colspan="4">건강보험 * 0.1281</td>
                 <td th:text="${#numbers.formatDecimal(totalData.elderlyCareInsurance, 1, 'COMMA', 0, 'POINT')}" class="right"></td>
             </tr>
         </table>

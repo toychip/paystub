@@ -203,9 +203,11 @@
         // 만약 전체 페이지가 0이라면
         if(totalPages == 0) {
             alert("조건에 맞는 데이터가 존재하지 않습니다.");
+            document.getElementById("prevPage").style.display = "none";
             document.getElementById("currentPage").style.display = "none";
             document.getElementById("/").style.display = "none";
             document.getElementById("totalPages").style.display = "none";
+            document.getElementById("nextPage").style.display = "none";
             currentPage = 0;
         }
 
