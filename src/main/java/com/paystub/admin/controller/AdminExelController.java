@@ -46,14 +46,14 @@ public class AdminExelController {
                                 Model model, RedirectAttributes redirectAttributes) {
         // 검색 요청 유효성 검사
         if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             Map<String, String> errorMap = new HashMap<>();
-            for (FieldError error : fieldErrors) {
+            for (FieldError error : bindingResult.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
             redirectAttributes.addFlashAttribute("searchErrors", errorMap);
             return "redirect:/adminSalary";
         }
+
 
         Long employeeID = null;
         if (request.getEmployeeID() != null && !request.getEmployeeID().isEmpty()) {

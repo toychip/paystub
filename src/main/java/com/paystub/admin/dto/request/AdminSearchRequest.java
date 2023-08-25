@@ -14,7 +14,7 @@ public class AdminSearchRequest {
     private Long year;
     private Long month;
     private String name;
-    @Pattern(regexp = "^[0-9]+$", message = "사번은 숫자만 입력 가능합니다!")
+    @Pattern(regexp = "^[0-9]*$", message = "사번은 숫자만 입력 가능합니다!")
     private String employeeID;
     public AdminSearchRequest() {
         this.year = 9999L;
