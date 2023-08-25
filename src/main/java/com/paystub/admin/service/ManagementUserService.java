@@ -44,8 +44,8 @@ public class ManagementUserService {
     }
 
     @Transactional
-    public void saveUsers(List<UserDao> adminUserListResponsAndUserSaveDaos, BindingResult bindingResult) {
-        for (UserDao userDao : adminUserListResponsAndUserSaveDaos) {
+    public void saveUsers(List<UserDao> userDaoList, BindingResult bindingResult) {
+        for (UserDao userDao : userDaoList) {
             Optional<UserDao> existingUserWithSameIDAndName =
                     adminMapper.findByEmployeeIDAndName(userDao.getEmployeeID(), userDao.getName());
             Optional<UserDao> existingUserWithSameID =

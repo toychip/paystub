@@ -27,8 +27,8 @@ public class SalaryService {
     private final AdminMapper adminMapper;
 
     @Transactional
-    public void saveEmployeeSalaries(List<EmployeeSalaryDao> employeeSalaryDaos, BindingResult bindingResult) {
-        for (EmployeeSalaryDao employeeSalaryDao : employeeSalaryDaos) {
+    public void saveEmployeeSalaries(List<EmployeeSalaryDao> employeeSalaryDaoList, BindingResult bindingResult) {
+        for (EmployeeSalaryDao employeeSalaryDao : employeeSalaryDaoList) {
             EmployeeSalaryDao existingData = adminMapper.findSalaryByYearMonthAndEmployeeID(
                     employeeSalaryDao.getYear(),
                     employeeSalaryDao.getMonth(),
