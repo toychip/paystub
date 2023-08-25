@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!--    ajax 요청-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>관리자 페이지</title>
+    <title>사용자 페이지</title>
     <style>
 
         /* 메인테이블 스타일 */
@@ -38,15 +38,25 @@
 <body>
 
 <!--    로그아웃버튼-->
-    <button id="logoutButton" type="button" class="logoutButton">로그아웃</button>
+<button id="logoutButton" type="button" class="logoutButton">로그아웃</button>
 
-    <h1 class="center">사용자 페이지</h1>
+<h1 class="center">사용자 페이지</h1>
 
 <!--년도와 월을 선택받아 조회하는 테이블-->
 <div class="center">
     <h3>조회할 년도와 월을 선택해주세요.</h3>
     <select id="year" th:name="year" th:value="${year}">
         <option value="9999">전체</option>
+        <option value="2000">2000</option>
+        <option value="2001">2001</option>
+        <option value="2002">2002</option>
+        <option value="2003">2003</option>
+        <option value="2004">2004</option>
+        <option value="2005">2005</option>
+        <option value="2006">2006</option>
+        <option value="2007">2007</option>
+        <option value="2008">2008</option>
+        <option value="2009">2009</option>
         <option value="2010">2010</option>
         <option value="2011">2011</option>
         <option value="2012">2012</option>

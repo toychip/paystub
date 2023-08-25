@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     // 쿼리에 사용할 limit를 하드코딩이 아닌 변수로 지정
-    private final int limit = 6;
+    private final int limit = 12;
 
     // 사용자 년,월 조회 페이지 로드하는 메서드
     @GetMapping("/userPaging")
