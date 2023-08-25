@@ -55,12 +55,17 @@ public class AdminExelController {
             return "redirect:/adminSalary";
         }
 
+        Long employeeID = null;
+        if (request.getEmployeeID() != null && !request.getEmployeeID().isEmpty()) {
+            employeeID = Long.parseLong(request.getEmployeeID());
+        }
+
 
         List<AdminSalaryResponse> adminSalaryRespons = exelService.findResponseByYearAndMonth(
                 request.getYear(),
                 request.getMonth(),
                 request.getName(),
-                request.getEmployeeID()
+                employeeID // Long 타입으로 변환된 employeeID 사용
         );
 
         model.addAttribute("request", request);

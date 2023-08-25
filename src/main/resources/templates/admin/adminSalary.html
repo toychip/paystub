@@ -216,7 +216,8 @@
     var searchError = /*[[${searchErrors}]]*/ null;
 
     if (searchError) {
-        var errorMessage = "employeeID: " + searchError.employeeID;
+        // var errorMessage = "employeeID: " + searchError.employeeID;
+        var errorMessage = searchError.employeeID; // 사용자에게 보여줄 메시지
         alert(errorMessage);
     }
 
