@@ -23,15 +23,27 @@ public class AdminAccountController {
     @GetMapping("/adminUserManagement")
     public String getAdminUserForm(Model model) {
 
+        // 관리자용 사용자 목록을 가져옴
         List<UserDao> userList = managementUserService.getAdminUserForm();
+
+        for (UserDao userDao : userList) {
+            log.info("-------------------------- userDao.getName() = " + userDao.getName());
+            log.info("-------------------------- userDao.getEmployeeID() = " + userDao.getEmployeeID());
+        }
         model.addAttribute("adminUserForm", userList);
+
+        // 관리자용 사용자 관리 페이지 반환
         return "admin/adminUserManagement";
     }
 
     @PostMapping("/adminUserManagement")
     public String deleteUsers(@RequestParam List<Long> employeeIds) {
+
+        // 사용자 ID 목록을 기반으로 사용자 삭제
         managementUserService.deleteUsersByIds(employeeIds);
-        return "redirect:/adminUserManagement"; // 삭제 후 관리자 페이지로 리다이렉트
+
+        // 삭제 후 관리자 페이지로 리다이렉트
+        return "redirect:/adminUserManagement";
     }
 
 }

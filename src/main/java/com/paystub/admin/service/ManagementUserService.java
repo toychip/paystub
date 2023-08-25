@@ -25,12 +25,13 @@ public class ManagementUserService {
     private final ExelTransObjectUtil exelTransObjectUtil;
     private final AdminMapper adminMapper;
 
+    // 엑셀의 행(Row)을 UserDao 객체로 변환
     public UserDao createUserDto(Row row) {
         Integer EmployeeID = Integer.valueOf(exelTransObjectUtil.getStringValueOrNull(row.getCell(0)));
         String name = exelTransObjectUtil.getStringValueOrNull(row.getCell(1));
         String birthday = exelTransObjectUtil.getStringValueOrNull(row.getCell(2));
         String emailAddress = exelTransObjectUtil.getStringValueOrNull(row.getCell(27));
-        String socialNumber = aesUtilUtil.encrypt(birthday);
+        String socialNumber = aesUtilUtil.encrypt(birthday);    // 생일을 암호화
 
         return UserDao.builder()
                 .EmployeeID(EmployeeID)
@@ -43,32 +44,39 @@ public class ManagementUserService {
                 .build();
     }
 
+    // 사용자 리스트 저장 (트랜잭션 처리)
     @Transactional
     public void saveUsers(List<UserDao> userDaoList, BindingResult bindingResult) {
         for (UserDao userDao : userDaoList) {
+            // 같은 ID와 이름, 또는 같은 ID를 가진 사용자 확인
             Optional<UserDao> existingUserWithSameIDAndName =
                     adminMapper.findByEmployeeIDAndName(userDao.getEmployeeID(), userDao.getName());
             Optional<UserDao> existingUserWithSameID =
                     adminMapper.findByEmployeeID(userDao.getEmployeeID());
 
             if (existingUserWithSameIDAndName.isPresent()) {
+//                 동일한 ID와 이름을 가진 사용자가 이미 있을 경우 처리 (현재 주석 처리)
 //                FieldError error = new FieldError("userDto", "Name",
 //                        "[" + userDto.getName() + "]님은 이미 존재해서 회원이 추가되지 않았습니다");
 //                bindingResult.addError(error);
             } else if (existingUserWithSameID.isPresent()) {
+                // 동일한 ID를 가진 사용자가 이미 있을 경우 오류 추가
                 FieldError error = new FieldError("userDto", "EmployeeID",
                         " 이미 [" + userDao.getEmployeeID() + "] 사번을 가진 직원이 존재합니다..");
                 bindingResult.addError(error);
             } else {
+                // 사용자 저장
                 adminMapper.insertUser(userDao);
             }
         }
     }
 
+    // 관리자 폼에 사용될 사용자 목록을 반환
     public List<UserDao> getAdminUserForm() {
         return adminMapper.findByAdminUser();
     }
 
+    // 주어진 employeeIds에 해당하는 사용자를 삭제 (트랜잭션 처리)
     @Transactional
     public void deleteUsersByIds(List<Long> employeeIds) {
         adminMapper.deleteEmployeeSalaryByIds(employeeIds);

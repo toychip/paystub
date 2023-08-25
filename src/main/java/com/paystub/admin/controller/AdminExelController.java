@@ -29,18 +29,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminExelController {
 
+    // 엑셀 처리 서비스
     private final ExelService exelService;
+    // 급여 처리 서비스
     private final SalaryService salaryService;
 
+    // 관리자 성공 페이지 로드
     @GetMapping("/adminDefaultSuccess")
     public String getAdminSelect() {
         return "admin/adminDefaultSuccess";
     }
 
+    // 엑셀 업로드 페이지 로드와 검색 결과 반환
     @GetMapping("/adminSalary")
     public String getUploadPage(@Validated @ModelAttribute AdminSearchRequest request, BindingResult bindingResult,
                                 Model model, RedirectAttributes redirectAttributes) {
-
+        // 검색 요청 유효성 검사
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             Map<String, String> errorMap = new HashMap<>();
@@ -64,12 +68,13 @@ public class AdminExelController {
         return "admin/adminSalary";
     }
 
+    // 엑셀 파일 업로드 처리
     @PostMapping("/adminSalary")
     public String handleFileUpload(@ModelAttribute @Valid FileUploadRequest form, BindingResult bindingResult,
                                    @RequestParam(required = false, defaultValue = "9999") Long year,
                                    @RequestParam(required = false, defaultValue = "0") Long month,
                                    Model model) {
-
+        // 파일 유효성 검사 및 처리 로직
         MultipartFile file = null;
 
         if (form != null && form.getFile() != null) {
@@ -123,6 +128,7 @@ public class AdminExelController {
 
     @PostMapping("/adminDeleteSalary")
     public String deleteSalaries(@RequestParam List<String> salaryKeys) {
+        // salaryKeys를 AdminDeleteSalaryRequest로 변환
         List<AdminDeleteSalaryRequest> salaryIds = salaryKeys.stream()
                 .map(key -> {
                     String[] parts = key.split("_");
