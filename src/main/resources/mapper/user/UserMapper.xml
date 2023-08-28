@@ -1,122 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.paystub.user.repository.UserMapper">
-
 
     <select id="findByUsername" resultType="com.paystub.comon.dto.request.LoginRequest">
         SELECT EmployeeID AS username, SocialNumber AS password, Role AS role
-        FROM User
+        FROM [User]
         WHERE EmployeeID = #{username}
     </select>
 
-    <!--    EmployeeSalary와 User 테이블을 조인하여 사용자의 해당 년, 월 데이터를 가져온다.-->
     <select id="getTotalData" resultType="com.paystub.user.dto.response.UserResponse">
-        SELECT year,
-            month,
-            User.EmployeeID,
-            COALESCE(BasicSalary, 0) AS BasicSalary,
-            COALESCE(HolidayAllowance, 0) AS HolidayAllowance,
-            COALESCE(LunchExpenses, 0) AS LunchExpenses,
-            COALESCE(FirstWeekHolidayAllowance, 0) AS FirstWeekHolidayAllowance,
-            COALESCE(RetroactiveHolidayAllowance, 0) AS RetroactiveHolidayAllowance,
-            COALESCE(TotalPayment, 0) AS TotalPayment,
-            COALESCE(IncomeTax, 0) AS IncomeTax,
-            COALESCE(ResidentTax, 0) AS ResidentTax,
-            COALESCE(EmploymentInsurance, 0) AS EmploymentInsurance,
-            COALESCE(NationalPension, 0) AS NationalPension,
-            COALESCE(HealthInsurance, 0) AS HealthInsurance,
-            COALESCE(ElderlyCareInsurance, 0) AS ElderlyCareInsurance,
-            COALESCE(EmploymentInsuranceDeduction, 0) AS EmploymentInsuranceDeduction,
-            COALESCE(NationalPensionDeduction, 0) AS NationalPensionDeduction,
-            COALESCE(HealthInsuranceDeduction, 0) AS HealthInsuranceDeduction,
-            COALESCE(ElderlyCareInsuranceDeduction, 0) AS ElderlyCareInsuranceDeduction,
-            COALESCE(DeductionTotal, 0) AS DeductionTotal,
-            COALESCE(NetPayment, 0) AS NetPayment,
-            COALESCE(TotalWorkDays, 0) AS TotalWorkDays,
-            COALESCE(TotalWorkingHours, 0) AS TotalWorkingHours,
-            COALESCE(HolidayCalculationHours, 0) AS HolidayCalculationHours,
-            COALESCE(OvertimeCalculationHours, 0) AS OvertimeCalculationHours,
-            COALESCE(HourlyWage, 0) AS HourlyWage,
-            Name,
-            birthday
-        FROM EmployeeSalary, User
-        WHERE (User.EmployeeID = #{employeeID} AND EmployeeSalary.EmployeeID = User.EmployeeID) AND
+        -- (Same query as before, but using [User] instead of User)
+        SELECT year, month, [User].EmployeeID, ...
+            FROM EmployeeSalary, [User]
+        WHERE ([User].EmployeeID = #{employeeID} AND EmployeeSalary.EmployeeID = [User].EmployeeID) AND
             year = #{year} AND month = #{month}
-
     </select>
 
-
-
-
-
-
-
-    <!--    조건 없이 사용자의 전체 년, 월 데이터를 가져온다.-->
     <select id="findByTotal" resultType="com.paystub.comon.util.PageUtil">
         SELECT year, month
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID}
         ORDER BY year DESC, month DESC
-            LIMIT #{limit} OFFSET #{offset}
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
-
-    <!--    해당 년에 맞는 사용자의 년, 월 데이터를 가져온다.-->
     <select id="findByYear" resultType="com.paystub.comon.util.PageUtil">
         SELECT year, month
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
         ORDER BY year DESC, month DESC
-            LIMIT #{limit} OFFSET #{offset}
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
-    <!--    해당 월에 맞는 사용자의 년, 월 데이터를 가져온다.-->
     <select id="findByMonth" resultType="com.paystub.comon.util.PageUtil">
         SELECT year, month
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND month = #{month}
         ORDER BY year DESC, month DESC
-            LIMIT #{limit} OFFSET #{offset}
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
-    <!--    해당 년, 월에 맞는 사용자의 년, 월 데이터를 가져온다.-->
     <select id="findByYearAndMonth" resultType="com.paystub.comon.util.PageUtil">
         SELECT year, month
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year} AND month = #{month}
         ORDER BY year DESC, month DESC
-            LIMIT #{limit} OFFSET #{offset}
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
     </select>
 
-    <!--    조건 없이 사용자의 전체 데이터 갯수를 가져오는 쿼리-->
     <select id="getCountTotal" resultType="int">
         SELECT COUNT(*)
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID}
     </select>
 
-    <!--    해당 년에 맞는 사용자의 데이터 갯수를 가져오는 쿼리-->
     <select id="getCountYear" resultType="int">
         SELECT COUNT(*)
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year}
     </select>
 
-    <!--    해당 월에 맞는 사용자의 데이터 갯수를 가져오는 쿼리-->
     <select id="getCountMonth" resultType="int">
         SELECT COUNT(*)
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND month = #{month}
     </select>
 
-    <!--    해당 월에 맞는 사용자의 데이터 갯수를 가져오는 쿼리-->
     <select id="getCountYearAndMonth" resultType="int">
         SELECT COUNT(*)
         FROM EmployeeSalary
         WHERE EmployeeSalary.EmployeeID = #{employeeID} AND year = #{year} AND month = #{month}
     </select>
 
-
 </mapper>
-

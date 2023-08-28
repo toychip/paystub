@@ -24,8 +24,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     compileOnly 'org.projectlombok:lombok'
-//	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
-    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'com.microsoft.sqlserver:mssql-jdbc'
+//    implementation 'mysql:mysql-connector-java:8.0.33'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
