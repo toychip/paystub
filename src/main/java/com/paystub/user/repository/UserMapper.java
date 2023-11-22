@@ -1,13 +1,10 @@
 package com.paystub.user.repository;
 
 
-import com.paystub.comon.util.PageUtil;
 import com.paystub.comon.dto.request.LoginRequest;
-import com.paystub.admin.dto.response.AdminSalaryResponse;
-import com.paystub.user.dto.UserDao;
+import com.paystub.comon.util.PageUtil;
 import com.paystub.user.dto.response.UserResponse;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;

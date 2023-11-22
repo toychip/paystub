@@ -1,14 +1,17 @@
 package com.paystub.admin.service;
 
-import com.paystub.comon.util.AESUtilUtil;
-import com.paystub.admin.dto.response.AdminSalaryResponse;
 import com.paystub.admin.dto.EmployeeSalaryDao;
-import com.paystub.user.dto.UserDao;
+import com.paystub.admin.dto.response.AdminSalaryResponse;
 import com.paystub.admin.repository.AdminMapper;
+import com.paystub.comon.util.AESUtilUtil;
+import com.paystub.user.dto.UserDao;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -58,7 +61,7 @@ public class ExelService {
         try {
             inputStream = file.getInputStream();
             Workbook workbook = WorkbookFactory.create(inputStream);
-            Sheet sheet = workbook.getSheetAt(2); // 세 번째 시트
+            Sheet sheet = workbook.getSheet("data");
 
             // 첫 번째 행은 헤더이므로 두 번째 행부터 시작합니다.
             for (int i = 2; i <= sheet.getLastRowNum(); i++) {

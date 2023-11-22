@@ -1,9 +1,7 @@
 package com.paystub.comon.util;
 
 import com.paystub.admin.repository.AdminMapper;
-import com.paystub.comon.util.AESUtilUtil;
 import com.paystub.user.dto.UserDao;
-import com.paystub.user.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
 
 //@Component

@@ -1,6 +1,9 @@
 package com.paystub.admin.dto.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -25,6 +28,10 @@ public class AdminSalaryResponse {
 
     private BigDecimal BasicSalary; // 기본수당
     private BigDecimal HolidayAllowance; // 주휴수당
+    private BigDecimal OvertimePay;
+    private BigDecimal OtherPay;
+
+
     private BigDecimal LunchExpenses; // 지금 중식비
     private BigDecimal FirstWeekHolidayAllowance; // 주휴수당(첫째주)
     private BigDecimal RetroactiveHolidayAllowance; // 주휴수당(소급분)
