@@ -25,13 +25,10 @@ public class AdminSalaryResponse {
     private String birthday; // 생일
     private String SocialNumber; // 주민번호
     private String EmailAddress; //이메일
-
     private BigDecimal BasicSalary; // 기본수당
     private BigDecimal HolidayAllowance; // 주휴수당
-    private BigDecimal OvertimePay;
-    private BigDecimal OtherPay;
-
-
+    private BigDecimal OvertimePay; // 연장 수당
+    private BigDecimal OtherPay; // 기타 수당
     private BigDecimal LunchExpenses; // 지금 중식비
     private BigDecimal FirstWeekHolidayAllowance; // 주휴수당(첫째주)
     private BigDecimal RetroactiveHolidayAllowance; // 주휴수당(소급분)

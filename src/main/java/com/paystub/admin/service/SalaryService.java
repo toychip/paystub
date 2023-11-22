@@ -60,7 +60,7 @@ public class SalaryService {
     }
 
     // 엑셀의 행(Row)을 EmployeeSalaryDao 객체로 변환
-    public EmployeeSalaryDao createEmployeeSalaryDto(Row row, Integer EmployeeID) {
+    public EmployeeSalaryDao createEmployeeSalaryDto(Row row, Integer employeeID) {
         // 현재 날짜를 가져옵니다.
         LocalDate now = LocalDate.now();
 
@@ -70,65 +70,69 @@ public class SalaryService {
         // 한 달 전의 월을 가져옵니다.
         int month = now.minusMonths(1).getMonthValue();
 
-        BigDecimal BasicSalary = exelTransObjectUtil.getNumericValueOrNull(row.getCell(3)); // 기본 수당
-        BigDecimal HolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(4)); // 주휴 수당
-        BigDecimal LunchExpenses = exelTransObjectUtil.getNumericValueOrNull(row.getCell(5)); // 중식비
-        BigDecimal FirstWeekHolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(6)); // 주휴수당 첫째주
-        BigDecimal RetroactiveHolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(7)); // 주휴수당 소급분
-        BigDecimal TotalPayment = exelTransObjectUtil.getNumericValueOrNull(row.getCell(8)); // 지급합계
-        BigDecimal IncomeTax = exelTransObjectUtil.getNumericValueOrNull(row.getCell(9)); // 소득세
-        BigDecimal ResidentTax = exelTransObjectUtil.getNumericValueOrNull(row.getCell(10)); // 주민세
-        BigDecimal EmploymentInsurance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(11)); // 고용 보험
-        BigDecimal NationalPension = exelTransObjectUtil.getNumericValueOrNull(row.getCell(12)); // 국민 연금
-        BigDecimal HealthInsurance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(13)); // 건강 보험
-        BigDecimal ElderlyCareInsurance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(14)); // 노인 요양
-        BigDecimal EmploymentInsuranceDeduction = exelTransObjectUtil.getNumericValueOrNull(row.getCell(15)); // 고용 보험 (소급공제)
-        BigDecimal NationalPensionDeduction = exelTransObjectUtil.getNumericValueOrNull(row.getCell(16)); // 국민 연금 (소급공제)
-        BigDecimal HealthInsuranceDeduction = exelTransObjectUtil.getNumericValueOrNull(row.getCell(17)); // 건강 보험 (소급공제)
-        BigDecimal ElderlyCareInsuranceDeduction = exelTransObjectUtil.getNumericValueOrNull(row.getCell(18)); // 노인 요양 (소급공제)
-        BigDecimal DeductionTotal = exelTransObjectUtil.getNumericValueOrNull(row.getCell(19)); // 공제 합계
-        BigDecimal NetPayment = exelTransObjectUtil.getNumericValueOrNull(row.getCell(20)); // 실지금액
-        BigDecimal TotalWorkDays = exelTransObjectUtil.getNumericValueOrNull(row.getCell(21)); // 총 근로일수
-        BigDecimal TotalWorkingHours = exelTransObjectUtil.getNumericValueOrNull(row.getCell(22)); // 총 근무시간
+        BigDecimal basicSalary = exelTransObjectUtil.getNumericValueOrNull(row.getCell(3)); // 기본 수당
+        BigDecimal holidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(4)); // 주휴 수당
+        BigDecimal overtimePay = exelTransObjectUtil.getNumericValueOrNull(row.getCell(5)); // 연장 수당
+        BigDecimal otherPay = exelTransObjectUtil.getNumericValueOrNull(row.getCell(6)); // 기타 수당
+        BigDecimal lunchExpenses = exelTransObjectUtil.getNumericValueOrNull(row.getCell(7)); // 중식비
+        BigDecimal firstWeekHolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(8)); // 주휴수당 첫째주
+        BigDecimal retroactiveHolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(9)); // 주휴수당 소급분
+        BigDecimal totalPayment = exelTransObjectUtil.getNumericValueOrNull(row.getCell(10)); // 지급합계
+        BigDecimal incomeTax = exelTransObjectUtil.getNumericValueOrNull(row.getCell(11)); // 소득세
+        BigDecimal residentTax = exelTransObjectUtil.getNumericValueOrNull(row.getCell(12)); // 주민세
+        BigDecimal employmentInsurance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(13)); // 고용 보험
+        BigDecimal nationalPension = exelTransObjectUtil.getNumericValueOrNull(row.getCell(14)); // 국민 연금
+        BigDecimal healthInsurance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(15)); // 건강 보험
+        BigDecimal elderlyCareInsurance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(16)); // 노인 요양
+        BigDecimal employmentInsuranceDeduction = exelTransObjectUtil.getNumericValueOrNull(row.getCell(17)); // 고용 보험 (소급공제)
+        BigDecimal nationalPensionDeduction = exelTransObjectUtil.getNumericValueOrNull(row.getCell(18)); // 국민 연금 (소급공제)
+        BigDecimal healthInsuranceDeduction = exelTransObjectUtil.getNumericValueOrNull(row.getCell(19)); // 건강 보험 (소급공제)
+        BigDecimal elderlyCareInsuranceDeduction = exelTransObjectUtil.getNumericValueOrNull(row.getCell(20)); // 노인 요양 (소급공제)
+        BigDecimal deductionTotal = exelTransObjectUtil.getNumericValueOrNull(row.getCell(21)); // 공제 합계
+        BigDecimal netPayment = exelTransObjectUtil.getNumericValueOrNull(row.getCell(22)); // 실지금액
+        BigDecimal totalWorkDays = exelTransObjectUtil.getNumericValueOrNull(row.getCell(23)); // 총 근로일수
+        BigDecimal totalWorkingHours = exelTransObjectUtil.getNumericValueOrNull(row.getCell(24)); // 총 근무시간
 
-        BigDecimal HolidayCalculationHours = exelTransObjectUtil.getNumericValueOrNull(row.getCell(23)); // 주휴산정시간
-        HolidayCalculationHours = HolidayCalculationHours != null ? HolidayCalculationHours.setScale(1, BigDecimal.ROUND_HALF_UP) : null;// 두번째 자리에서 반올림
+        BigDecimal holidayCalculationHours = exelTransObjectUtil.getNumericValueOrNull(row.getCell(25)); // 주휴산정시간
+        holidayCalculationHours = holidayCalculationHours != null ? holidayCalculationHours.setScale(1, BigDecimal.ROUND_HALF_UP) : null;// 두번째 자리에서 반올림
 
-        BigDecimal OvertimeCalculationHours = exelTransObjectUtil.getNumericValueOrNull(row.getCell(24)); // 주휴산정시간(소급분)
-        OvertimeCalculationHours = OvertimeCalculationHours != null ? OvertimeCalculationHours.setScale(1, BigDecimal.ROUND_HALF_UP) : null; // 두번째 자리에서 반올림
+        BigDecimal overtimeCalculationHours = exelTransObjectUtil.getNumericValueOrNull(row.getCell(26)); // 주휴산정시간(소급분)
+        overtimeCalculationHours = overtimeCalculationHours != null ? overtimeCalculationHours.setScale(1, BigDecimal.ROUND_HALF_UP) : null; // 두번째 자리에서 반올림
 
-        BigDecimal HourlyWage = exelTransObjectUtil.getNumericValueOrNull(row.getCell(25)); // 시급
-        BigDecimal LunchAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(26)); // 근태 중식비
+        BigDecimal hourlyWage = exelTransObjectUtil.getNumericValueOrNull(row.getCell(27)); // 시급
+        BigDecimal lunchAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(28)); // 근태 중식비
 
         // EmployeeSalaryDao 객체 생성 및 반환
         return EmployeeSalaryDao.builder()
                 .year(year)
                 .month(month)
-                .EmployeeID(EmployeeID)
-                .BasicSalary(BasicSalary)
-                .HolidayAllowance(HolidayAllowance)
-                .LunchExpenses(LunchExpenses)
-                .FirstWeekHolidayAllowance(FirstWeekHolidayAllowance)
-                .RetroactiveHolidayAllowance(RetroactiveHolidayAllowance)
-                .TotalPayment(TotalPayment)
-                .IncomeTax(IncomeTax)
-                .ResidentTax(ResidentTax)
-                .EmploymentInsurance(EmploymentInsurance)
-                .NationalPension(NationalPension)
-                .HealthInsurance(HealthInsurance)
-                .ElderlyCareInsurance(ElderlyCareInsurance)
-                .EmploymentInsuranceDeduction(EmploymentInsuranceDeduction)
-                .NationalPensionDeduction(NationalPensionDeduction)
-                .HealthInsuranceDeduction(HealthInsuranceDeduction)
-                .ElderlyCareInsuranceDeduction(ElderlyCareInsuranceDeduction)
-                .DeductionTotal(DeductionTotal)
-                .NetPayment(NetPayment)
-                .TotalWorkDays(TotalWorkDays)
-                .TotalWorkingHours(TotalWorkingHours)
-                .HolidayCalculationHours(HolidayCalculationHours)
-                .OvertimeCalculationHours(OvertimeCalculationHours)
-                .HourlyWage(HourlyWage)
-                .LunchAllowance(LunchAllowance)
+                .EmployeeID(employeeID)
+                .BasicSalary(basicSalary)
+                .HolidayAllowance(holidayAllowance)
+                .OvertimePay(overtimePay)
+                .OtherPay(otherPay)
+                .LunchExpenses(lunchExpenses)
+                .FirstWeekHolidayAllowance(firstWeekHolidayAllowance)
+                .RetroactiveHolidayAllowance(retroactiveHolidayAllowance)
+                .TotalPayment(totalPayment)
+                .IncomeTax(incomeTax)
+                .ResidentTax(residentTax)
+                .EmploymentInsurance(employmentInsurance)
+                .NationalPension(nationalPension)
+                .HealthInsurance(healthInsurance)
+                .ElderlyCareInsurance(elderlyCareInsurance)
+                .EmploymentInsuranceDeduction(employmentInsuranceDeduction)
+                .NationalPensionDeduction(nationalPensionDeduction)
+                .HealthInsuranceDeduction(healthInsuranceDeduction)
+                .ElderlyCareInsuranceDeduction(elderlyCareInsuranceDeduction)
+                .DeductionTotal(deductionTotal)
+                .NetPayment(netPayment)
+                .TotalWorkDays(totalWorkDays)
+                .TotalWorkingHours(totalWorkingHours)
+                .HolidayCalculationHours(holidayCalculationHours)
+                .OvertimeCalculationHours(overtimeCalculationHours)
+                .HourlyWage(hourlyWage)
+                .LunchAllowance(lunchAllowance)
                 .build();
     }
 }
