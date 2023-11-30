@@ -15,9 +15,14 @@ public class ExelTransObjectUtil {
         if (cell == null || cell.getCellType() != CellType.NUMERIC) {
             return null;
         }
-        return new BigDecimal(cell.getNumericCellValue());
+        try {
+            return new BigDecimal(cell.getNumericCellValue());
+        } catch (NumberFormatException e) {
+            // 여기에 로그 기록 또는 다른 처리 방법 작성
+            System.err.println("NumberFormatException in getNumericValueOrNull: " + e.getMessage());
+            return null; // 또는 적절한 기본값 설정
+        }
     }
-
 
     public String getStringValueOrNull(Cell cell) {
         if (cell == null) {
@@ -34,9 +39,10 @@ public class ExelTransObjectUtil {
                 Date date = cell.getDateCellValue();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");  // 날짜 포맷 지정
                 return sdf.format(date);
+            } else {
+                // 숫자형 셀일 경우, 숫자를 문자열로 변환
+                return Double.toString(cell.getNumericCellValue());
             }
-            // 숫자형 셀일 경우, 그냥 null 반환 (필요하다면 이 부분을 수정할 수 있음)
-            return null;
         } else {
             // 그 외의 셀 타입일 경우, null 반환
             return null;

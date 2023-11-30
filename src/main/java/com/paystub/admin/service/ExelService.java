@@ -8,10 +8,7 @@ import com.paystub.user.dto.UserDao;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -66,7 +63,7 @@ public class ExelService {
             // 첫 번째 행은 헤더이므로 두 번째 행부터 시작합니다.
             for (int i = 2; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
-                if (row == null) {
+                if (row == null || isRowEmpty(row)) {
                     continue;   // 행이 비어 있으면 건너뛰기
                 }
 
@@ -99,5 +96,18 @@ public class ExelService {
 
         // 저장된 데이터를 바로 반환하거나 필요한 경우 데이터베이스에서 다시 조회
         return findResponseByYearAndMonth(year, month);
+    }
+
+    private boolean isRowEmpty(Row row) {
+        if (row == null) {
+            return true;
+        }
+        for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+            Cell cell = row.getCell(c);
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
+                return false;
+            }
+        }
+        return true;
     }
 }
