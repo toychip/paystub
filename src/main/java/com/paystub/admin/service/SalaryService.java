@@ -72,12 +72,12 @@ public class SalaryService {
 
         BigDecimal basicSalary = exelTransObjectUtil.getNumericValueOrNull(row.getCell(3)); // 기본 수당
         BigDecimal holidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(4)); // 주휴 수당
-        BigDecimal overtimePay = exelTransObjectUtil.getNumericValueOrNull(row.getCell(5)); // 연장 수당
-        BigDecimal otherPay = exelTransObjectUtil.getNumericValueOrNull(row.getCell(6)); // 기타 수당
-        BigDecimal lunchExpenses = exelTransObjectUtil.getNumericValueOrNull(row.getCell(7)); // 중식비
-        BigDecimal firstWeekHolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(8)); // 주휴수당 첫째주
-        BigDecimal retroactiveHolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(9)); // 주휴수당 소급분
-        BigDecimal totalPayment = exelTransObjectUtil.getNumericValueOrNull(row.getCell(10)); // 지급합계
+        BigDecimal lunchExpenses = exelTransObjectUtil.getNumericValueOrNull(row.getCell(5)); // 중식비
+        BigDecimal firstWeekHolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(6)); // 주휴수당 첫째주
+        BigDecimal retroactiveHolidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(7)); // 주휴수당 소급분
+        BigDecimal totalPayment = exelTransObjectUtil.getNumericValueOrNull(row.getCell(8)); // 지급합계
+        BigDecimal overtimePay = exelTransObjectUtil.getNumericValueOrNull(row.getCell(9)); // 연장 수당
+        BigDecimal otherPay = exelTransObjectUtil.getNumericValueOrNull(row.getCell(10)); // 기타 수당
         BigDecimal incomeTax = exelTransObjectUtil.getNumericValueOrNull(row.getCell(11)); // 소득세
         BigDecimal residentTax = exelTransObjectUtil.getNumericValueOrNull(row.getCell(12)); // 주민세
         BigDecimal employmentInsurance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(13)); // 고용 보험

@@ -5,8 +5,8 @@
 
     <insert id="insertEmployeeSalaryDto">
         INSERT INTO EmployeeSalary (
-            year, month, EmployeeID, BasicSalary, HolidayAllowance, LunchExpenses,
-            FirstWeekHolidayAllowance, RetroactiveHolidayAllowance, TotalPayment,
+            year, month, EmployeeID, BasicSalary, HolidayAllowance, OvertimePay, OtherPay,
+            LunchExpenses, FirstWeekHolidayAllowance, RetroactiveHolidayAllowance, TotalPayment,
             IncomeTax, ResidentTax, EmploymentInsurance, NationalPension,
             HealthInsurance, ElderlyCareInsurance, EmploymentInsuranceDeduction,
             NationalPensionDeduction, HealthInsuranceDeduction, ElderlyCareInsuranceDeduction,
@@ -14,8 +14,8 @@
             HolidayCalculationHours, OvertimeCalculationHours, HourlyWage, LunchAllowance
         )
         VALUES (
-                   #{year}, #{month}, #{EmployeeID}, #{BasicSalary}, #{HolidayAllowance}, #{LunchExpenses},
-                   #{FirstWeekHolidayAllowance}, #{RetroactiveHolidayAllowance}, #{TotalPayment},
+                   #{year}, #{month}, #{EmployeeID}, #{BasicSalary}, #{HolidayAllowance}, #{OvertimePay}, #{OtherPay},
+                   #{LunchExpenses}, #{FirstWeekHolidayAllowance}, #{RetroactiveHolidayAllowance}, #{TotalPayment},
                    #{IncomeTax}, #{ResidentTax}, #{EmploymentInsurance}, #{NationalPension},
                    #{HealthInsurance}, #{ElderlyCareInsurance}, #{EmploymentInsuranceDeduction},
                    #{NationalPensionDeduction}, #{HealthInsuranceDeduction}, #{ElderlyCareInsuranceDeduction},
@@ -73,8 +73,8 @@
 
     <select id="findJoinedDataByYearAndMonth" resultType="com.paystub.admin.dto.response.AdminSalaryResponse">
         SELECT u.EmployeeID, u.Name, u.State, u.Role, u.birthday, u.SocialNumber, u.EmailAddress,
-        e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance, e.TotalPayment,
-        e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
+        e.year, e.month, e.BasicSalary, e.HolidayAllowance, e.OvertimePay, e.OtherPay, e.LunchExpenses, e.FirstWeekHolidayAllowance, e.RetroactiveHolidayAllowance,
+        e.TotalPayment, e.IncomeTax, e.ResidentTax, e.EmploymentInsurance, e.NationalPension, e.HealthInsurance, e.ElderlyCareInsurance, e.EmploymentInsuranceDeduction,
         e.NationalPensionDeduction, e.HealthInsuranceDeduction, e.ElderlyCareInsuranceDeduction, e.DeductionTotal, e.NetPayment, e.TotalWorkDays,
         e.TotalWorkingHours, e.HolidayCalculationHours, e.OvertimeCalculationHours, e.HourlyWage, e.LunchAllowance
         FROM [User] u

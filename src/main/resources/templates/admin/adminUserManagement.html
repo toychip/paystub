@@ -50,26 +50,28 @@
         }
 
         .logoutButton {
-            position: fixed;
-            top: 5px;
-            right: 5px;
+            float: right;
         }
 
     </style>
 </head>
 <body>
 
-<!--    로그아웃버튼-->
-<button id="logoutButton" type="button" class="logoutButton">로그아웃</button>
-
 <div class="container">
-    <h2 class="center">회원 관리</h2>
+
+    <!--    로그아웃버튼-->
+<button id="logoutButton" type="button" class="logoutButton">로그아웃</button> 
+
+<!--        admin 페이지로 이동 -->
+<button id="toAdminForm" type="button" style="float: right; margin-right: 1%;">급여명세서 관리 페이지로 이동</button>
+
+    <h2 style="margin-top: 5%;">회원 관리</h2>
 
     <!--    선택 후 삭제 버튼을 누르면 삭제되는 /adminUserForm 로 가게함-->
     <form method="POST" action="/adminUserManagement">
         <div class="margin" style="overflow:scroll; width:1000px; height:700px;">
 
-            <button id="checkAllButton" type="button" class="checkButton" style="width: 70px; height: 25px; margin-right: 100px">전체선택</button>
+            <button id="checkAllButton" type="button" class="checkButton" style="width: 70px; height: 25px; margin-right: 100px">ALL</button>
             <table>
                 <thead>
                 <tr>
@@ -94,8 +96,6 @@
         </div>
         <!--        삭제 버튼-->
         <button id="deleteButton" type="submit" style="width: 200px; height: 40px; float:left; transform: translateX(75px)">삭제</button>
-        <!--        admin 페이지로 이동 -->
-        <button id="toAdminForm" type="button" style="width: 230px; height: 40px; float: right; transform: translateX(-60px)">급여명세서 관리 페이지로 이동</button>
 
     </form>
 </div>

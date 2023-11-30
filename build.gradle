@@ -7,6 +7,9 @@ plugins {
 group = 'com.'
 version = '0.4-safe'
 
+version = '0.5-SNAPSHOT'
+
+
 java {
     sourceCompatibility = '1.8'
 }

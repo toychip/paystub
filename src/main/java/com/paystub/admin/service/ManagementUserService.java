@@ -30,7 +30,7 @@ public class ManagementUserService {
         Integer EmployeeID = Integer.valueOf(exelTransObjectUtil.getStringValueOrNull(row.getCell(0)));
         String name = exelTransObjectUtil.getStringValueOrNull(row.getCell(1));
         String birthday = exelTransObjectUtil.getStringValueOrNull(row.getCell(2));
-        String emailAddress = exelTransObjectUtil.getStringValueOrNull(row.getCell(27));
+        String emailAddress = exelTransObjectUtil.getStringValueOrNull(row.getCell(29));
         String socialNumber = aesUtilUtil.encrypt(birthday);    // 생일을 암호화
 
         return UserDao.builder()
