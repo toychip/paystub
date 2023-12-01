@@ -60,15 +60,12 @@ public class SalaryService {
     }
 
     // 엑셀의 행(Row)을 EmployeeSalaryDao 객체로 변환
-    public EmployeeSalaryDao createEmployeeSalaryDto(Row row, Integer employeeID) {
-        // 현재 날짜를 가져옵니다.
-        LocalDate now = LocalDate.now();
+    public EmployeeSalaryDao createEmployeeSalaryDto(Row row, String date, Integer employeeID) {
 
-        // 현재 년도를 가져옵니다.
-        int year = now.getYear();
+        // "년"을 기준으로 분할
 
-        // 한 달 전의 월을 가져옵니다.
-        int month = now.minusMonths(1).getMonthValue();
+        int year = getYear(date);
+        int month = getMonth(date);
 
         BigDecimal basicSalary = exelTransObjectUtil.getNumericValueOrNull(row.getCell(3)); // 기본 수당
         BigDecimal holidayAllowance = exelTransObjectUtil.getNumericValueOrNull(row.getCell(4)); // 주휴 수당
@@ -134,5 +131,21 @@ public class SalaryService {
                 .HourlyWage(hourlyWage)
                 .LunchAllowance(lunchAllowance)
                 .build();
+    }
+
+    public int getYear(String date) {
+        String[] yearSplit = date.split("년", 2);
+        String yearPart = yearSplit[0].trim(); // 연도 부분
+        return Integer.parseInt(yearPart);
+    }
+
+    public int getMonth(String date) {
+        String[] monthSplit = date.split("월", 2);
+        String monthPart = monthSplit[0].trim(); // 월 부분
+
+        // "월" 앞의 부분에서 숫자만 추출
+        String[] splitForMonth = monthPart.split(" ");
+        String month = splitForMonth[splitForMonth.length - 1];
+        return Integer.parseInt(month);
     }
 }

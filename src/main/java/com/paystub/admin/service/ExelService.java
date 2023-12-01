@@ -4,6 +4,7 @@ import com.paystub.admin.dto.EmployeeSalaryDao;
 import com.paystub.admin.dto.response.AdminSalaryResponse;
 import com.paystub.admin.repository.AdminMapper;
 import com.paystub.comon.util.AESUtilUtil;
+import com.paystub.comon.util.ExelTransObjectUtil;
 import com.paystub.user.dto.UserDao;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class ExelService {
     private final SalaryService salaryService;
     private final AdminMapper adminMapper;
     private final ManagementUserService managementUserService;
+    private final ExelTransObjectUtil exelTransObjectUtil;
 
     // 년, 월에 따른 AdminSalaryResponse 목록을 반환
     public List<AdminSalaryResponse> findResponseByYearAndMonth(Long year, Long month) {
@@ -60,6 +62,10 @@ public class ExelService {
             Workbook workbook = WorkbookFactory.create(inputStream);
             Sheet sheet = workbook.getSheet("data");
 
+            Row firstRow = sheet.getRow(0);
+            Cell cell = firstRow.getCell(0);
+            String date = exelTransObjectUtil.getStringValueOrNull(cell);
+
             // 첫 번째 행은 헤더이므로 두 번째 행부터 시작합니다.
             for (int i = 2; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
@@ -69,7 +75,7 @@ public class ExelService {
 
                 // UserDao와 EmployeeSalaryDao 생성
                 UserDao userDao = managementUserService.createUserDto(row);
-                EmployeeSalaryDao employeeSalaryDao = salaryService.createEmployeeSalaryDto(row, userDao.getEmployeeID());
+                EmployeeSalaryDao employeeSalaryDao = salaryService.createEmployeeSalaryDto(row, date, userDao.getEmployeeID());
 
                 userDaos.add(userDao);
                 employeeSalaryDaos.add(employeeSalaryDao);
